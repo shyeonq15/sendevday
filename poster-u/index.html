@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="교실의 문제를 코드로 바꾸는 선생님들, 매달 마지막 화요일 저녁.">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="../shared/core.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<script src="../shared/core.js"></script>
+<style>
+/* 시안 U · 벤토 그리드: 둥근 타일 몇 개로만. 장식 없이 색과 크기로 위계 */
+#poster{background:#F4F3EE;color:var(--ink);--wide-bg-body:#F4F3EE;--intro-bg:#F4F3EE}
+.wide body{background:#F4F3EE}
+.lay{padding:calc(var(--p)*30);gap:calc(var(--p)*14);grid-template-columns:repeat(6,1fr);grid-template-rows:auto auto 1fr auto auto;
+  grid-template-areas:"ti ti ti ti pr pr" "ti ti ti ti tu tu" "d1 d1 d2 d2 d3 d3" "wi wi wi qr qr qr" "ft ft ft ft ft ft"}
+.wide .lay{padding:calc(var(--p)*26);gap:calc(var(--p)*14);grid-template-columns:repeat(8,1fr);grid-template-rows:1fr 1fr auto auto;
+  grid-template-areas:"ti ti ti ti d1 d1 d2 d2" "ti ti ti ti d1 d1 d2 d2" "tu tu pr d3 d3 d3 qr qr" "ft ft ft ft ft ft ft ft"}
+.tile{border-radius:calc(var(--p)*28);padding:calc(var(--p)*26);position:relative;overflow:hidden;min-width:0}
+.ti{grid-area:ti;background:var(--lime);display:flex;flex-direction:column;justify-content:space-between;min-height:calc(var(--p)*400)}
+.wide .ti{min-height:0}
+.ti .lb{display:flex;justify-content:space-between;font:700 calc(var(--p)*12)/1 var(--mono);letter-spacing:.1em}
+.ti h1{margin:0;font:900 calc(var(--p)*84)/.98 var(--sans);letter-spacing:-.07em}
+.wide .ti h1{font-size:calc(var(--p)*82)}
+.ti p{margin:calc(var(--p)*16) 0 0;font:700 calc(var(--p)*19)/1.45 var(--sans);letter-spacing:-.035em}
+.pr{grid-area:pr;background:var(--lilac);display:grid;place-items:center;cursor:pointer;padding:calc(var(--p)*14)}
+.pr .m{width:72%;transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.pr:hover .m{transform:rotate(-8deg) scale(1.06)}
+.pr .say{position:absolute;left:calc(var(--p)*16);top:calc(var(--p)*16);font:800 calc(var(--p)*12)/1 var(--mono);background:#fff;padding:calc(var(--p)*7) calc(var(--p)*10);border-radius:99px}
+.tu{grid-area:tu;background:var(--ink);color:#fff;display:flex;flex-direction:column;justify-content:center}
+.tu .k{font:700 calc(var(--p)*11.5)/1 var(--mono);letter-spacing:.12em;color:var(--lime)}
+.tu b{display:block;margin-top:calc(var(--p)*10);font:900 calc(var(--p)*30)/1.1 var(--sans);letter-spacing:-.05em}
+.tu small{display:block;margin-top:calc(var(--p)*8);font:550 calc(var(--p)*13)/1.4 var(--sans);color:rgba(255,255,255,.7)}
+.wide .tu b{font-size:calc(var(--p)*24)}
+
+.dt{background:#fff;border:0;text-align:left;font-family:var(--sans);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;transition:transform .2s,background .2s}
+.dt:hover{transform:translateY(calc(var(--p)*-4))}
+.dt:focus-visible{outline:calc(var(--p)*3) solid var(--coral);outline-offset:calc(var(--p)*3)}
+.d1{grid-area:d1}.d2{grid-area:d2}.d3{grid-area:d3}
+.dt.next{background:var(--ink);color:#fff}
+.dt .no{display:flex;justify-content:space-between;font:700 calc(var(--p)*11.5)/1 var(--mono);letter-spacing:.08em;opacity:.6}
+.dt.next .no{opacity:1;color:var(--lime)}
+.dt .mo{margin-top:calc(var(--p)*26);font:900 calc(var(--p)*30)/1 var(--sans);letter-spacing:-.05em}
+.dt .dd{font:900 calc(var(--p)*92)/.9 var(--sans);letter-spacing:-.075em;margin-top:calc(var(--p)*4)}
+.dt .dd small{font-size:calc(var(--p)*22);letter-spacing:-.02em;margin-left:calc(var(--p)*4)}
+.wide .dt .dd{font-size:calc(var(--p)*84)}
+.dt h3{margin:auto 0 0;padding-top:calc(var(--p)*16);font:800 calc(var(--p)*16)/1.3 var(--sans);letter-spacing:-.035em}
+.dt .tm{margin-top:calc(var(--p)*6);font:600 calc(var(--p)*12.5)/1.35 var(--sans);opacity:.7}
+.dt .tm b{font:800 calc(var(--p)*12.5)/1 var(--mono)}
+.wide .d3{flex-direction:row;align-items:center;gap:calc(var(--p)*18)}
+.wide .d3 .mo{margin:0}
+.wide .d3 .dd{margin:0;font-size:calc(var(--p)*64)}
+.wide .d3 .no{display:none}
+.wide .d3 h3{margin:0;padding:0}
+.wide .d3 .meta{display:flex;flex-direction:column}
+
+.wi{grid-area:wi;background:#fff;font:600 calc(var(--p)*14)/1.75 var(--mono);display:flex;flex-direction:column;justify-content:center}
+.wi .c{color:#8A928D}
+.wi .k{color:#6B5BD6;font-weight:800}
+.wi .s{background:var(--lime);padding:0 calc(var(--p)*4)}
+.wide .wi{font-size:calc(var(--p)*11.5);padding:calc(var(--p)*18)}
+.qr{grid-area:qr;background:var(--lime);display:flex;align-items:center;gap:calc(var(--p)*18);text-decoration:none;color:var(--ink)}
+.qr > span:first-child{flex:none;width:calc(var(--p)*104);height:calc(var(--p)*104);background:#fff;border-radius:calc(var(--p)*16);padding:calc(var(--p)*8)}
+.wide .qr span:first-child{width:calc(var(--p)*84);height:calc(var(--p)*84)}
+.qr img{display:block;width:100%;height:100%}
+.qr strong{display:block;font:850 calc(var(--p)*19)/1.3 var(--sans);letter-spacing:-.04em}
+.qr small{display:block;margin-top:calc(var(--p)*6);font:600 calc(var(--p)*12.5)/1.45 var(--sans)}
+.qr .pending{display:inline-flex}
+.wide .qr strong{font-size:calc(var(--p)*16)}
+.ft{grid-area:ft;display:flex;justify-content:space-between;padding:0 calc(var(--p)*6);font:600 calc(var(--p)*11)/1 var(--sans);opacity:.7}
+.ft b{font-weight:850}
+.dt .meta{display:flex;flex-direction:column;margin-top:auto}
+.dt h3{margin:0;padding-top:0}
+html:not(.wide) .dt .dd{font-size:calc(var(--p)*118)}
+html:not(.wide) .dt .mo{font-size:calc(var(--p)*34)}
+.wide .wi{display:none}
+.wide .d3 .meta{margin:0}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="lay">
+    <section class="tile ti">
+      <div class="lb"><span>&gt;_ TEACHER DEV DAY</span><span>SEOUL 2026</span></div>
+      <div><h1>교사<br>개발자의 날</h1><p>교실의 문제를 코드로 바꾸는<br>선생님들이 모입니다.</p></div>
+    </section>
+    <div class="tile pr" role="img" aria-label="프롬이"><span class="say">안녕하세요!</span><span class="m"></span></div>
+    <div class="tile tu"><span class="k">EVERY LAST TUESDAY</span><b>매달 마지막<br>화요일 저녁</b><small>12월만 15일, 연말 특집</small></div>
+    <div class="dates" style="display:contents"></div>
+    <div class="tile wi" aria-label="코드 한 줄">
+      <span><span class="k">if</span> (교실.문제) {</span>
+      <span>&nbsp;&nbsp;코드로.<span class="s">해결</span>();</span>
+      <span>} <span class="c">// 코딩 몰라도 괜찮아요</span></span>
+    </div>
+    <a class="tile qr" target="_blank" rel="noopener"><span><img src="../shared/qr.svg" alt="sendev.kr QR 코드"></span><span><strong>모든 교사 개발자를<br>초대합니다</strong><small class="apply"></small></span></a>
+    <div class="ft"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span>sendev.kr</span></div>
+  </div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 처음부터</button></div>
+<script>
+const { fi, F } = ENV, S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.qr').href = POSTER.cta.url;
+$('.apply').innerHTML = '듣기만 해도 OK · 신청은 sendev.kr' + (F.apply ? '' : ENV.pendTag);
+$('.pr .m').innerHTML = KIT.mascot({ face: 'happy' });
+const NAMES = ['서로의 경험을 잇는 날', '실패의 날 × 외국인 개발자', '구해줘요, 교사 개발자!'];
+const PLACE = ['온라인', '서울시교육청', '온라인'];
+const FACE = ['happy', 'worry', 'happy'];
+$('.dates').outerHTML = S.map((s, i) => `<button class="tile dt d${i + 1}${i === fi ? ' next' : ''}" type="button" data-i="${i}" aria-label="${s.mo}월 ${s.dd}일 ${NAMES[i]} 자세히 보기">
+  <span class="no"><span>0${i + 1}</span><span>${i === fi ? 'NEXT ▶' : s.dow + '요일'}</span></span>
+  <span class="mo">${s.mo}월</span><span class="dd">${s.dd}<small>일</small></span>
+  <span class="meta"><h3>${NAMES[i]}</h3><span class="tm"><b>${s.time}</b> · ${PLACE[i]}</span></span></button>`).join('');
+const SAY = ['안녕하세요!', '같이 가요!', '>_ 접속!', '듣기만 해도 OK'];
+let k = 0;
+$('.pr').addEventListener('click', e => { e.stopPropagation(); $('.pr .say').textContent = SAY[++k % SAY.length]; });
+
+CORE.init({
+  cards: '.dt',
+  face: i => KIT.mascot({ face: FACE[i], dark: true }),
+  dots: { color: '#0E1311', alpha: .06, hot: .4 },
+  reveal() {
+    KIT.pop($$('.tile'), { stagger: 70, from: 'scale(.85)' });
+  },
+});
+</script>
+</body>
+</html>

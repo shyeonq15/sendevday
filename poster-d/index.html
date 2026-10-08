@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="교실의 문제를 코드로 바꾸는 선생님들의 모험. 10.27 · 11.24 · 12.15">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="stylesheet" href="../shared/base.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<style>
+/* 시안 D · 8비트 게임 타이틀: 프롬이의 모험 */
+#poster{background:var(--ink);color:#fff;font-family:var(--pixel)}
+.u{position:absolute}
+.stars i{position:absolute;width:calc(var(--p)*4);height:calc(var(--p)*4);background:#fff;animation:blink 1.6s steps(1) infinite}
+.hud{left:calc(var(--p)*40);right:calc(var(--p)*40);top:calc(var(--p)*28);display:flex;justify-content:space-between;align-items:center;font-size:calc(var(--p)*15);color:var(--lime)}
+.hud .hearts{color:var(--pink);letter-spacing:calc(var(--p)*4)}
+.hud .score b{color:#fff;font-weight:400}
+.kicker{left:calc(var(--p)*56);top:calc(var(--p)*92);font-size:calc(var(--p)*14);color:var(--lilac);letter-spacing:.08em}
+h1{left:calc(var(--p)*50);top:calc(var(--p)*116);margin:0;font:700 calc(var(--p)*104)/1.08 var(--pixel);color:var(--lime);
+  text-shadow:calc(var(--p)*6) calc(var(--p)*6) 0 #6B5BD6;letter-spacing:-.02em}
+h1 span{display:inline-block}
+.sub{left:calc(var(--p)*56);top:calc(var(--p)*356);margin:0;font-size:calc(var(--p)*19);line-height:1.6}
+.sub em{font-style:normal;color:var(--ink);background:var(--lime);padding:0 calc(var(--p)*5)}
+
+.stats{left:calc(var(--p)*56);top:calc(var(--p)*440);font-size:calc(var(--p)*15);line-height:2;color:#D8DED9}
+.stats b{color:var(--lilac);font-weight:400;display:inline-block;width:calc(var(--p)*84)}
+.stats .ok{color:var(--lime)}
+.start{left:calc(var(--p)*56);top:calc(var(--p)*568);font-size:calc(var(--p)*22);color:#fff;background:none;border:0;padding:0;cursor:pointer;font-family:var(--pixel)}
+.start span{animation:blink 1s steps(1) infinite;color:var(--lime)}
+
+.hero{left:calc(var(--p)*520);top:calc(var(--p)*440);width:calc(var(--p)*210);cursor:pointer}
+.hero .bodyw{animation:bob 1.2s steps(2) infinite}
+.bubble{left:calc(var(--p)*404);top:calc(var(--p)*420);background:#fff;color:var(--ink);font-size:calc(var(--p)*14);padding:calc(var(--p)*9) calc(var(--p)*12);
+  box-shadow:0 calc(var(--p)*-4) 0 #fff,0 calc(var(--p)*4) 0 #fff,calc(var(--p)*-4) 0 0 #fff,calc(var(--p)*4) 0 0 #fff;white-space:nowrap}
+.coin{position:absolute;font-size:calc(var(--p)*18);color:var(--lime);pointer-events:none;z-index:50}
+
+/* 스테이지 선택 */
+.stages{left:calc(var(--p)*50);right:calc(var(--p)*50);top:calc(var(--p)*660);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--p)*22)}
+.st{position:relative;background:var(--ink2);color:#fff;padding:calc(var(--p)*16) calc(var(--p)*16) calc(var(--p)*14);cursor:pointer;border:0;text-align:left;font-family:var(--pixel);
+  box-shadow:0 calc(var(--p)*-4) 0 #3A443E,0 calc(var(--p)*4) 0 #3A443E,calc(var(--p)*-4) 0 0 #3A443E,calc(var(--p)*4) 0 0 #3A443E}
+.st.focus{background:var(--lime);color:var(--ink);box-shadow:0 calc(var(--p)*-4) 0 #fff,0 calc(var(--p)*4) 0 #fff,calc(var(--p)*-4) 0 0 #fff,calc(var(--p)*4) 0 0 #fff}
+.st .lv{font-size:calc(var(--p)*12);opacity:.75}
+.st .ic{width:calc(var(--p)*56);position:absolute;right:calc(var(--p)*12);top:calc(var(--p)*10)}
+.st .dt{font-size:calc(var(--p)*34);margin-top:calc(var(--p)*42);letter-spacing:-.02em}
+.st .nm{font-size:calc(var(--p)*16);margin-top:calc(var(--p)*6)}
+.st .ds{font:600 calc(var(--p)*12)/1.45 var(--sans);margin-top:calc(var(--p)*8);opacity:.8;min-height:calc(var(--p)*34)}
+.here{position:absolute;left:50%;top:calc(var(--p)*-34);transform:translateX(-50%);font-size:calc(var(--p)*12);color:var(--lime);white-space:nowrap;animation:bob .8s steps(2) infinite}
+.dialog{left:calc(var(--p)*50);right:calc(var(--p)*50);top:calc(var(--p)*838);background:var(--ink);font-size:calc(var(--p)*13);line-height:1.6;padding:calc(var(--p)*10) calc(var(--p)*14);
+  box-shadow:0 calc(var(--p)*-3) 0 #fff,0 calc(var(--p)*3) 0 #fff,calc(var(--p)*-3) 0 0 #fff,calc(var(--p)*3) 0 0 #fff;display:none;z-index:20}
+.dialog.on{display:block}
+.dialog b{color:var(--lime);font-weight:400}
+
+/* 땅 + 정보 */
+.ground{left:0;right:0;top:calc(var(--p)*900);bottom:0;background:#141A17}
+.grass{height:calc(var(--p)*24);background:
+  linear-gradient(90deg,var(--lime) 50%,#9FCC00 50%) 0 0/calc(var(--p)*48) calc(var(--p)*12),
+  linear-gradient(90deg,#9FCC00 50%,var(--lime) 50%) 0 calc(var(--p)*12)/calc(var(--p)*48) calc(var(--p)*12);background-repeat:repeat-x}
+.info{position:absolute;left:calc(var(--p)*56);top:calc(var(--p)*48);font-size:calc(var(--p)*14.5);line-height:2.05}
+.info b{color:var(--lime);font-weight:400}
+.info .pending{font-family:var(--pixel)}
+.qbox{position:absolute;right:calc(var(--p)*56);top:calc(var(--p)*42);display:flex;flex-direction:column;align-items:center;gap:calc(var(--p)*8);color:var(--lime);font-size:calc(var(--p)*12);text-decoration:none}
+.qbox span:first-child{display:block;width:calc(var(--p)*118);height:calc(var(--p)*118);padding:calc(var(--p)*8);background:var(--lime);
+  box-shadow:0 calc(var(--p)*-4) 0 #fff,0 calc(var(--p)*4) 0 #fff,calc(var(--p)*-4) 0 0 #fff,calc(var(--p)*4) 0 0 #fff}
+.qbox img{display:block;width:100%;height:100%}
+.foot{position:absolute;left:calc(var(--p)*56);right:calc(var(--p)*56);bottom:calc(var(--p)*16);display:flex;justify-content:space-between;font:500 calc(var(--p)*10.5)/1 var(--sans);color:rgba(255,255,255,.5)}
+.foot b{color:rgba(255,255,255,.8);font-weight:650}
+
+/* 부팅 화면 */
+.boot{position:absolute;inset:0;background:var(--ink);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--p)*18);color:var(--lime);font-size:calc(var(--p)*20)}
+.boot .bar{width:calc(var(--p)*320);height:calc(var(--p)*28);box-shadow:0 0 0 calc(var(--p)*4) var(--lime);padding:calc(var(--p)*5)}
+.boot .bar i{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,var(--lime) 0 calc(var(--p)*14),transparent calc(var(--p)*14) calc(var(--p)*18))}
+.boot .ps{width:calc(var(--p)*120)}
+.static .boot{display:none}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="stars" aria-hidden="true"></div>
+  <div class="u hud"><span class="score">1UP <b>000000</b></span><span class="hearts">♥♥♥</span><span class="lvl"></span></div>
+  <div class="u kicker">SEOUL TEACHER DEV DAY · 2026</div>
+  <h1 class="u"><span class="chars">교사</span><br><span class="chars">개발자의 날</span></h1>
+  <p class="u sub">교실의 문제를 <em>코드로</em> 바꾸는 선생님들의 모험!</p>
+
+  <div class="u stats">
+    <div><b>PLAYER</b>선생님 누구나</div>
+    <div><b>LEVEL</b>코딩 몰라도 <span class="ok">OK</span></div>
+    <div><b>MODE</b>듣기만 해도 <span class="ok">OK</span></div>
+  </div>
+  <button class="u start" type="button"><span>▶</span> PRESS START</button>
+
+  <div class="u bubble">같이 접속할래요?</div>
+  <div class="u hero outline" role="img" aria-label="마스코트 프롬이"><div class="bodyw"></div></div>
+
+  <div class="u stages"></div>
+  <div class="u dialog" aria-live="polite"></div>
+
+  <div class="u ground">
+    <div class="grass"></div>
+    <div class="info"></div>
+    <a class="qbox" target="_blank" rel="noopener"><span><img src="../shared/qr.svg" alt="QR 코드"></span><span>INSERT COIN ▶ sendev.kr</span></a>
+    <div class="foot"><span>주최 <b class="host"></b> · 기획 <b class="team"></b></span><span>© 2026 PROM-OS</span></div>
+  </div>
+
+  <div class="boot" aria-hidden="true"><div class="ps"></div><div>PROM-OS v1.0</div><div class="bar"><i></i></div><div class="msg">LOADING...</div></div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 다시 보기</button></div>
+
+<script>
+const { STATIC, ANIMATE, fi, F, dday, pendTag } = ENV;
+const S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const poster = $('#poster');
+$('.host').textContent = POSTER.host; $('.team').textContent = POSTER.team;
+$('.qbox').href = POSTER.cta.url;
+$('.lvl').textContent = STATIC ? `STAGE ${fi + 1}-1` : `STAGE ${fi + 1} · ${dday}`;
+
+// 별 (고정 배치)
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+$('.stars').innerHTML = Array.from({ length: 34 }, () =>
+  `<i style="left:calc(var(--p)*${(rnd() * 780) | 0});top:calc(var(--p)*${(60 + rnd() * 560) | 0});animation-delay:-${(rnd() * 1.6).toFixed(2)}s;opacity:${(.25 + rnd() * .6).toFixed(2)}"></i>`).join('');
+
+// 프롬이
+const hero = $('.hero .bodyw');
+hero.innerHTML = KIT.sprite('idle'); KIT.alive(hero);
+$('.boot .ps').innerHTML = KIT.sprite('idle');
+
+// 스테이지
+const FACE = ['idle', 'oops', 'happy'];
+$('.stages').innerHTML = S.map((s, i) => `<button class="st${i === fi ? ' focus' : ''}" type="button" data-i="${i}">
+  ${i === fi ? '<span class="here">▼ NEXT STAGE</span>' : ''}
+  <div class="lv">STAGE ${i + 1}</div><div class="ic${i === fi ? '' : ' outline'}">${KIT.sprite(FACE[i])}</div>
+  <div class="dt">${s.mmdd}</div><div class="nm">${s.step} · ${s.dow}요일</div>
+  <div class="ds">${s.short}<br>${s.format}</div></button>`).join('');
+const dlg = $('.dialog');
+$$('.st').forEach(b => b.addEventListener('click', () => {
+  const s = S[b.dataset.i];
+  dlg.innerHTML = `<b>프롬이:</b> STAGE ${+b.dataset.i + 1}에서는 ${s.main}! <b>▶</b> ${s.join}${s.pending && POSTER.showPending ? ' <span class="pending">세부 조정 중</span>' : ''}`;
+  dlg.classList.add('on');
+  KIT.burst(poster, 160 + b.dataset.i * 236, 700, { n: 12 });
+}));
+poster.addEventListener('click', e => { if (!e.target.closest('.st')) dlg.classList.remove('on'); }, true);
+
+$('.info').innerHTML = `
+  <div><b>NEXT ▶</b> ${F.mmdd} (${F.dow}) ${F.time ?? '시간 추후 공지'}${F.time ? '' : pendTag}</div>
+  <div><b>APPLY ▶</b> ${F.apply ?? '신청 링크 추후 공지'}${F.apply ? '' : pendTag}</div>
+  <div><b>Q&amp;A ▶</b> 질문과 자료는 sendev.kr 한 곳에서</div>`;
+
+// 점프 + 코인
+let score = 0;
+function jump() {
+  if (STATIC) return;
+  const h = $('.hero'), P = KIT.unit(poster);
+  hero.innerHTML = KIT.sprite('happy'); hero.dataset.face = 'happy';
+  h.animate([{ transform: 'none' }, { transform: `translateY(${-120 * P}px)`, offset: .45 }, { transform: `translateY(${-120 * P}px)`, offset: .55 }, { transform: 'none' }],
+    { duration: 620, easing: 'steps(8)' }).onfinish = () => { hero.dataset.face = 'idle'; hero.innerHTML = KIT.sprite('idle'); };
+  score += 100; $('.score b').textContent = String(score).padStart(6, '0');
+  const c = document.createElement('div'); c.className = 'coin'; c.textContent = '+100 ◆';
+  c.style.left = `${600 * P}px`; c.style.top = `${380 * P}px`; poster.appendChild(c);
+  c.animate([{ transform: 'none', opacity: 1 }, { transform: `translateY(${-70 * P}px)`, opacity: 0 }], { duration: 900, easing: 'steps(6)' }).onfinish = () => c.remove();
+}
+$('.hero').addEventListener('click', jump);
+$('.start').addEventListener('click', () => { jump(); KIT.burst(poster, 150, 580); });
+addEventListener('keydown', e => { if (e.code === 'Space') { e.preventDefault(); jump(); } });
+
+// 등장: 부팅 → 픽셀 디졸브 → 글자 낙하 → 프롬이 착지
+$$('.chars').forEach(el => { el.innerHTML = [...el.textContent].map(c => `<span>${c === ' ' ? '&nbsp;' : c}</span>`).join(''); });
+async function play() {
+  const boot = $('.boot');
+  if (!ANIMATE) { boot.remove(); return; }
+  boot.style.display = 'flex'; const bar = $('.boot .bar i'); bar.style.width = '0';
+  $('.boot .msg').textContent = 'LOADING...';
+  for (let k = 0; k <= 10; k++) { bar.style.width = `${k * 10}%`; await KIT.wait(85); }
+  $('.boot .msg').textContent = 'READY!'; await KIT.wait(280);
+  boot.style.display = 'none';
+  KIT.pixelReveal(poster, { color: '#0E1311', cell: 34, duration: 700 });
+  KIT.drop($$('h1 .chars span'), { delay: 250, stagger: 70, height: 300 });
+  KIT.pop($$('.kicker,.sub,.hud'), { delay: 150, stagger: 90 });
+  KIT.pop($$('.stats > div, .start'), { delay: 1000, stagger: 120, from: 'translateX(-40px)' });
+  KIT.drop([$('.hero')], { delay: 1100, height: 600 });
+  KIT.pop([$('.bubble')], { delay: 1900 });
+  setTimeout(() => KIT.burst(poster, 616, 600, { n: 22 }), 1550);
+  KIT.pop($$('.st'), { delay: 1700, stagger: 150 });
+  KIT.pop([$('.ground')], { delay: 600, from: 'translateY(120px)' });
+}
+play();
+$('#replay').addEventListener('click', play);
+</script>
+</body>
+</html>

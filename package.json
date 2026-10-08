@@ -1,0 +1,14 @@
+{
+  "name": "sendevday-poster",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "qr": "node scripts/make-qr.mjs",
+    "png": "node scripts/render-png.mjs",
+    "thumbs": "node scripts/build-thumbs.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.63.0",
+    "qrcode": "^1.5.4"
+  }
+}

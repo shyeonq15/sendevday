@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="교실의 문제를 코드로 바꾸는 선생님들, 올해 세 번 쏟아집니다. 매달 마지막 화요일 저녁.">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="../shared/core.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<script src="../shared/core.js"></script>
+<style>
+/* 시안 O · 검정 밤하늘 게임 화면(K 느낌) + 날씨 프롬이. 세로(A4)·가로(16:9) 자동 전환 */
+#poster{background:var(--ink);color:#fff;--wide-bg-body:var(--ink);
+  --intro-bg:radial-gradient(circle at 50% 56%,#232B26 0,var(--ink) 62%);--intro-fg:#fff;--intro-accent:var(--lime);
+  --env-back:#A99BF0;--env-front:var(--lilac);--env-flap:#DCD3FF;--env-letter:var(--lime);--env-text:var(--ink);--env-accent:var(--ink)}
+.wide body{background:var(--ink)}
+.stars{position:absolute;inset:0;z-index:0;pointer-events:none}
+.stars i{position:absolute;width:calc(var(--p)*4);height:calc(var(--p)*4);background:#fff;animation:blink 1.6s steps(1) infinite}
+
+.lay{padding:calc(var(--p)*30) calc(var(--p)*44) calc(var(--p)*92);grid-template-columns:1fr;
+  grid-template-rows:auto auto auto auto auto auto auto 1fr;grid-template-areas:"hud" "kick" "title" "sub" "tue" "fch" "cards" "join"}
+.wide .lay{padding:calc(var(--p)*26) calc(var(--p)*52) calc(var(--p)*70);grid-template-columns:1fr 1.28fr;column-gap:calc(var(--p)*40);
+  grid-template-rows:auto auto auto auto auto 1fr;grid-template-areas:"hud hud" "kick fch" "title cards" "sub cards" "tue cards" "join cards"}
+
+.hud{grid-area:hud;display:flex;justify-content:space-between;font:700 calc(var(--p)*13)/1 var(--mono);letter-spacing:.06em;color:var(--lime)}
+.hud .hearts{color:var(--pink);letter-spacing:calc(var(--p)*4);font-family:var(--sans)}
+.hud .score b{color:#fff;font-weight:700}
+.kick{grid-area:kick;margin-top:calc(var(--p)*40);font:700 calc(var(--p)*12.5)/1 var(--mono);letter-spacing:.14em;color:var(--lilac)}
+.wide .kick{margin-top:calc(var(--p)*30)}
+h1{grid-area:title;margin:calc(var(--p)*14) 0 0;font:900 calc(var(--p)*104)/1.02 var(--sans);letter-spacing:-.065em;color:var(--lime);text-shadow:calc(var(--p)*5) calc(var(--p)*5) 0 #6B5BD6}
+.wide h1{font-size:calc(var(--p)*82)}
+h1 span{display:inline-block}
+.sub{grid-area:sub;margin:calc(var(--p)*20) 0 0;font:750 calc(var(--p)*22)/1.55 var(--sans);letter-spacing:-.03em}
+.sub em{font-style:normal;color:var(--ink);background:var(--lime);padding:0 calc(var(--p)*6)}
+.wide .sub{font-size:calc(var(--p)*20)}
+
+/* 매달 마지막 화요일: 라임 띠 */
+.tue{grid-area:tue;margin-top:calc(var(--p)*26);background:var(--lime);color:var(--ink);border-radius:calc(var(--p)*18);display:flex;align-items:center;gap:calc(var(--p)*20);padding:calc(var(--p)*16) calc(var(--p)*22)}
+.week{display:flex;gap:calc(var(--p)*5);align-items:center}
+.week i{width:calc(var(--p)*26);height:calc(var(--p)*26);border-radius:50%;display:grid;place-items:center;font:700 calc(var(--p)*11.5)/1 var(--sans);font-style:normal;border:1.5px solid rgba(14,19,17,.3);color:rgba(14,19,17,.55)}
+.week i.on{width:calc(var(--p)*38);height:calc(var(--p)*38);background:var(--ink);color:var(--lime);border:0;font-size:calc(var(--p)*15);font-weight:900}
+.tue strong{display:block;font:900 calc(var(--p)*23)/1.1 var(--sans);letter-spacing:-.05em}
+.tue small{display:block;margin-top:calc(var(--p)*5);font:600 calc(var(--p)*12.5)/1.3 var(--sans);opacity:.75}
+
+.fch{grid-area:fch;margin-top:calc(var(--p)*30);font:750 calc(var(--p)*15)/1 var(--sans);color:var(--lime);display:flex;justify-content:space-between;align-items:baseline}
+.fch span{font-weight:500;color:rgba(255,255,255,.55);font-size:calc(var(--p)*13)}
+.wide .fch{align-self:end;margin-top:0}
+
+/* 예보 카드 */
+.cards{grid-area:cards;margin-top:calc(var(--p)*16);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(var(--p)*16);align-self:start}
+.wide .cards{margin-top:calc(var(--p)*16)}
+.card{position:relative;background:var(--paper);color:var(--ink);border:calc(var(--p)*2.5) solid #3A443E;border-radius:calc(var(--p)*22);padding:calc(var(--p)*16) calc(var(--p)*16) calc(var(--p)*18);
+  text-align:left;font-family:var(--sans);cursor:pointer;display:flex;flex-direction:column;transition:transform .15s}
+.card:hover{transform:translateY(calc(var(--p)*-5))}
+.card:focus-visible{outline:calc(var(--p)*3) solid var(--coral);outline-offset:calc(var(--p)*3)}
+.card.next{background:var(--lime);border-color:#fff}
+.card .lv{font:700 calc(var(--p)*11)/1 var(--mono);letter-spacing:.08em;opacity:.7}
+.card .ill{position:absolute;right:calc(var(--p)*6);top:calc(var(--p)*10);width:calc(var(--p)*92)}
+.card .wx{margin-top:calc(var(--p)*26);font:850 calc(var(--p)*25)/1 var(--sans);letter-spacing:-.04em}
+.card .dm{margin-top:calc(var(--p)*30);font:750 calc(var(--p)*14)/1 var(--sans);opacity:.75}
+.card .dd{margin-top:calc(var(--p)*4);font:900 calc(var(--p)*64)/1 var(--sans);letter-spacing:-.06em}
+.card .dd small{font-size:calc(var(--p)*26);letter-spacing:-.02em;margin-left:calc(var(--p)*2)}
+.card .tm{margin-top:calc(var(--p)*8);font:700 calc(var(--p)*12.5)/1.35 var(--sans)}
+.card .tm b{font:800 calc(var(--p)*13)/1 var(--mono)}
+.card h3{margin:calc(var(--p)*14) 0 0;font:850 calc(var(--p)*19)/1.25 var(--sans);letter-spacing:-.04em}
+.card p{margin:calc(var(--p)*6) 0 0;font:600 calc(var(--p)*12.5)/1.4 var(--sans);opacity:.7}
+.card .tap{margin-top:auto;padding-top:calc(var(--p)*10);align-self:flex-end;font:700 calc(var(--p)*10.5)/1 var(--mono);opacity:.55;animation:blink 1.2s steps(1) infinite}
+.static .card .tap{display:none}
+.card .nx{position:absolute;left:calc(var(--p)*14);top:calc(var(--p)*-13);background:var(--coral);color:#fff;font:700 calc(var(--p)*11)/1 var(--mono);letter-spacing:.06em;padding:calc(var(--p)*6) calc(var(--p)*10);border-radius:99px}
+
+/* 안내 + QR */
+.join{grid-area:join;align-self:end;display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--p)*20);margin-top:calc(var(--p)*24)}
+.info{font:600 calc(var(--p)*14.5)/2 var(--sans)}
+.info b{display:inline-block;width:calc(var(--p)*84);font:700 calc(var(--p)*11.5)/1 var(--mono);letter-spacing:.1em;color:var(--lime)}
+.qbox{display:flex;flex-direction:column;align-items:center;gap:calc(var(--p)*8);color:var(--lime);font:700 calc(var(--p)*10.5)/1 var(--mono);text-decoration:none;flex:none}
+.qbox span:first-child{display:block;width:calc(var(--p)*108);height:calc(var(--p)*108);padding:calc(var(--p)*7);background:var(--lime);border-radius:calc(var(--p)*12);border:calc(var(--p)*2.5) solid #fff}
+.wide .qbox span:first-child{width:calc(var(--p)*92);height:calc(var(--p)*92)}
+.qbox img{display:block;width:100%;height:100%}
+
+/* 잔디 바닥 */
+.ground{position:absolute;left:0;right:0;bottom:0;height:calc(var(--p)*64);background:#141A17;z-index:1}
+.wide .ground{height:calc(var(--p)*50)}
+.grass{height:calc(var(--p)*20);background:linear-gradient(90deg,var(--lime) 50%,#9FCC00 50%) 0 0/calc(var(--p)*40) calc(var(--p)*10),linear-gradient(90deg,#9FCC00 50%,var(--lime) 50%) 0 calc(var(--p)*10)/calc(var(--p)*40) calc(var(--p)*10);background-repeat:repeat-x}
+.foot{display:flex;justify-content:space-between;padding:calc(var(--p)*14) calc(var(--p)*44) 0;font:500 calc(var(--p)*10.5)/1 var(--sans);color:rgba(255,255,255,.55)}
+.wide .foot{padding:calc(var(--p)*10) calc(var(--p)*52) 0}
+.foot b{color:rgba(255,255,255,.85);font-weight:650}
+
+/* 프롬이 */
+.hero{position:absolute;z-index:2;left:calc(var(--p)*606);top:calc(var(--p)*112);width:calc(var(--p)*128);cursor:pointer}
+.wide .hero{left:calc(var(--p)*296);top:calc(var(--p)*112);width:calc(var(--p)*92)}
+.hero .bw{animation:float 2.6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(calc(var(--p)*-8)) rotate(-2deg)}}
+.bubble{position:absolute;z-index:2;left:calc(var(--p)*478);top:calc(var(--p)*96);background:#fff;color:var(--ink);font:750 calc(var(--p)*13.5)/1 var(--sans);padding:calc(var(--p)*9) calc(var(--p)*12);
+  border-radius:calc(var(--p)*14) calc(var(--p)*14) calc(var(--p)*4) calc(var(--p)*14);white-space:nowrap}
+.wide .bubble{left:calc(var(--p)*396);top:calc(var(--p)*128)}
+
+/* 가로판: 카드를 키워 오른쪽을 채움 */
+.wide .cards{gap:calc(var(--p)*18)}
+.wide .card{padding:calc(var(--p)*18) calc(var(--p)*18) calc(var(--p)*20)}
+.wide .card .ill{width:calc(var(--p)*86)}
+.wide .card .wx{font-size:calc(var(--p)*25);margin-top:calc(var(--p)*30)}
+.wide .card .dm{margin-top:calc(var(--p)*44);font-size:calc(var(--p)*15)}
+.wide .card .dd{font-size:calc(var(--p)*86)}
+.wide .card .dd small{font-size:calc(var(--p)*30)}
+.wide .card .tm{margin-top:calc(var(--p)*12);font-size:calc(var(--p)*14)}
+.wide .card .tm b{font-size:calc(var(--p)*14.5)}
+.wide .card h3{white-space:nowrap;font-size:calc(var(--p)*19.5);margin-top:calc(var(--p)*20)}
+.wide .card p{font-size:calc(var(--p)*13.5)}
+
+/* 월도 크게: 10월 / 27일 두 줄 */
+.card .dm{margin-top:calc(var(--p)*26);font:900 calc(var(--p)*44)/1 var(--sans);letter-spacing:-.06em;opacity:1}
+.card .dm small,.card .dd small{font-size:.42em;letter-spacing:-.02em;margin-left:calc(var(--p)*2)}
+.card .dd{margin-top:calc(var(--p)*2);font-size:calc(var(--p)*62)}
+.card .dd small{font-size:calc(var(--p)*26)}
+.wide .card .dm{margin-top:calc(var(--p)*36);font-size:calc(var(--p)*54)}
+.wide .card .dd{font-size:calc(var(--p)*80)}
+
+/* 세로판 높이 맞춤 */
+html:not(.wide) .kick{margin-top:calc(var(--p)*30)}
+html:not(.wide) h1{font-size:calc(var(--p)*96)}
+html:not(.wide) .sub{margin-top:calc(var(--p)*16)}
+html:not(.wide) .tue{margin-top:calc(var(--p)*20)}
+html:not(.wide) .fch{margin-top:calc(var(--p)*24)}
+html:not(.wide) .card .wx{margin-top:calc(var(--p)*20)}
+html:not(.wide) .card .dm{margin-top:calc(var(--p)*20)}
+html:not(.wide) .join{margin-top:calc(var(--p)*16)}
+
+/* 연보라 섞기 */
+.card .tm b{white-space:nowrap}
+.wide .card .tm,.wide .card .tm b{font-size:calc(var(--p)*13)}
+.card:not(.next){background:#fff}
+.card:not(.next) .ill{filter:drop-shadow(0 0 0 transparent)}
+.fch span,.kick{color:var(--lilac)}
+.info b:nth-of-type(n){color:var(--lime)}
+.info div:nth-child(3) b{color:var(--lilac)}
+.hud .lvl{color:var(--lilac)}
+.card .dm{margin-top:calc(var(--p)*64)}
+.wide .card .dm{margin-top:calc(var(--p)*84)}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="stars" aria-hidden="true"></div>
+  <div class="lay">
+    <div class="hud"><span class="score">1UP <b>000000</b></span><span class="hearts">♥♥♥</span><span class="lvl"></span></div>
+    <div class="kick">SEOUL TEACHER DEV DAY · 2026</div>
+    <h1><span>교사</span><br><span>개발자의 날</span></h1>
+    <p class="sub">교실의 문제를 <em>코드로</em> 바꾸는 선생님들,<br>올해 세 번 쏟아집니다.</p>
+    <div class="tue">
+      <div class="week" aria-hidden="true"><i>월</i><i class="on">화</i><i>수</i><i>목</i><i>금</i></div>
+      <div><strong>매달 마지막 화요일 저녁</strong><small>12월만 15일(화), 연말 특집으로 만나요</small></div>
+    </div>
+    <div class="fch">▼ 2026 교사 개발자의 날 일정<span class="hint">날짜를 눌러 보세요</span></div>
+    <div class="cards"></div>
+    <div class="join">
+      <div class="info"></div>
+      <a class="qbox" target="_blank" rel="noopener"><span><img src="../shared/qr.svg" alt="sendev.kr QR 코드"></span><span>INSERT COIN ▶ sendev.kr</span></a>
+    </div>
+  </div>
+  <div class="bubble">같이 접속할래요?</div>
+  <div class="hero" role="img" aria-label="마스코트 프롬이"><div class="bw"></div></div>
+  <div class="ground"><div class="grass"></div><div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span>질문과 자료는 sendev.kr 한 곳에서</span></div></div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 처음부터</button></div>
+
+<script>
+const { STATIC, fi, F, dday } = ENV;
+const S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const poster = $('#poster');
+$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.qbox').href = POSTER.cta.url;
+$('.lvl').textContent = STATIC ? `STAGE ${fi + 1} · ${F.mmdd}` : `STAGE ${fi + 1} · ${dday}`;
+if (STATIC) $('.hint').remove();
+
+// 별
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+$('.stars').innerHTML = Array.from({ length: 46 }, () =>
+  `<i style="left:${(rnd() * 99).toFixed(1)}%;top:${(4 + rnd() * 80).toFixed(1)}%;animation-delay:-${(rnd() * 1.6).toFixed(2)}s;opacity:${(.25 + rnd() * .6).toFixed(2)}"></i>`).join('');
+
+const hero = $('.hero .bw');
+hero.innerHTML = KIT.mascot({ face: 'idle', dark: true });
+
+// 예보 카드: 날씨 프롬이 · 큰 날짜 · 시간·장소 · 의미
+const WX = [
+  { face: 'happy', title: '시작하기 좋은 날', place: '온라인' },
+  { face: 'worry', title: '실패해도 괜찮은 날', place: '서울시교육청' },
+  { face: 'happy', title: '서로 구해 주는 날', place: '온라인' },
+];
+const NAMES = ['서로의 경험을 잇는 날', '실패의 날 × 외국인 개발자', '구해줘요, 교사 개발자!'];
+$('.cards').innerHTML = S.map((s, i) => `<button class="card${i === fi ? ' next' : ''}" type="button" data-i="${i}" aria-label="${s.mo}월 ${s.dd}일 ${WX[i].title} 자세히 보기">
+  ${i === fi ? '<span class="nx">NEXT ▶</span>' : ''}
+  <span class="lv">STAGE ${i + 1}</span>
+  <span class="ill">${KIT.mascot(WX[i])}</span>
+  <span class="dm">${s.mo}<small>월</small></span>
+  <span class="dd">${s.dd}<small>일</small></span>
+  <span class="tm"><b>${s.dow}요일 ${s.time}</b><br>${WX[i].place}</span>
+  <h3>${WX[i].title}</h3>
+  <p>${NAMES[i]}</p>
+  <span class="tap">TAP ▶</span></button>`).join('');
+
+$('.info').innerHTML = `
+  <div><b>NEXT ▶</b>${F.mo}월 ${F.dd}일(${F.dow}) ${F.time}</div>
+  <div><b>APPLY ▶</b>${F.apply ?? '신청 링크 추후 공지'}${F.apply ? '' : ENV.pendTag}</div>
+  <div><b>TIP ▶</b>듣기만 해도 괜찮아요.</div>`;
+
+// 프롬이 점프
+let score = 0;
+$('.hero').addEventListener('click', e => {
+  e.stopPropagation();
+  hero.innerHTML = KIT.mascot({ face: 'happy', dark: true });
+  $('.hero').animate([{ transform: 'none' }, { transform: `translateY(${-46 * KIT.unit(poster)}px) rotate(-6deg)` }, { transform: 'none' }], { duration: 500, easing: 'cubic-bezier(.3,1.5,.5,1)' })
+    .onfinish = () => { hero.innerHTML = KIT.mascot({ face: 'idle', dark: true }); };
+  score += 100; $('.score b').textContent = String(score).padStart(6, '0');
+});
+
+CORE.init({
+  cards: '.card',
+  dark: true,
+  face: i => KIT.mascot({ ...WX[i], dark: true }),
+  dots: { color: '#CCFF00', alpha: .05, hot: .55, grow: 3 },
+  drip: ['#CCFF00', '#CFC4FF', '#FFFFFF'],
+  fountain: ['#0E1311', '#0E1311', '#6B5BD6', '#FFFFFF'],
+  burst: ['#CCFF00', '#CFC4FF', '#FFB8CB', '#FFFFFF'],
+  floor: () => $('.ground').getBoundingClientRect().top - poster.getBoundingClientRect().top + 10,
+  letter: { strong: '교사 개발자의 날에<br>초대합니다' },
+  reveal() {
+    KIT.pop($$('.hud,.kick'), { stagger: 90 });
+    KIT.drop($$('h1 span'), { delay: 120, stagger: 120, height: 280 });
+    KIT.pop([$('.sub')], { delay: 600 });
+    KIT.pop([$('.tue')], { delay: 750, from: 'translateY(30px)' });
+    KIT.pop($$('.week i'), { delay: 900, stagger: 60 });
+    KIT.drop([$('.hero')], { delay: 650, height: 420 });
+    KIT.pop([$('.bubble')], { delay: 1200 });
+    KIT.pop([$('.fch')], { delay: 950 });
+    KIT.pop($$('.card'), { delay: 1050, stagger: 160 });
+    KIT.pop([$('.join')], { delay: 1450, from: 'translateY(30px)' });
+    KIT.pop([$('.ground')], { delay: 500, from: 'translateY(80px)' });
+  },
+});
+</script>
+</body>
+</html>

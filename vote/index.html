@@ -1,0 +1,297 @@
+<title>교사개발자의 날 시안 투표</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="shared/fonts.css">
+<style>
+/* Layout: 갤러리 보드 — 상단 안내 바, A4 썸네일 카드 그리드, 카드를 열면 움직이는 시안 + 의견 패널 */
+:root{
+  --bg:#F3F3EE; --surface:#FFFFFF; --fg:#0E1311; --muted:#5F6862; --line:rgba(14,19,17,.14);
+  --accent:#CCFF00; --accent-ink:#0E1311; --lilac:#CFC4FF; --heart:#FF5C39;
+  --sans:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --pixel:Galmuri11,var(--mono);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1311; --surface:#171E1A; --fg:#EEF1EC; --muted:#9AA39D; --line:rgba(238,241,236,.14); --lilac:#3A3466; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1311; --surface:#171E1A; --fg:#EEF1EC; --muted:#9AA39D; --line:rgba(238,241,236,.14); --lilac:#3A3466; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--heart);outline-offset:2px}
+
+/* 머리말 */
+.hd{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.prom{width:64px;height:64px;image-rendering:pixelated}
+.kick{font:400 13px/1 var(--pixel);color:var(--muted)}
+h1{margin:6px 0 0;font-size:clamp(26px,4vw,38px);line-height:1.15;font-weight:850;letter-spacing:-.04em;text-wrap:balance}
+h1 mark{background:var(--accent);color:var(--accent-ink);padding:0 6px}
+.how{margin:16px 0 0;color:var(--muted);max-width:62ch}
+.how b{color:var(--fg)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:20px;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.chip{display:inline-flex;align-items:center;gap:8px;font:700 13px/1 var(--mono);padding:8px 12px;border-radius:99px;background:var(--bg);border:1px solid var(--line)}
+.hearts i{width:12px;height:12px;display:inline-block;clip-path:polygon(50% 100%,0 40%,0 15%,20% 0,50% 18%,80% 0,100% 15%,100% 40%);background:var(--line)}
+.hearts i.on{background:var(--heart)}
+.sort{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.sort button{border:0;background:none;padding:8px 14px;font-size:13px;font-weight:650}
+.sort button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.notice{margin-top:12px;padding:10px 14px;border-radius:12px;background:var(--lilac);font-size:13.5px}
+
+/* 카드 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;margin-top:24px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.card.mine{border-color:var(--heart);box-shadow:0 0 0 2px var(--heart)}
+.card.wide .thumb{aspect-ratio:16/9}
+@media (min-width:600px){.card.wide{grid-column:span 2}}
+dialog.wide .dlg{grid-template-columns:1fr;overflow:auto}
+dialog.wide .live iframe{aspect-ratio:16/9;max-width:100%}
+.thumb{position:relative;display:block;width:100%;padding:0;border:0;background:#ddd;aspect-ratio:794/1123}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.thumb .play{position:absolute;right:10px;bottom:10px;font:700 12px/1 var(--sans);background:var(--fg);color:var(--bg);padding:8px 11px;border-radius:99px;opacity:.92}
+.letter{position:absolute;left:10px;top:10px;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--fg);color:var(--accent);font:800 16px/1 var(--mono)}
+.rank{position:absolute;right:10px;top:10px;font:400 12px/1 var(--pixel);background:var(--accent);color:var(--accent-ink);padding:7px 9px;border-radius:99px}
+.meta{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.meta h2{margin:0;font-size:17px;font-weight:800;letter-spacing:-.02em}
+.meta p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.5}
+.row{display:flex;align-items:center;gap:8px;margin-top:auto}
+.vote{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--fg);background:none;border-radius:99px;padding:8px 14px;font-weight:750;font-size:14px}
+.vote svg{width:16px;height:16px}
+.vote[aria-pressed="true"]{background:var(--heart);border-color:var(--heart);color:#fff}
+.vote:disabled{opacity:.45;cursor:not-allowed}
+.cnt{font:700 13px/1 var(--mono);color:var(--muted)}
+.notes-btn{margin-left:auto;border:0;background:none;font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+
+/* 상세 보기 */
+dialog{width:min(1100px,calc(100vw - 32px));max-height:calc(100vh - 32px);border:0;border-radius:20px;padding:0;background:var(--surface);color:var(--fg)}
+dialog::backdrop{background:rgba(14,19,17,.6)}
+.dlg{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);max-height:calc(100vh - 32px)}
+.live{background:#1A211D;display:flex;align-items:center;justify-content:center;padding:16px;min-height:0}
+.live iframe{border:0;width:100%;max-width:min(100%,calc((100vh - 64px) * 794 / 1123));aspect-ratio:794/1123;background:#1A211D;display:block}
+.side{padding:22px;overflow:auto;display:flex;flex-direction:column;gap:14px;min-width:0}
+.side .top{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.side h3{margin:0;font-size:22px;font-weight:850;letter-spacing:-.03em}
+.side .x{border:1px solid var(--line);background:none;border-radius:99px;width:36px;height:36px;flex:none}
+.tips{margin:0;padding-left:18px;color:var(--muted);font-size:13.5px}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.links button{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:6px 12px;font-size:12.5px;font-weight:650}
+.links button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+label{font-weight:750;font-size:14px}
+textarea{width:100%;min-height:76px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;background:var(--bg);color:var(--fg)}
+.save{align-self:flex-start;border:0;background:var(--fg);color:var(--bg);border-radius:99px;padding:9px 16px;font-weight:750;font-size:14px}
+.saved{font-size:13px;color:var(--muted)}
+.notes{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.notes li{background:var(--bg);border-radius:12px;padding:10px 12px;font-size:14px}
+.notes li b{display:block;font-size:12px;color:var(--muted);font-weight:650;margin-bottom:2px}
+.empty{color:var(--muted);font-size:13.5px}
+@media (max-width:760px){.dlg{grid-template-columns:1fr;overflow:auto}.live iframe{max-width:100%}.sort{margin-left:0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="hd">
+    <svg class="prom" id="prom" viewBox="0 0 20 20" shape-rendering="crispEdges" aria-hidden="true"></svg>
+    <div>
+      <div class="kick">▶ 교사개발자의 날 · 홍보 포스터 시안</div>
+      <h1>마음에 드는 시안에 <mark>♥</mark>를 눌러 주세요</h1>
+    </div>
+  </header>
+  <p class="how">한 사람당 <b>♥ 3개</b>까지 고를 수 있어요. 카드를 누르면 실제로 움직이는 버전이 열리고, 시안마다 한 줄 의견을 남길 수 있어요. 지금은 모두 1회차(10.27) 기준 초안이에요. 새로 추가된 <b>H</b>는 앞선 의견을 모아 만든 종합안이고, <b>I</b>는 H를 깔끔한 글꼴로 바꾼 버전, <b>J</b>는 I에 초대장 오프닝을 붙인 버전, <b>K</b>는 노트북 화면용 가로형, <b>L</b>은 파티원 모집 스토리와 상세 페이지를 넣은 라임 버전, <b>M</b>은 L에서 정보를 덜어낸 버전, <b>N</b>은 카드 3장으로 정리한 세로·가로 겸용 안, <b>O</b>(검정)와 <b>P</b>(라임)는 비교용으로 같은 기능을 넣은 두 안이에요.</p>
+
+  <div class="bar">
+    <span class="chip">참여 <span id="voters">0</span>명</span>
+    <span class="chip hearts" id="myHearts" aria-label="내가 쓴 하트"><i></i><i></i><i></i></span>
+    <div class="sort" role="group" aria-label="정렬">
+      <button type="button" id="sortId" aria-pressed="true">시안 순</button>
+      <button type="button" id="sortVote" aria-pressed="false">득표 순</button>
+    </div>
+  </div>
+  <div class="notice" id="notice" hidden></div>
+
+  <main class="grid" id="grid"></main>
+</div>
+
+<dialog id="dlg" aria-labelledby="dTitle">
+  <div class="dlg">
+    <div class="live"><iframe id="frame" title="움직이는 시안"></iframe></div>
+    <div class="side">
+      <div class="top"><h3 id="dTitle"></h3><button class="x" type="button" id="close" aria-label="닫기">✕</button></div>
+      <p class="empty" id="dDesc"></p>
+      <ul class="tips" id="dTips"></ul>
+      <div class="links" role="group" aria-label="회차 바꿔 보기"><button type="button" data-f="1" aria-pressed="true">1회차 버전</button><button type="button" data-f="2" aria-pressed="false">2회차</button><button type="button" data-f="3" aria-pressed="false">3회차</button></div>
+      <div class="row"><button class="vote" type="button" id="dVote"></button><span class="cnt" id="dCnt"></span></div>
+      <label for="note">한 줄 의견</label>
+      <textarea id="note" maxlength="300" placeholder="예: 프롬이 표정이 귀여워요. 날짜가 더 크면 좋겠어요."></textarea>
+      <div class="row" style="margin-top:0"><button class="save" type="button" id="saveNote">의견 저장</button><span class="saved" id="savedMsg" aria-live="polite"></span></div>
+      <div><label>모두의 의견</label></div>
+      <ul class="notes" id="dNotes"></ul>
+    </div>
+  </div>
+</dialog>
+
+<script>
+const DRAFTS = [
+  { k: 'a', dir: 'poster', name: '정보형', desc: '라임 바탕에 큰 제목, 세 회차를 카드로 정리한 기본안.', tips: ['카드를 누르면 뒤집혀서 프로그램이 보여요', '마우스를 올리면 점 격자가 반응해요'] },
+  { k: 'b', dir: 'poster-b', name: '데스크톱 화면', desc: '선생님의 바탕화면. 창·메모지·FM 플레이어·아이콘으로 구성.', tips: ['창 제목줄을 끌어서 옮길 수 있어요', 'FM 플레이어 ▶를 눌러 보세요'] },
+  { k: 'c', dir: 'poster-c', name: '코드 에디터', desc: '포스터 전체가 하나의 코드 파일. 일정이 코드로 쓰여 있어요.', tips: ['날짜 줄에 마우스를 올리면 상세 정보가 떠요', '▶ 실행을 누르면 터미널이 다시 돌아가요'] },
+  { k: 'd', dir: 'poster-d', name: '8비트 게임', desc: '프롬이의 모험. 부팅 화면 → 픽셀 디졸브 → 타이틀 화면.', tips: ['프롬이를 누르거나 스페이스바로 점프!', '스테이지 상자를 누르면 프롬이가 설명해 줘요'] },
+  { k: 'e', dir: 'poster-e', name: '코드 소나기 예보', desc: '코드가 쏟아져 바닥에 쌓이는 날씨 예보. 우산 쓴 프롬이.', tips: ['처음에 코드 소나기가 쏟아져요', '아무 데나 누르면 코드가 한 방울 떨어져요'] },
+  { k: 'f', dir: 'poster-f', name: '직업 선택 게임', desc: '입문형·성장형·도전형 중 골라도 목적지는 “누구나 개발자”.', tips: ['유형 카드를 누르면 지도 위 프롬이 옷이 바뀌어요', '퀘스트 맵 끝에 트로피가 있어요'] },
+  { k: 'g', dir: 'poster-g', name: '프롬이 메신저', desc: '프롬이가 선생님에게 말을 걸며 행사를 소개하는 대화.', tips: ['대화가 하나씩 도착해요', '아래 “언제 해요?” 버튼을 눌러 보세요'] },
+  { k: 'h', dir: 'poster-h', name: '종합안 (D+E+F)', desc: 'D의 밤하늘 게임 화면에 매끈한 프롬이, E의 예보 문구, 크게 보이는 날짜를 합친 안.', tips: ['날짜 카드를 누르면 프롬이가 게임 대화창으로 설명해 줘요', '빈 곳을 누르면 코드가 쏟아져요', '프롬이를 누르면 점프!'] },
+  { k: 'i', dir: 'poster-i', name: '종합안 · 깔끔한 글꼴', desc: 'H와 같은 구성에서 제목·날짜·라벨을 픽셀 글꼴 대신 굵은 고딕으로 바꾼 안.', tips: ['날짜 카드를 누르면 프롬이가 대화창으로 설명해 줘요', '빈 곳을 누르면 코드가 쏟아져요', '프롬이를 누르면 점프!'] },
+  { k: 'j', dir: 'poster-j', name: '초대장 오프닝', desc: 'I 포스터 앞에 초대장 봉투를 붙인 안. 봉투를 열면 코드가 분수처럼 쏟아지고 포스터가 나타나요.', tips: ['봉투를 눌러 열어 보세요', '열린 뒤에는 I와 똑같이 날짜 카드·코드 클릭이 동작해요', '아래 ↻ 다시 보기로 봉투를 다시 볼 수 있어요'] },
+  { k: 'k', dir: 'poster-k', wide: true, name: '가로형 (노트북 화면)', desc: 'J를 16:9로 다시 배치해 노트북·모니터 화면을 꽉 채우는 안. 왼쪽에 제목과 안내, 오른쪽에 날짜 카드.', tips: ['봉투를 눌러 열어 보세요', '날짜 카드를 누르면 프롬이가 설명해 줘요', '전체 화면으로 보려면 새 탭에서 열어 보세요'] },
+  { k: 'l', dir: 'poster-l', name: '파티원 모집 (라임)', desc: '“무지개를 찾아 떠날 파티원 모집” 스토리. 매달 마지막 화요일을 강조하고, 날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요.', tips: ['봉투를 열면 파티원 모집 공고가 나와요', '날짜 카드를 누르면 상세 페이지(주제·이런 걸 해요·시간표)가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'm', dir: 'poster-m', name: '파티원 모집 · 덜어낸 버전', desc: 'L에서 정보를 덜어 제목·스토리 한 줄·세 날짜·QR만 남긴 안. 자세한 내용은 날짜를 눌러 상세 페이지로.', tips: ['봉투를 열면 파티원 모집 공고가 나와요', '날짜 줄을 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'n', dir: 'poster-n', extra: '&layout=tall', name: '최종 정리안 · 세로', desc: '무지개 이야기를 빼고 “교실의 문제를 코드로 바꾸는 선생님들”로. L의 카드 3장 형태에서 내용을 덜어낸 안. 같은 파일이 화면에 따라 가로로도 바뀌어요.', tips: ['봉투를 눌러 열어 보세요', '날짜 카드를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'nw', dir: 'poster-n', extra: '&layout=wide', wide: true, name: '최종 정리안 · 가로', desc: 'N과 같은 내용을 노트북 화면용 16:9로 배치한 버전. 상세 페이지도 두 칸으로 넓게 보여요.', tips: ['노트북에서 poster-n을 열면 자동으로 이 배치가 돼요', '날짜 카드를 누르면 상세 페이지가 펼쳐져요'] },
+  { k: 'o', dir: 'poster-o', extra: '&layout=tall', name: '검정 · 프롬이 (세로)', desc: 'K의 밤하늘 게임 화면을 N처럼 정리한 안. 프롬이 표정과 큰 월·날짜, 매달 마지막 화요일 라임 띠.', tips: ['봉투를 눌러 열어 보세요', '날짜 카드를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '마우스를 움직이면 점 격자가 따라와요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'ow', dir: 'poster-o', extra: '&layout=wide', wide: true, name: '검정 · 프롬이 (가로)', desc: 'O와 같은 내용의 노트북 화면용 배치.', tips: ['봉투를 눌러 열어 보세요', '날짜 카드를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '마우스를 움직이면 점 격자가 따라와요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'p', dir: 'poster-p', extra: '&layout=tall', name: '라임 · 정보형 (세로)', desc: '시안 A를 N처럼 정리한 안. 선으로 나눈 3칸과 init·ERR·fix 스티커, 아래 검은 띠.', tips: ['봉투를 눌러 열어 보세요', '날짜 카드를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '마우스를 움직이면 점 격자가 따라와요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'pw', dir: 'poster-p', extra: '&layout=wide', wide: true, name: '라임 · 정보형 (가로)', desc: 'P와 같은 내용의 노트북 화면용 배치.', tips: ['봉투를 눌러 열어 보세요', '날짜 카드를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '마우스를 움직이면 점 격자가 따라와요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'q', dir: 'poster-q', extra: '&layout=tall', name: '달력 (세로)', desc: '세 달 달력에서 화요일 줄과 행사 날짜를 칠한 안.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'qw', dir: 'poster-q', extra: '&layout=wide', wide: true, name: '달력 (가로)', desc: '세 달 달력에서 화요일 줄과 행사 날짜를 칠한 안.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'r', dir: 'poster-r', extra: '&layout=tall', name: '노선도 (세로)', desc: '“화요일선” 노선 하나에 세 개의 역.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'rw', dir: 'poster-r', extra: '&layout=wide', wide: true, name: '노선도 (가로)', desc: '“화요일선” 노선 하나에 세 개의 역.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 's', dir: 'poster-s', extra: '&layout=tall', name: '숫자 포스터 (세로)', desc: '10.27 · 11.24 · 12.15를 화면 가득 크게.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'sw', dir: 'poster-s', extra: '&layout=wide', wide: true, name: '숫자 포스터 (가로)', desc: '10.27 · 11.24 · 12.15를 화면 가득 크게.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 't', dir: 'poster-t', extra: '&layout=tall', name: 'TV 일기예보 (세로)', desc: '기상캐스터 프롬이와 3개월 예보판, 속보 자막.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'tw', dir: 'poster-t', extra: '&layout=wide', wide: true, name: 'TV 일기예보 (가로)', desc: '기상캐스터 프롬이와 3개월 예보판, 속보 자막.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'u', dir: 'poster-u', extra: '&layout=tall', name: '벤토 그리드 (세로)', desc: '둥근 타일 몇 개로만 정리한 깔끔한 안.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'uw', dir: 'poster-u', extra: '&layout=wide', wide: true, name: '벤토 그리드 (가로)', desc: '둥근 타일 몇 개로만 정리한 깔끔한 안.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'v', dir: 'poster-v', extra: '&layout=tall', name: '미니멀 (세로)', desc: '넉넉한 여백과 라임 원 하나, 가는 선 목록.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'vw', dir: 'poster-v', extra: '&layout=wide', wide: true, name: '미니멀 (가로)', desc: '넉넉한 여백과 라임 원 하나, 가는 선 목록.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'w', dir: 'poster-w', extra: '&layout=tall', name: '참여 확인 창 (세로)', desc: '“참여하시겠습니까?” 알림창. [나중에] 버튼은 도망가요.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'ww', dir: 'poster-w', extra: '&layout=wide', wide: true, name: '참여 확인 창 (가로)', desc: '“참여하시겠습니까?” 알림창. [나중에] 버튼은 도망가요.', tips: ['모니터를 눌러 켜 보세요', '날짜를 누르면 주제·시간표가 담긴 상세 페이지가 펼쳐져요', '빈 곳을 누르면 코드가 쏟아져요'] },
+  { k: 'x', dir: 'poster-x', extra: '&layout=tall', name: '키치 코드 기호 (세로)', desc: '검정 바탕에 픽셀 코딩 기호, 2D 프롬이, 카오모지 리본 테이프, 색 블록 타이포.', tips: ['모니터를 눌러 켜 보세요', '날짜(테이프·스티커)를 누르면 상세 페이지가 펼쳐져요', '기호를 누르면 빙글, 프롬이를 누르면 표정이 바뀌어요'] },
+  { k: 'xw', dir: 'poster-x', extra: '&layout=wide', wide: true, name: '키치 코드 기호 (가로)', desc: 'X와 같은 내용의 노트북 화면용 배치.', tips: ['모니터를 눌러 켜 보세요', '날짜(테이프·스티커)를 누르면 상세 페이지가 펼쳐져요', '기호를 누르면 빙글, 프롬이를 누르면 표정이 바뀌어요'] },
+  { k: 'y', dir: 'poster-y', extra: '&layout=tall', name: '노트북 스티커 (세로)', desc: '노트북 뚜껑 위 스티커: 1회 라디오 · 2회 지구본 · 3회 구명튜브.', tips: ['모니터를 눌러 켜 보세요', '라디오·지구본·구명튜브 스티커를 누르면 상세 페이지', '스티커를 끌어서 옮길 수 있어요'] },
+  { k: 'yw', dir: 'poster-y', extra: '&layout=wide', wide: true, name: '노트북 스티커 (가로)', desc: 'Y와 같은 내용의 노트북 화면용 배치.', tips: ['모니터를 눌러 켜 보세요', '라디오·지구본·구명튜브 스티커를 누르면 상세 페이지', '스티커를 끌어서 옮길 수 있어요'] },
+];
+const MAX = 3;
+const $ = s => document.querySelector(s);
+const grid = $('#grid'), dlg = $('#dlg'), frame = $('#frame');
+
+// 머리말 프롬이 (작은 픽셀 그림)
+(() => {
+  const rows = ['......KKKKKKKK......','......KLKKKKKK......','......KKLKKKKK......','......KLKKLLLK......','......KKKKKKKK......','.........KK.........','....KKKKKKKKKKKK....','...KWWWWWWWWWWWWK...','..KWWWWWWWWWWWWWGK..','.KWWWWWWWWWWWWWWWGK.','.KWWWKKWWWWWWKKWWGK.','.KWWWKKWWWWWWKKWWGK.','.KWPPWWWWWWWWWWPPGK.','.KWWWWWWKWWKWWWWWGK.','.KWWWWWWWKKWWWWWWGK.','..KWWWWWWWWWWWWWGK..','...KWWKKKKKKKKKKK...','..KWWK..............','.KWK................','.KK.................'];
+  const C = { K: '#0E1311', W: '#fff', G: '#D3D8CE', P: '#FFB8CB', L: '#CCFF00' };
+  $('#prom').innerHTML = rows.map((r, y) => [...r].map((ch, x) => ch === '.' ? '' : `<rect x="${x}" y="${y}" width="1" height="1" fill="${C[ch]}"/>`).join('')).join('');
+})();
+
+// 상태: 모든 투표 문서(votes/<id>) + 내 것
+let votes = new Map(), myId = null, mine = { picks: [], notes: {} }, sortBy = 'id', db = null, user = null, canWrite = true, openK = null;
+const heartSvg = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14.5 1.6 8.3A3.9 3.9 0 0 1 8 3.4a3.9 3.9 0 0 1 6.4 4.9z" fill="currentColor"/></svg>';
+const tally = () => { const t = {}; DRAFTS.forEach(d => t[d.k] = 0); votes.forEach(v => (v.picks || []).forEach(k => { if (k in t) t[k]++; })); return t; };
+const notesFor = k => [...votes.entries()].filter(([, v]) => v.notes && v.notes[k]).map(([id, v]) => ({ id, text: String(v.notes[k]).slice(0, 300) }));
+
+function render() {
+  const t = tally();
+  const ranked = [...DRAFTS].sort((a, b) => t[b.k] - t[a.k]);
+  const top = t[ranked[0].k] > 0 ? ranked[0].k : null;
+  const list = sortBy === 'vote' ? ranked : DRAFTS;
+  grid.innerHTML = list.map(d => {
+    const on = mine.picks.includes(d.k), n = notesFor(d.k).length;
+    return `<article class="card${on ? ' mine' : ''}${d.wide ? ' wide' : ''}">
+      <button class="thumb" type="button" data-open="${d.k}" aria-label="${d.name} 시안 크게 보기">
+        <img src="thumbs/${d.k}.png" alt="${d.name} 시안 미리보기" loading="lazy">
+        <span class="letter">${d.k.toUpperCase()}</span>${d.k === top ? '<span class="rank">현재 1위</span>' : ''}
+        <span class="play">▶ 움직이는 버전</span></button>
+      <div class="meta"><h2>${d.name}</h2><p>${d.desc}</p>
+        <div class="row"><button class="vote" type="button" data-vote="${d.k}" aria-pressed="${on}" ${!canWrite || (!on && mine.picks.length >= MAX) ? 'disabled' : ''}>${heartSvg}${on ? '골랐어요' : '좋아요'}</button>
+          <span class="cnt">♥ ${t[d.k]}</span>
+          <button class="notes-btn" type="button" data-open="${d.k}">의견 ${n}</button></div></div></article>`;
+  }).join('');
+  $('#voters').textContent = [...votes.values()].filter(v => (v.picks || []).length).length;
+  [...$('#myHearts').children].forEach((i, n) => i.classList.toggle('on', n < mine.picks.length));
+  if (openK) fillDialog(openK);
+}
+
+// 내 문서 저장: 한 번에 하나씩
+let saving = Promise.resolve();
+function persist() {
+  if (!db || !myId) return Promise.resolve();
+  const body = { picks: [...mine.picks], notes: { ...mine.notes }, at: new Date().toISOString() };
+  saving = saving.then(() => db.doc('votes/' + myId).set(body)).catch(e => {
+    if (e && e.code === 'invalid_argument') { canWrite = false; showNotice('이 링크에서는 투표 권한이 없어요. 공유한 분께 “참여자(Contributor)” 권한을 부탁해 주세요.'); render(); }
+    else showNotice('저장하지 못했어요. 잠시 후 다시 눌러 주세요.');
+  });
+  return saving;
+}
+function toggle(k) {
+  if (!canWrite) return;
+  const i = mine.picks.indexOf(k);
+  if (i >= 0) mine.picks.splice(i, 1); else if (mine.picks.length < MAX) mine.picks.push(k); else return;
+  votes.set(myId || 'me', { ...mine });
+  render(); persist();
+}
+function showNotice(t) { const n = $('#notice'); n.textContent = t; n.hidden = false; }
+
+// 상세 보기
+async function fillDialog(k) {
+  const d = DRAFTS.find(x => x.k === k), t = tally(), on = mine.picks.includes(k);
+  $('#dTitle').textContent = `${k.toUpperCase()} · ${d.name}`;
+  $('#dDesc').textContent = d.desc;
+  $('#dTips').innerHTML = d.tips.map(x => `<li>${x}</li>`).join('');
+  const v = $('#dVote'); v.innerHTML = `${heartSvg}${on ? '골랐어요' : '좋아요'}`; v.setAttribute('aria-pressed', on);
+  v.disabled = !canWrite || (!on && mine.picks.length >= MAX);
+  $('#dCnt').textContent = `♥ ${t[k]}`;
+  const ns = notesFor(k), ul = $('#dNotes');
+  if (!ns.length) { ul.innerHTML = '<li class="empty" style="background:none;padding:0">아직 의견이 없어요. 첫 의견을 남겨 주세요.</li>'; return; }
+  let names = {};
+  try { if (user) names = await user.profiles(ns.map(n => n.id)); } catch {}
+  ul.innerHTML = '';
+  ns.forEach(n => {
+    const li = document.createElement('li'), b = document.createElement('b'), p = document.createElement('span');
+    b.textContent = n.id === myId ? '나' : ((names[n.id] && names[n.id].name) || '참여자');
+    p.textContent = n.text; li.append(b, p); ul.append(li);
+  });
+}
+function openDraft(k, f = '1') {
+  openK = k;
+  const d = DRAFTS.find(x => x.k === k);
+  frame.src = `${d.dir}/index.html#embed&focus=${f}${d.extra || ''}`;
+  dlg.classList.toggle('wide', !!d.wide);
+  document.querySelectorAll('.links button').forEach(b => b.setAttribute('aria-pressed', b.dataset.f === f));
+  $('#note').value = mine.notes[k] || ''; $('#note').disabled = !canWrite; $('#saveNote').disabled = !canWrite;
+  $('#savedMsg').textContent = '';
+  fillDialog(k);
+  if (!dlg.open) dlg.showModal();
+}
+grid.addEventListener('click', e => {
+  const o = e.target.closest('[data-open]'), v = e.target.closest('[data-vote]');
+  if (v) toggle(v.dataset.vote); else if (o) openDraft(o.dataset.open);
+});
+$('#dVote').addEventListener('click', () => toggle(openK));
+$('#close').addEventListener('click', () => dlg.close());
+dlg.addEventListener('close', () => { openK = null; frame.src = 'about:blank'; });
+document.querySelectorAll('.links button').forEach(b => b.addEventListener('click', () => openDraft(openK, b.dataset.f)));
+$('#saveNote').addEventListener('click', async () => {
+  const txt = $('#note').value.trim();
+  if (txt) mine.notes[openK] = txt; else delete mine.notes[openK];
+  votes.set(myId || 'me', { ...mine });
+  await persist(); $('#savedMsg').textContent = '저장했어요'; render();
+});
+$('#sortId').addEventListener('click', () => { sortBy = 'id'; $('#sortId').setAttribute('aria-pressed', 'true'); $('#sortVote').setAttribute('aria-pressed', 'false'); render(); });
+$('#sortVote').addEventListener('click', () => { sortBy = 'vote'; $('#sortVote').setAttribute('aria-pressed', 'true'); $('#sortId').setAttribute('aria-pressed', 'false'); render(); });
+
+render();
+
+// 공유 저장소 연결
+(async () => {
+  const c = window.claude;
+  if (!c || !c.use) { canWrite = false; showNotice('이 화면에서는 투표가 저장되지 않아요. claude.ai 링크로 열어 주세요.'); render(); return; }
+  [db, user] = await Promise.all([c.use('db'), c.use('user')]);
+  if (!db) { canWrite = false; showNotice('투표하려면 claude.ai에 로그인한 상태로 열어 주세요. 시안 구경은 그대로 할 수 있어요.'); render(); return; }
+  myId = user ? await user.id() : null;
+  if (!myId) { canWrite = false; showNotice('로그인 정보를 확인하지 못해 투표가 꺼져 있어요.'); }
+  else if (user && user.can && (await user.can('data.write')) === false) { canWrite = false; showNotice('보기 전용 권한이라 투표는 할 수 없어요. 공유한 분께 “참여자(Contributor)” 권한을 부탁해 주세요.'); }
+  db.collection('votes').onSnapshot(snap => {
+    votes = new Map(snap.docs.filter(d => d.exists).map(d => [d.id, d.data()]));
+    const m = myId && votes.get(myId);
+    if (m) mine = { picks: [...(m.picks || [])].slice(0, MAX), notes: { ...(m.notes || {}) } };
+    render();
+  }, () => showNotice('투표 현황을 불러오지 못했어요. 새로고침해 주세요.'));
+})();
+</script>

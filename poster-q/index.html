@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="매달 마지막 화요일 저녁, 교실의 문제를 코드로 바꾸는 선생님들이 모입니다.">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="../shared/core.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<script src="../shared/core.js"></script>
+<style>
+/* 시안 Q · 달력: 세 달의 달력에서 화요일 세로줄과 행사 날짜를 칠해 '매달 마지막 화요일'을 보여 줌 */
+#poster{background:var(--lime);color:var(--ink)}
+.wide body{background:var(--lime)}
+.lay{padding:calc(var(--p)*44) calc(var(--p)*52) calc(var(--p)*30);grid-template-columns:1fr;
+  grid-template-rows:auto auto auto 1fr auto auto;grid-template-areas:"top" "title" "sub" "cals" "join" "foot"}
+.wide .lay{padding:calc(var(--p)*34) calc(var(--p)*52) calc(var(--p)*22);grid-template-columns:.9fr 1.6fr;column-gap:calc(var(--p)*44);
+  grid-template-rows:auto auto auto 1fr auto;grid-template-areas:"top top" "title cals" "sub cals" "join cals" "foot foot"}
+.top{grid-area:top;display:flex;justify-content:space-between;align-items:center}
+.logo{display:flex;align-items:center;gap:calc(var(--p)*9);font:850 calc(var(--p)*16)/1 var(--sans);letter-spacing:-.02em}
+.logo i{width:calc(var(--p)*32);height:calc(var(--p)*32);display:grid;place-items:center;background:var(--ink);color:var(--lime);border-radius:calc(var(--p)*9);font:800 calc(var(--p)*12)/1 var(--mono);font-style:normal}
+.top .r{font:700 calc(var(--p)*11.5)/1 var(--mono);letter-spacing:.12em}
+h1{grid-area:title;margin:calc(var(--p)*56) 0 0;font:900 calc(var(--p)*96)/1 var(--sans);letter-spacing:-.07em}
+.wide h1{margin-top:calc(var(--p)*50);font-size:calc(var(--p)*76);line-height:1.05}
+.sub{grid-area:sub;margin:calc(var(--p)*20) 0 0;font:750 calc(var(--p)*25)/1.45 var(--sans);letter-spacing:-.04em}
+.sub b{font-weight:900;background:var(--ink);color:var(--lime);padding:0 calc(var(--p)*6)}
+.wide .sub{font-size:calc(var(--p)*21)}
+
+/* 달력 */
+.cals{grid-area:cals;align-self:center;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(var(--p)*18)}
+.wide .cals{align-self:center}
+.cal{background:#fff;border:calc(var(--p)*2.5) solid var(--ink);border-radius:calc(var(--p)*20);padding:calc(var(--p)*16) calc(var(--p)*14) calc(var(--p)*16);
+  text-align:left;font-family:var(--sans);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;transition:transform .18s;position:relative}
+.cal:hover{transform:translateY(calc(var(--p)*-4)) rotate(-.6deg)}
+.cal:focus-visible{outline:calc(var(--p)*3) solid var(--coral);outline-offset:calc(var(--p)*3)}
+.cal.next{box-shadow:calc(var(--p)*7) calc(var(--p)*7) 0 var(--ink)}
+.cal .mh{display:flex;align-items:baseline;justify-content:space-between}
+.cal .mh b{font:900 calc(var(--p)*46)/1 var(--sans);letter-spacing:-.06em}
+.cal .mh b small{font-size:calc(var(--p)*20);margin-left:calc(var(--p)*2)}
+.cal .mh span{font:700 calc(var(--p)*10.5)/1 var(--mono);letter-spacing:.1em;opacity:.6}
+.cal .nx{position:absolute;right:calc(var(--p)*12);top:calc(var(--p)*-12);background:var(--coral);color:#fff;font:700 calc(var(--p)*10.5)/1 var(--mono);letter-spacing:.06em;padding:calc(var(--p)*6) calc(var(--p)*9);border-radius:99px}
+.grid{margin-top:calc(var(--p)*12);display:grid;grid-template-columns:repeat(7,1fr);row-gap:calc(var(--p)*3);font:600 calc(var(--p)*11)/1 var(--mono);text-align:center}
+.grid i{font-style:normal;height:calc(var(--p)*22);display:grid;place-items:center;position:relative;font-variant-numeric:tabular-nums}
+.grid i.h{font-weight:800;font-size:calc(var(--p)*10);opacity:.55}
+.grid i.tue{background:var(--lilac)}
+.grid i.h.tue{opacity:1;border-radius:calc(var(--p)*6) calc(var(--p)*6) 0 0}
+.grid i.last{border-radius:0 0 calc(var(--p)*6) calc(var(--p)*6)}
+.grid i.ev{z-index:1;color:var(--ink);font-weight:900}
+.grid i.ev::before{content:"";position:absolute;inset:calc(var(--p)*-6) 50% auto auto;width:calc(var(--p)*32);height:calc(var(--p)*32);transform:translateX(50%);
+  border-radius:50%;background:var(--lime);border:calc(var(--p)*2.5) solid var(--ink);z-index:-1;top:calc(var(--p)*-5)}
+.cal .tm{margin-top:calc(var(--p)*14);font:800 calc(var(--p)*13.5)/1 var(--mono)}
+.cal .pl{margin-top:calc(var(--p)*6);font:600 calc(var(--p)*12.5)/1.3 var(--sans);opacity:.75}
+.cal h3{margin:calc(var(--p)*10) 0 0;font:850 calc(var(--p)*16.5)/1.3 var(--sans);letter-spacing:-.035em}
+.legend{grid-column:1/-1;display:flex;gap:calc(var(--p)*18);font:650 calc(var(--p)*12.5)/1 var(--sans);margin-top:calc(var(--p)*4)}
+.legend span{display:inline-flex;align-items:center;gap:calc(var(--p)*6)}
+.legend i{width:calc(var(--p)*14);height:calc(var(--p)*14);border-radius:calc(var(--p)*3);background:var(--lilac);border:1.5px solid var(--ink)}
+.legend i.o{border-radius:50%;background:var(--lime)}
+
+.join{grid-area:join;align-self:end;display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--p)*20);margin-top:calc(var(--p)*24)}
+.join strong{display:block;font:850 calc(var(--p)*22)/1.3 var(--sans);letter-spacing:-.04em}
+.join span{display:block;margin-top:calc(var(--p)*8);font:600 calc(var(--p)*14)/1.5 var(--sans)}
+.wide .join strong{font-size:calc(var(--p)*19)}
+.prom{width:calc(var(--p)*76);flex:none;margin-left:auto;cursor:pointer}
+.qr{display:block;flex:none;width:calc(var(--p)*108);height:calc(var(--p)*108);padding:calc(var(--p)*7);background:#fff;border-radius:calc(var(--p)*14);border:calc(var(--p)*2.5) solid var(--ink)}
+.wide .qr{width:calc(var(--p)*88);height:calc(var(--p)*88)}
+.qr img{display:block;width:100%;height:100%}
+.foot{grid-area:foot;margin-top:calc(var(--p)*18);display:flex;justify-content:space-between;font:600 calc(var(--p)*11)/1 var(--sans);opacity:.8}
+.wide .foot{margin-top:calc(var(--p)*12)}
+.foot b{font-weight:850}
+.join .pending{display:inline-flex;margin-top:0}
+.wide .prom{display:none}
+.wide .join span{font-size:calc(var(--p)*13)}
+html:not(.wide) .cals{gap:calc(var(--p)*16)}
+html:not(.wide) .grid i{height:calc(var(--p)*26)}
+html:not(.wide) .cal .mh b{font-size:calc(var(--p)*52)}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="lay">
+    <div class="top"><span class="logo"><i>&gt;_</i>교사개발자</span><span class="r">SEOUL · 2026</span></div>
+    <h1>교사<br>개발자의 날</h1>
+    <p class="sub">교실의 문제를 코드로 바꾸는 선생님들이<br><b>매달 마지막 화요일 저녁</b> 모입니다.</p>
+    <div class="cals"></div>
+    <div class="join">
+      <div><strong>코딩을 몰라도, 이미 잘해도. <br>모든 교사 개발자를 초대합니다.</strong><span class="apply"></span></div>
+      <span class="prom" role="img" aria-label="프롬이"></span>
+      <a class="qr" target="_blank" rel="noopener"><img src="../shared/qr.svg" alt="sendev.kr QR 코드"></a>
+    </div>
+    <div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span>sendev.kr</span></div>
+  </div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 처음부터</button></div>
+<script>
+const { fi, F } = ENV, S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const poster = $('#poster');
+$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.qr').href = POSTER.cta.url;
+$('.apply').innerHTML = '듣기만 해도 괜찮아요. 신청과 자료는 sendev.kr' + (F.apply ? '' : ENV.pendTag);
+$('.prom').innerHTML = KIT.mascot({ face: 'happy' });
+const NAMES = ['서로의 경험을 잇는 날', '실패의 날 × 외국인 개발자', '구해줘요, 교사 개발자!'];
+const PLACE = ['온라인', '서울시교육청 스튜디오', '온라인 · 연말 특집'];
+const FACE = ['happy', 'worry', 'happy'];
+const H = ['일', '월', '화', '수', '목', '금', '토'];
+$('.cals').innerHTML = S.map((s, i) => {
+  const first = new Date(2026, s.mo - 1, 1).getDay(), days = new Date(2026, s.mo, 0).getDate();
+  const cells = H.map((h, c) => `<i class="h${c === 2 ? ' tue' : ''}">${h}</i>`);
+  for (let k = 0; k < first; k++) cells.push(`<i class="${k === 2 ? 'tue' : ''}"></i>`);
+  const lastRow = Math.floor((first + days - 1) / 7);
+  for (let d = 1; d <= days; d++) {
+    const c = (first + d - 1) % 7, row = Math.floor((first + d - 1) / 7);
+    cells.push(`<i class="${c === 2 ? 'tue' : ''}${c === 2 && row === lastRow ? ' last' : ''}${d === s.dd ? ' ev' : ''}">${d}</i>`);
+  }
+  return `<button class="cal${i === fi ? ' next' : ''}" type="button" data-i="${i}" aria-label="${s.mo}월 ${s.dd}일 ${NAMES[i]} 자세히 보기">
+    ${i === fi ? '<span class="nx">NEXT</span>' : ''}
+    <span class="mh"><b>${s.mo}<small>월</small></b><span>0${i + 1}</span></span>
+    <span class="grid">${cells.join('')}</span>
+    <span class="tm">${s.dd}일(${s.dow}) ${s.time}</span>
+    <span class="pl">${PLACE[i]}</span>
+    <h3>${NAMES[i]}</h3></button>`;
+}).join('') + '<div class="legend"><span><i></i>화요일</span><span><i class="o"></i>교사 개발자의 날</span></div>';
+
+$('.prom').addEventListener('click', e => { e.stopPropagation(); $('.prom').animate([{ transform: 'none' }, { transform: 'translateY(-30%) rotate(-8deg)' }, { transform: 'none' }], { duration: 460, easing: 'cubic-bezier(.3,1.5,.5,1)' }); });
+
+CORE.init({
+  cards: '.cal',
+  face: i => KIT.mascot({ face: FACE[i], dark: true }),
+  dots: { color: '#0E1311', alpha: .1, hot: .5 },
+  reveal() {
+    KIT.pop([$('.top')]);
+    KIT.drop([$('h1')], { delay: 100, height: 240 });
+    KIT.pop([$('.sub')], { delay: 450 });
+    KIT.pop($$('.cal'), { delay: 650, stagger: 160 });
+    $$('.grid i.tue').forEach((el, k) => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, delay: 1100 + k * 25, fill: 'backwards' }));
+    $$('.grid i.ev').forEach((el, k) => el.animate([{ transform: 'scale(0)' }, { transform: 'scale(1.3)' }, { transform: 'none' }], { duration: 500, delay: 1500 + k * 180, easing: 'cubic-bezier(.3,1.5,.5,1)', fill: 'backwards' }));
+    KIT.pop([$('.legend'), $('.join')], { delay: 1300, stagger: 120, from: 'translateY(24px)' });
+  },
+});
+</script>
+</body>
+</html>

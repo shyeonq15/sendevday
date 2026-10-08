@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="10.27 · 11.24 · 12.15 매달 마지막 화요일 저녁, 교사 개발자의 날.">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="../shared/core.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<script src="../shared/core.js"></script>
+<style>
+/* 시안 S · 숫자 포스터: 세 날짜를 화면 가득 거대한 숫자로. 다음 회차만 라임으로 채움 */
+#poster{background:var(--ink);color:#fff;--intro-bg:var(--ink);--intro-fg:#fff;--intro-accent:var(--lime)}
+.wide body{background:var(--ink)}
+.lay{padding:calc(var(--p)*44) calc(var(--p)*48) calc(var(--p)*28);grid-template-columns:1fr;grid-template-rows:auto auto 1fr auto auto;grid-template-areas:"top" "title" "nums" "join" "foot"}
+.wide .lay{padding:calc(var(--p)*34) calc(var(--p)*52) calc(var(--p)*22);grid-template-rows:auto auto 1fr auto auto}
+.top{grid-area:top;display:flex;justify-content:space-between;align-items:center}
+.logo{display:flex;align-items:center;gap:calc(var(--p)*9);font:850 calc(var(--p)*16)/1 var(--sans);letter-spacing:-.02em}
+.logo i{width:calc(var(--p)*32);height:calc(var(--p)*32);display:grid;place-items:center;background:var(--lime);color:var(--ink);border-radius:calc(var(--p)*9);font:800 calc(var(--p)*12)/1 var(--mono);font-style:normal}
+.top .r{font:700 calc(var(--p)*11.5)/1 var(--mono);letter-spacing:.12em;color:var(--lilac)}
+.title{grid-area:title;margin-top:calc(var(--p)*34);display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--p)*20);border-bottom:calc(var(--p)*2) solid #fff;padding-bottom:calc(var(--p)*18)}
+h1{margin:0;font:900 calc(var(--p)*64)/1 var(--sans);letter-spacing:-.065em}
+.title p{margin:0;text-align:right;font:650 calc(var(--p)*16)/1.5 var(--sans);color:rgba(255,255,255,.8)}
+.title p b{color:var(--lime);font-weight:850}
+.wide h1{font-size:calc(var(--p)*58)}
+
+/* 거대한 날짜 */
+.nums{grid-area:nums;display:grid;align-self:stretch}
+html:not(.wide) .nums{grid-template-rows:repeat(3,1fr)}
+.wide .nums{grid-template-columns:repeat(3,1fr)}
+.row{position:relative;display:grid;align-items:center;background:none;border:0;padding:0;text-align:left;font-family:var(--sans);color:#fff;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.18)}
+html:not(.wide) .row{grid-template-columns:auto 1fr;column-gap:calc(var(--p)*22)}
+.wide .row{border-bottom:0;border-right:1px solid rgba(255,255,255,.18);align-content:center;justify-items:start;padding:0 calc(var(--p)*22)}
+.wide .row:first-child{padding-left:0}
+.wide .row:last-child{border-right:0}
+.row:focus-visible{outline:calc(var(--p)*3) solid var(--coral);outline-offset:calc(var(--p)*-3)}
+.big{font:900 calc(var(--p)*178)/.82 var(--sans);letter-spacing:-.075em;color:#fff;transition:color .25s;white-space:nowrap}
+.wide .big{font-size:calc(var(--p)*150);line-height:.86;display:flex;flex-direction:column}
+.big .dot{color:inherit}
+.row.next .big{color:var(--lime)}
+.row:hover:not(.next) .big{color:var(--lilac)}
+.big small{font-size:.24em;letter-spacing:-.02em;color:rgba(255,255,255,.7);margin-left:calc(var(--p)*4)}
+.wide .big small{margin:calc(var(--p)*10) 0 0;font-size:calc(var(--p)*22)}
+.row.next .big small{color:var(--lime)}
+.meta{display:flex;flex-direction:column;gap:calc(var(--p)*7)}
+.wide .meta{margin-top:calc(var(--p)*22)}
+.meta .no{font:700 calc(var(--p)*11.5)/1 var(--mono);letter-spacing:.1em;color:var(--lilac)}
+.meta .no b{background:var(--coral);color:#fff;padding:calc(var(--p)*4) calc(var(--p)*7);border-radius:99px;margin-left:calc(var(--p)*6);font-weight:700}
+.meta h3{margin:0;font:850 calc(var(--p)*20)/1.25 var(--sans);letter-spacing:-.04em}
+.meta span{font:600 calc(var(--p)*13.5)/1.3 var(--sans);color:rgba(255,255,255,.75)}
+.meta span b{font:800 calc(var(--p)*13.5)/1 var(--mono);color:#fff}
+
+.join{grid-area:join;display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--p)*18);margin-top:calc(var(--p)*22)}
+.join strong{display:block;font:850 calc(var(--p)*22)/1.3 var(--sans);letter-spacing:-.04em}
+.join strong em{font-style:normal;color:var(--lime)}
+.join span{display:block;margin-top:calc(var(--p)*8);font:600 calc(var(--p)*14)/1.5 var(--sans);color:rgba(255,255,255,.75)}
+.join .pending{display:inline-flex;margin-top:0}
+.wide .join strong br{display:none}
+.prom{width:calc(var(--p)*80);flex:none;margin-left:auto;cursor:pointer}
+.qr{display:block;flex:none;width:calc(var(--p)*104);height:calc(var(--p)*104);padding:calc(var(--p)*7);background:var(--lime);border-radius:calc(var(--p)*14)}
+.wide .qr{width:calc(var(--p)*84);height:calc(var(--p)*84)}
+.qr img{display:block;width:100%;height:100%}
+.foot{grid-area:foot;margin-top:calc(var(--p)*16);display:flex;justify-content:space-between;font:500 calc(var(--p)*11)/1 var(--sans);color:rgba(255,255,255,.55)}
+.foot b{color:rgba(255,255,255,.85);font-weight:650}
+.join .pending{color:var(--coral)}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="lay">
+    <div class="top"><span class="logo"><i>&gt;_</i>교사개발자</span><span class="r">SEOUL · 2026</span></div>
+    <div class="title"><h1>교사 개발자의 날</h1><p>교실의 문제를 코드로 바꾸는 선생님들,<br><b>매달 마지막 화요일 저녁</b></p></div>
+    <div class="nums"></div>
+    <div class="join">
+      <div><strong>코딩을 몰라도, 이미 잘해도. <br><em>모든 교사 개발자</em>를 초대합니다.</strong><span class="apply"></span></div>
+      <span class="prom" role="img" aria-label="프롬이"></span>
+      <a class="qr" target="_blank" rel="noopener"><img src="../shared/qr.svg" alt="sendev.kr QR 코드"></a>
+    </div>
+    <div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span>질문과 자료는 sendev.kr</span></div>
+  </div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 처음부터</button></div>
+<script>
+const { fi, F } = ENV, S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.qr').href = POSTER.cta.url;
+$('.apply').innerHTML = '듣기만 해도 괜찮아요. 신청과 자료는 sendev.kr' + (F.apply ? '' : ENV.pendTag);
+$('.prom').innerHTML = KIT.mascot({ face: 'happy', dark: true });
+const NAMES = ['서로의 경험을 잇는 날', '실패의 날 × 외국인 개발자', '구해줘요, 교사 개발자!'];
+const PLACE = ['온라인', '서울시교육청 스튜디오', '온라인 · 연말 특집'];
+const FACE = ['happy', 'worry', 'happy'];
+const pad = n => String(n).padStart(2, '0');
+$('.nums').innerHTML = S.map((s, i) => `<button class="row${i === fi ? ' next' : ''}" type="button" data-i="${i}" aria-label="${s.mo}월 ${s.dd}일 ${NAMES[i]} 자세히 보기">
+  <span class="big"><span class="m">${s.mo}<span class="dot">.</span></span><span class="d">${pad(s.dd)}<small>${s.dow}</small></span></span>
+  <span class="meta"><span class="no">0${i + 1} · ${s.mo}월 ${s.dd}일${i === fi ? '<b>NEXT</b>' : ''}</span><h3>${NAMES[i]}</h3><span><b>${s.time}</b> · ${PLACE[i]}</span></span></button>`).join('');
+$('.prom').addEventListener('click', e => { e.stopPropagation(); $('.prom').animate([{ transform: 'none' }, { transform: 'translateY(-30%) rotate(-8deg)' }, { transform: 'none' }], { duration: 460, easing: 'cubic-bezier(.3,1.5,.5,1)' }); });
+
+CORE.init({
+  dark: true,
+  cards: '.row',
+  face: i => KIT.mascot({ face: FACE[i], dark: true }),
+  dots: { color: '#CCFF00', alpha: .04, hot: .5 },
+  drip: ['#CCFF00', '#CFC4FF', '#FFFFFF'],
+  reveal() {
+    KIT.pop([$('.top'), $('.title')], { stagger: 120 });
+    $$('.big').forEach((el, i) => el.animate([{ transform: 'translateY(40%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 700, delay: 350 + i * 180, easing: 'cubic-bezier(.2,.9,.25,1.1)', fill: 'backwards' }));
+    KIT.pop($$('.meta'), { delay: 700, stagger: 180, from: 'translateX(20px)' });
+    KIT.pop([$('.join')], { delay: 1300, from: 'translateY(24px)' });
+  },
+});
+</script>
+</body>
+</html>

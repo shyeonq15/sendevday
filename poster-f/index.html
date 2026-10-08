@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="입문형도 성장형도 도전형도, 우리는 모두 개발자. 10.27 · 11.24 · 12.15">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="stylesheet" href="../shared/base.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<style>
+/* 시안 F · 직업 선택: 입문형·성장형·도전형 모두 '누구나 개발자'로 가는 모험 */
+#poster{background:var(--lilac);font-family:var(--pixel)}
+.u{position:absolute}
+.pxbox{box-shadow:0 calc(var(--p)*-4) 0 var(--ink),0 calc(var(--p)*4) 0 var(--ink),calc(var(--p)*-4) 0 0 var(--ink),calc(var(--p)*4) 0 0 var(--ink),calc(var(--p)*4) calc(var(--p)*8) 0 rgba(14,19,17,.25)}
+.top{left:calc(var(--p)*44);right:calc(var(--p)*44);top:calc(var(--p)*30);display:flex;justify-content:space-between;font-size:calc(var(--p)*14)}
+.top .sel{background:var(--ink);color:var(--lime);padding:calc(var(--p)*6) calc(var(--p)*10)}
+.top .sel span{animation:blink 1s steps(1) infinite}
+h1{left:calc(var(--p)*40);top:calc(var(--p)*78);margin:0;font:700 calc(var(--p)*78)/1.1 var(--pixel);letter-spacing:-.02em;color:var(--ink);
+  text-shadow:calc(var(--p)*5) calc(var(--p)*5) 0 #fff}
+h1 span{display:inline-block}
+.sub{left:calc(var(--p)*44);top:calc(var(--p)*178);margin:0;font:750 calc(var(--p)*21)/1.4 var(--sans);letter-spacing:-.03em}
+.sub em{font-style:normal;background:var(--ink);color:var(--lime);padding:0 calc(var(--p)*6)}
+
+/* 직업 카드 */
+.classes{left:calc(var(--p)*48);right:calc(var(--p)*48);top:calc(var(--p)*236);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--p)*22)}
+.cls{background:var(--paper);padding:calc(var(--p)*14) calc(var(--p)*14) calc(var(--p)*16);cursor:pointer;position:relative;border:0;text-align:left;font-family:var(--pixel);color:var(--ink);transition:transform .15s}
+.cls:hover{transform:translateY(calc(var(--p)*-4))}
+.cls.sel{background:var(--lime)}
+.cls .no{font-size:calc(var(--p)*11);opacity:.6}
+.cls .sp{width:calc(var(--p)*112);margin:calc(var(--p)*8) auto 0;height:calc(var(--p)*112)}
+.cls .sp .prom{width:100%;height:100%}
+.cls h2{margin:calc(var(--p)*10) 0 0;font:700 calc(var(--p)*26)/1 var(--pixel)}
+.cls .ttl{font-size:calc(var(--p)*13);margin-top:calc(var(--p)*6);color:#6B5BD6}
+.cls.sel .ttl{color:var(--ink)}
+.stat{display:grid;grid-template-columns:calc(var(--p)*42) 1fr;align-items:center;font-size:calc(var(--p)*11);margin-top:calc(var(--p)*7)}
+.bar{display:flex;gap:calc(var(--p)*3)}
+.bar i{flex:1;height:calc(var(--p)*9);background:rgba(14,19,17,.14)}
+.bar i.on{background:var(--ink)}
+.cls p{margin:calc(var(--p)*10) 0 0;font:600 calc(var(--p)*12)/1.5 var(--sans);letter-spacing:-.01em}
+.pick{position:absolute;left:50%;top:calc(var(--p)*-30);transform:translateX(-50%);font-size:calc(var(--p)*12);white-space:nowrap;display:none;animation:bob .8s steps(2) infinite}
+.cls.sel .pick{display:block}
+.all{left:0;right:0;top:calc(var(--p)*624);text-align:center;font-size:calc(var(--p)*15)}
+.all b{background:var(--ink);color:var(--lime);font-weight:400;padding:calc(var(--p)*4) calc(var(--p)*8)}
+
+/* 퀘스트 맵 */
+.map{left:calc(var(--p)*30);right:calc(var(--p)*30);top:calc(var(--p)*660);height:calc(var(--p)*240)}
+.path{position:absolute;inset:0;width:100%;height:100%}
+.node{position:absolute;width:calc(var(--p)*160);text-align:center;transform:translateX(-50%)}
+.node .b{width:calc(var(--p)*64);height:calc(var(--p)*64);margin:0 auto;background:var(--paper);display:grid;place-items:center;font-size:calc(var(--p)*13)}
+.node.now .b{background:var(--lime)}
+.node.done .b{background:var(--ink);color:var(--lime)}
+.node .d{font:400 calc(var(--p)*22)/1 var(--pixel);margin-top:calc(var(--p)*12)}
+.node .s{font-size:calc(var(--p)*13);margin-top:calc(var(--p)*6)}
+.node .t{font:600 calc(var(--p)*11)/1.4 var(--sans);margin-top:calc(var(--p)*5);opacity:.75}
+.goal .b{background:none;box-shadow:none;width:calc(var(--p)*80);height:calc(var(--p)*80)}
+.goal .d{font-size:calc(var(--p)*16)}
+.walker{position:absolute;width:calc(var(--p)*46);z-index:3}
+.exp{left:calc(var(--p)*48);right:calc(var(--p)*48);top:calc(var(--p)*902);display:grid;grid-template-columns:auto 1fr auto;gap:calc(var(--p)*12);align-items:center;font-size:calc(var(--p)*13)}
+.exp .bar i{height:calc(var(--p)*14);background:rgba(255,255,255,.6)}
+.exp .bar i.on{background:var(--ink)}
+
+/* 하단 */
+.band{left:0;right:0;bottom:0;height:calc(var(--p)*180);background:var(--ink);color:#fff}
+.info{position:absolute;left:calc(var(--p)*44);top:calc(var(--p)*26);font-size:calc(var(--p)*14);line-height:2}
+.info b{color:var(--lime);font-weight:400;display:inline-block;width:calc(var(--p)*78)}
+.info .pending{font-family:var(--pixel)}
+.qr{position:absolute;right:calc(var(--p)*44);top:calc(var(--p)*18);display:flex;align-items:center;gap:calc(var(--p)*12);color:var(--lime);text-decoration:none;font-size:calc(var(--p)*12)}
+.qr span:first-child{display:block;width:calc(var(--p)*112);height:calc(var(--p)*112);padding:calc(var(--p)*7);background:var(--lime)}
+.qr img{display:block;width:100%;height:100%}
+.qr span:last-child{writing-mode:vertical-rl}
+.foot{position:absolute;left:calc(var(--p)*44);bottom:calc(var(--p)*14);font:500 calc(var(--p)*10.5)/1 var(--sans);color:rgba(255,255,255,.55)}
+.foot b{color:rgba(255,255,255,.85);font-weight:650}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="u top"><span class="sel"><span>▶</span> SELECT YOUR CLASS</span><span class="lvl"></span></div>
+  <h1 class="u"><span class="chars">교사 개발자의 날</span></h1>
+  <p class="u sub">입문형도, 성장형도, 도전형도 <em>모두 개발자</em>예요.</p>
+  <div class="u classes"></div>
+  <div class="u all">어떤 유형을 골라도 목적지는 하나 ▶ <b>누구나 개발자</b></div>
+
+  <div class="u map">
+    <svg class="path" aria-hidden="true"></svg>
+    <div class="nodes"></div>
+  </div>
+  <div class="u exp"><span>EXP</span><div class="bar"></div><span class="pct"></span></div>
+
+  <div class="u band">
+    <div class="info"></div>
+    <a class="qr" target="_blank" rel="noopener"><span><img src="../shared/qr.svg" alt="QR 코드"></span><span class="ql"></span></a>
+    <div class="foot">주최 <b class="h1"></b> · 기획 <b class="h2"></b></div>
+  </div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 다시 보기</button></div>
+
+<script>
+const { STATIC, ANIMATE, fi, F, dday, pendTag } = ENV;
+const S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const poster = $('#poster');
+$('.lvl').textContent = STATIC ? 'P1 ▶ 선생님' : `QUEST ${fi + 1} · ${dday}`;
+$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.qr').href = POSTER.cta.url; $('.ql').textContent = POSTER.cta.label;
+
+// 직업 3종 (문구는 sendev 유형 설명 확정 후 교체)
+const CLASSES = [
+  { name: '입문형', title: '새싹 개발자', face: 'sprout', stats: [['호기심', 5], ['코딩', 1], ['용기', 3]],
+    desc: '아직 시작 전이어도 괜찮아요. 듣기만 해도 경험치가 쌓여요.' },
+  { name: '성장형', title: '쑥쑥 개발자', face: 'idle', stats: [['호기심', 4], ['코딩', 3], ['공유', 3]],
+    desc: '하나쯤 만들어 봤다면, 같이 더 크게 키워요.' },
+  { name: '도전형', title: '용감한 개발자', face: 'flag', stats: [['호기심', 4], ['코딩', 4], ['도전', 5]],
+    desc: '부수고 고치며 앞으로. 실패도 경험치예요.' },
+];
+const bar = (n, max = 5) => `<div class="bar">${Array.from({ length: max }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</div>`;
+$('.classes').innerHTML = CLASSES.map((c, i) => `<button class="cls pxbox${i === 0 ? ' sel' : ''}" type="button" data-i="${i}">
+  <span class="pick">▼ PICK!</span>
+  <div class="no">CLASS 0${i + 1}</div>
+  <div class="sp" data-face="${c.face}"></div>
+  <h2>${c.name}</h2><div class="ttl">${c.title}</div>
+  ${c.stats.map(([k, v]) => `<div class="stat"><span>${k}</span>${bar(v)}</div>`).join('')}
+  <p>${c.desc}</p></button>`).join('');
+$$('.cls .sp').forEach(el => { el.innerHTML = KIT.sprite(el.dataset.face); KIT.alive(el, el.dataset.face); });
+
+// 퀘스트 맵: 3회차 + 골
+const XS = [110, 300, 490, 670], YS = [40, 70, 30, 46];
+const svg = $('.path');
+svg.setAttribute('viewBox', '0 0 734 240');
+svg.innerHTML = XS.slice(0, -1).map((x, i) => {
+  const x2 = XS[i + 1], y1 = YS[i] + 32, y2 = YS[i + 1] + 32, n = 9;
+  return Array.from({ length: n }, (_, k) => {
+    const t = (k + 1) / (n + 1), px = x + (x2 - x) * t, py = y1 + (y2 - y1) * t - Math.sin(t * Math.PI) * 18;
+    return `<rect class="dot" x="${(px - 4).toFixed(1)}" y="${(py - 4).toFixed(1)}" width="8" height="8" fill="${i < fi ? '#0E1311' : '#FFFFFF'}"/>`;
+  }).join('');
+}).join('');
+const TROPHY = ['..KKKKKKKKKK..', 'KKKLLLLLLLLKKK', 'K.KLLLLLLLLK.K', 'K.KLLWLLLLLK.K', '.KKLLWLLLLLKK.', '...KLLLLLLK...', '....KLLLLK....',
+  '.....KLLK.....', '......KK......', '......KK......', '....KKKKKK....', '....KLLLLK....', '...KKKKKKKK...', '..............'];
+$('.nodes').innerHTML = S.map((s, i) => `<div class="node${i === fi ? ' now' : i < fi ? ' done' : ''}" style="left:calc(var(--p)*${XS[i]});top:calc(var(--p)*${YS[i]})">
+  <div class="b pxbox">${i < fi ? 'CLEAR' : `Q${i + 1}`}</div><div class="d">${s.mmdd}</div><div class="s">${s.step} · ${s.dow}</div><div class="t">${s.short}<br>${s.format}</div></div>`).join('')
+  + `<div class="node goal" style="left:calc(var(--p)*${XS[3]});top:calc(var(--p)*${YS[3] - 16})"><div class="b">${KIT.pix(TROPHY)}</div><div class="d">GOAL</div><div class="s">누구나 개발자</div></div>`
+  + `<div class="walker" style="left:calc(var(--p)*${XS[fi] + 30});top:calc(var(--p)*${YS[fi] - 40})"></div>`;
+const walker = $('.walker'); walker.innerHTML = KIT.sprite('sprout'); walker.dataset.face = 'sprout'; KIT.alive(walker, 'sprout');
+
+// EXP: 지난 회차 수만큼
+$('.exp .bar').outerHTML = bar(fi * 4 + 1, 12);
+$('.pct').textContent = `${Math.round((fi * 4 + 1) / 12 * 100)}% → 누구나 개발자`;
+
+$('.info').innerHTML = `
+  <div><b>NEXT ▶</b>QUEST ${fi + 1} · ${F.mmdd} (${F.dow}) ${F.time ?? '시간 추후 공지'}${F.time ? '' : pendTag}</div>
+  <div><b>APPLY ▶</b>${F.apply ?? '신청 링크 추후 공지'}${F.apply ? '' : pendTag}</div>
+  <div><b>Q&amp;A ▶</b>질문과 자료는 sendev.kr 한 곳에서</div>`;
+
+// 직업 고르기: 카드 선택 + 지도 위 프롬이 옷 바뀜
+$$('.cls').forEach(b => b.addEventListener('click', () => {
+  $$('.cls').forEach(x => x.classList.toggle('sel', x === b));
+  const c = CLASSES[b.dataset.i], sp = b.querySelector('.sp');
+  walker.dataset.face = c.face; walker.innerHTML = KIT.sprite(c.face);
+  sp.animate([{ transform: 'none' }, { transform: 'translateY(-30%)' }, { transform: 'none' }], { duration: 420, easing: 'steps(6)' });
+  walker.animate([{ transform: 'none' }, { transform: 'translateY(-40%)' }, { transform: 'none' }], { duration: 420, easing: 'steps(6)' });
+  KIT.burst(poster, 160 + b.dataset.i * 240, 420, { n: 16 });
+}));
+
+// 등장: 글자 낙하 → 카드 뒤집기 → 길 점이 하나씩 → 트로피 반짝
+$$('.chars').forEach(el => { el.innerHTML = [...el.textContent].map(c => `<span>${c === ' ' ? '&nbsp;' : c}</span>`).join(''); });
+function play() {
+  if (!ANIMATE) return;
+  KIT.pixelReveal(poster, { color: '#CFC4FF', cell: 30, duration: 650 });
+  KIT.pop($$('.top'), { delay: 100 });
+  KIT.drop($$('h1 .chars span'), { delay: 250, stagger: 60, height: 260 });
+  KIT.pop([$('.sub')], { delay: 800 });
+  $$('.cls').forEach((el, i) => el.animate([{ transform: 'rotateY(90deg)', opacity: 0 }, { transform: 'none', opacity: 1 }],
+    { duration: 420, delay: 950 + i * 180, easing: 'steps(6)', fill: 'backwards' }));
+  KIT.pop([$('.all')], { delay: 1600 });
+  $$('.dot').forEach((d, i) => d.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 60, delay: 1800 + i * 45, fill: 'backwards' }));
+  KIT.pop($$('.node'), { delay: 1800, stagger: 400 });
+  KIT.drop([walker], { delay: 2900, height: 300 });
+  setTimeout(() => KIT.burst(poster, 700, 720, { n: 26 }), 3200);
+  KIT.pop([$('.exp'), $('.band')], { delay: 3000, stagger: 150, from: 'translateY(40px)' });
+}
+play();
+$('#replay').addEventListener('click', play);
+</script>
+</body>
+</html>

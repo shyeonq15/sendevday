@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="교실의 문제를 코드로 바꾸는 선생님들이 세 번, 접속합니다. 10.27 · 11.24 · 12.15">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Nanum+Pen+Script&display=swap">
+<script src="../shared/data.js"></script>
+<style>
+/* 시안 B · 데스크톱: 포스터 전체가 한 선생님의 바탕화면 */
+:root{
+  --ink:#0E1311;--lime:#CCFF00;--paper:#F3F3EE;--lilac:#CFC4FF;--coral:#FF5C39;
+  --sans:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --pen:"Nanum Pen Script",var(--sans);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100vh;background:#1A211D;color:var(--ink);font-family:var(--sans);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:14px;padding:16px;word-break:keep-all;-webkit-font-smoothing:antialiased}
+.stage{container-type:inline-size;width:min(100%, calc((100vh - 76px) * 794 / 1123), 900px)}
+#poster{--p:calc(100cqw / 794);position:relative;width:100%;aspect-ratio:794/1123;overflow:hidden;
+  background:var(--lime) radial-gradient(rgba(14,19,17,.13) calc(var(--p)*1.2), transparent calc(var(--p)*1.6)) 0 0/calc(var(--p)*22) calc(var(--p)*22);
+  box-shadow:0 30px 80px rgba(0,0,0,.45);user-select:none;-webkit-user-select:none;touch-action:none}
+.mono{font-family:var(--mono)}
+
+/* 메뉴바 · 작업표시줄 */
+.menubar{position:absolute;inset:0 0 auto;height:calc(var(--p)*30);background:var(--ink);color:#fff;display:flex;align-items:center;
+  justify-content:space-between;padding:0 calc(var(--p)*16);font-size:calc(var(--p)*12);z-index:900}
+.menubar .l{display:flex;align-items:center;gap:calc(var(--p)*16)}
+.menubar .l b{color:var(--lime);font:800 calc(var(--p)*12)/1 var(--mono)}
+.menubar .l strong{font-weight:750}
+.menubar .l span{opacity:.65}
+.menubar .r{font:700 calc(var(--p)*11)/1 var(--mono);letter-spacing:.06em;display:flex;align-items:center;gap:calc(var(--p)*14)}
+.onair{display:none;align-items:center;gap:calc(var(--p)*6);color:var(--lime)}
+.onair::before{content:"";width:calc(var(--p)*6);height:calc(var(--p)*6);border-radius:50%;background:var(--coral);animation:blink 1.4s infinite}
+html:not(.static) .onair{display:inline-flex}
+.taskbar{position:absolute;inset:auto 0 0;height:calc(var(--p)*44);background:var(--ink);color:#fff;display:flex;align-items:center;
+  justify-content:space-between;padding:0 calc(var(--p)*14);z-index:900;font-size:calc(var(--p)*11)}
+.start{display:inline-flex;align-items:center;gap:calc(var(--p)*8);background:var(--lime);color:var(--ink);border-radius:calc(var(--p)*6);
+  padding:calc(var(--p)*7) calc(var(--p)*12);font:800 calc(var(--p)*12)/1 var(--mono)}
+.start em{font-style:normal;font-family:var(--sans);font-weight:750}
+.tasks{display:flex;gap:calc(var(--p)*6);margin-left:calc(var(--p)*10);margin-right:auto}
+.tasks span{font:600 calc(var(--p)*10.5)/1 var(--mono);padding:calc(var(--p)*7) calc(var(--p)*10);border-radius:calc(var(--p)*5);background:rgba(255,255,255,.08);color:rgba(255,255,255,.75)}
+.host{color:rgba(255,255,255,.6)}
+.host b{color:#fff;font-weight:650}
+
+/* 창 */
+.win{position:absolute;left:calc(var(--p)*var(--x));top:calc(var(--p)*var(--y));width:calc(var(--p)*var(--w));
+  background:var(--paper);border:calc(var(--p)*1.6) solid var(--ink);border-radius:calc(var(--p)*10);
+  box-shadow:calc(var(--p)*6) calc(var(--p)*6) 0 var(--ink);transform:rotate(calc(var(--rot,0) * 1deg))}
+.bar{height:calc(var(--p)*30);display:flex;align-items:center;gap:calc(var(--p)*6);padding:0 calc(var(--p)*11);
+  border-bottom:calc(var(--p)*1.6) solid var(--ink);font:700 calc(var(--p)*11)/1 var(--mono);cursor:grab}
+.bar i{width:calc(var(--p)*10);height:calc(var(--p)*10);border-radius:50%;border:calc(var(--p)*1.4) solid var(--ink)}
+.bar i:first-child{background:var(--coral)}
+.bar span{margin-left:auto;margin-right:auto;transform:translateX(calc(var(--p)*-18))}
+.dragging .bar,.dragging.sticker{cursor:grabbing}
+.body{padding:calc(var(--p)*22) calc(var(--p)*24)}
+
+.w-hello .term{font:700 calc(var(--p)*13)/1 var(--mono);display:flex;align-items:center}
+.cur{display:inline-block;width:calc(var(--p)*8);height:calc(var(--p)*15);background:var(--ink);margin-left:calc(var(--p)*3);animation:blink 1s steps(1) infinite}
+.static .cur{animation:none}
+h1{margin:calc(var(--p)*14) 0 0;font-size:calc(var(--p)*88);line-height:1.02;font-weight:800;letter-spacing:-.055em}
+.sub{margin:calc(var(--p)*16) 0 0;font-size:calc(var(--p)*19);line-height:1.55;font-weight:650;letter-spacing:-.03em}
+.hl{position:relative;z-index:0;display:inline-block;color:var(--lime);padding:0 calc(var(--p)*6);margin:0 calc(var(--p)*2)}
+.hl::before{content:"";position:absolute;inset:calc(var(--p)*2) 0;background:var(--ink);z-index:-1}
+
+/* FM 플레이어 */
+.w-fm{background:var(--ink);color:#fff;box-shadow:calc(var(--p)*6) calc(var(--p)*6) 0 rgba(14,19,17,.35)}
+.w-fm .bar{border-color:rgba(255,255,255,.15);color:var(--lime)}
+.w-fm .bar i{border-color:rgba(255,255,255,.5)}
+.w-fm .bar i:first-child{border-color:var(--coral)}
+.ep{font:800 calc(var(--p)*11)/1 var(--mono);color:var(--lime);letter-spacing:.1em}
+.w-fm h3{margin:calc(var(--p)*9) 0 0;font-size:calc(var(--p)*21);line-height:1.3;font-weight:750;letter-spacing:-.03em}
+.w-fm p{margin:calc(var(--p)*5) 0 0;font-size:calc(var(--p)*12);opacity:.65}
+.eq{display:flex;align-items:flex-end;gap:calc(var(--p)*4);height:calc(var(--p)*38);margin-top:calc(var(--p)*16)}
+.eq i{flex:1;background:var(--lime);border-radius:calc(var(--p)*1.5);height:calc(var(--h) * 1%);transform-origin:bottom}
+.playing .eq i{animation:eq .9s ease-in-out infinite alternate;animation-delay:calc(var(--d) * -1s)}
+.prog{margin-top:calc(var(--p)*12);height:calc(var(--p)*3);background:rgba(255,255,255,.18);border-radius:9px;position:relative}
+.prog::before{content:"";position:absolute;inset:0 auto 0 0;width:34%;background:var(--lime);border-radius:9px}
+.ctl{display:flex;align-items:center;justify-content:space-between;margin-top:calc(var(--p)*10);font:700 calc(var(--p)*10)/1 var(--mono);opacity:.9}
+.play{width:calc(var(--p)*36);height:calc(var(--p)*36);border-radius:50%;border:0;background:var(--lime);color:var(--ink);
+  display:grid;place-items:center;font-size:calc(var(--p)*13);cursor:pointer;padding:0}
+.play svg{width:42%;height:42%}
+
+/* 메모지 */
+.memo{position:absolute;left:calc(var(--p)*var(--x));top:calc(var(--p)*var(--y));width:calc(var(--p)*var(--w));
+  background:var(--lilac);padding:calc(var(--p)*20) calc(var(--p)*24) calc(var(--p)*16);transform:rotate(calc(var(--rot,0) * 1deg));
+  box-shadow:0 calc(var(--p)*10) calc(var(--p)*18) rgba(14,19,17,.18);cursor:grab}
+.memo::before{content:"";position:absolute;left:50%;top:calc(var(--p)*-11);width:calc(var(--p)*92);height:calc(var(--p)*22);
+  transform:translateX(-50%) rotate(-2deg);background:rgba(243,243,238,.75);border:1px solid rgba(14,19,17,.08)}
+.memo h2{margin:0;font:400 calc(var(--p)*34)/1 var(--pen)}
+.memo h2 small{font:700 calc(var(--p)*10)/1 var(--mono);letter-spacing:.12em;margin-left:calc(var(--p)*8);vertical-align:middle;opacity:.6}
+.memo ol{list-style:none;margin:calc(var(--p)*12) 0 0;padding:0}
+.memo li{display:grid;grid-template-columns:calc(var(--p)*20) calc(var(--p)*100) 1fr;align-items:start;column-gap:calc(var(--p)*10);
+  padding:calc(var(--p)*12) 0;border-top:calc(var(--p)*1.2) dashed rgba(14,19,17,.35)}
+.box{width:calc(var(--p)*16);height:calc(var(--p)*16);border:calc(var(--p)*1.6) solid var(--ink);border-radius:calc(var(--p)*3);margin-top:calc(var(--p)*6)}
+.memo li.done .box{background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23CCFF00' stroke-width='2.4'/%3E%3C/svg%3E") center/80% no-repeat}
+.memo .d{font:800 calc(var(--p)*25)/1.1 var(--mono);letter-spacing:-.04em}
+.memo .d small{display:block;font-size:calc(var(--p)*10);letter-spacing:.08em;margin-top:calc(var(--p)*4);opacity:.65}
+.memo .t{font-size:calc(var(--p)*14.5);font-weight:750;line-height:1.35;letter-spacing:-.02em}
+.memo .t em{font-style:normal;font:800 calc(var(--p)*10)/1 var(--mono);background:var(--ink);color:var(--lilac);padding:calc(var(--p)*3) calc(var(--p)*5);border-radius:calc(var(--p)*3);margin-right:calc(var(--p)*6);vertical-align:calc(var(--p)*2)}
+.memo .t span{display:block;font-size:calc(var(--p)*11.5);font-weight:550;opacity:.7;margin-top:calc(var(--p)*3)}
+.memo li.next .t em{background:var(--coral);color:#fff}
+.memo .d b{position:relative;font-weight:inherit}
+.memo li.next .d b::after{content:"";position:absolute;left:calc(var(--p)*-4);right:calc(var(--p)*-4);bottom:calc(var(--p)*1);height:calc(var(--p)*10);
+  background:var(--lime);z-index:-1;border-radius:2px}
+.memo li .d{z-index:0;position:relative}
+
+/* readme · QR */
+.w-readme h2{margin:0;font-size:calc(var(--p)*27);font-weight:800;letter-spacing:-.04em;line-height:1.2}
+.w-readme p{margin:calc(var(--p)*9) 0 0;font-size:calc(var(--p)*13);line-height:1.6;color:#3f4743}
+.w-readme p b{color:var(--ink)}
+.facts{display:flex;gap:calc(var(--p)*22);margin:calc(var(--p)*14) 0 0;padding-top:calc(var(--p)*12);border-top:calc(var(--p)*1.2) solid rgba(14,19,17,.15)}
+.facts dt{font:800 calc(var(--p)*9.5)/1 var(--mono);letter-spacing:.14em;margin-bottom:calc(var(--p)*6);opacity:.55}
+.facts dd{margin:0;font-size:calc(var(--p)*12.5);font-weight:650;line-height:1.4}
+.pending{display:inline-flex;align-items:center;gap:calc(var(--p)*4);font:700 calc(var(--p)*9.5)/1 var(--mono);color:var(--coral);margin-left:calc(var(--p)*6);vertical-align:calc(var(--p)*1)}
+.pending::before{content:"";width:calc(var(--p)*5);height:calc(var(--p)*5);border-radius:50%;background:currentColor}
+.w-qr .body{display:flex;flex-direction:column;align-items:center;gap:calc(var(--p)*10);padding:calc(var(--p)*16)}
+.w-qr a{display:block;width:calc(var(--p)*132);height:calc(var(--p)*132);padding:calc(var(--p)*8);background:var(--lime);border-radius:calc(var(--p)*6)}
+.w-qr img{display:block;width:100%;height:100%}
+.w-qr span{font:800 calc(var(--p)*12)/1 var(--mono)}
+
+/* 바탕화면 아이콘 */
+.icons{position:absolute;right:calc(var(--p)*30);top:calc(var(--p)*62);display:grid;gap:calc(var(--p)*16);justify-items:center}
+.ico{display:flex;flex-direction:column;align-items:center;gap:calc(var(--p)*6);width:calc(var(--p)*104);cursor:default}
+.ico b{display:grid;place-items:center;width:calc(var(--p)*52);height:calc(var(--p)*52);border-radius:calc(var(--p)*11);
+  background:var(--paper);border:calc(var(--p)*1.6) solid var(--ink);font:800 calc(var(--p)*13)/1 var(--mono);box-shadow:calc(var(--p)*3) calc(var(--p)*3) 0 var(--ink)}
+.ico.dark b{background:var(--ink);color:var(--lime)}
+.ico span{font-size:calc(var(--p)*11.5);font-weight:650;padding:calc(var(--p)*2) calc(var(--p)*6);border-radius:calc(var(--p)*4);text-align:center;line-height:1.3}
+.ico.sel span{background:var(--ink);color:var(--lime)}
+
+/* 스티커 */
+.sticker{position:absolute;left:calc(var(--p)*var(--x));top:calc(var(--p)*var(--y));width:calc(var(--p)*80);height:calc(var(--p)*80);
+  border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--lime);font:800 calc(var(--p)*15)/1.05 var(--mono);text-align:center;
+  box-shadow:0 0 0 calc(var(--p)*3.5) var(--paper),0 0 0 calc(var(--p)*5) var(--ink),0 calc(var(--p)*8) calc(var(--p)*14) rgba(14,19,17,.25);
+  transform:rotate(calc(var(--rot,0) * 1deg));cursor:grab;z-index:500}
+.sticker.alt{background:var(--paper);color:var(--ink)}
+
+/* 장식 커서 (PNG에서만) */
+.ptr{position:absolute;width:calc(var(--p)*26);z-index:800;display:none;filter:drop-shadow(0 calc(var(--p)*2) calc(var(--p)*2) rgba(0,0,0,.25))}
+.static .ptr{display:block}
+
+.ctrl{display:flex;gap:8px}
+.ctrl button{font:600 13px/1 var(--sans);color:#d9ded9;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:9px 14px;cursor:pointer}
+.ctrl button:hover{border-color:var(--lime);color:var(--lime)}
+.static body{padding:0;background:var(--lime);display:block;min-height:0}
+.static .stage{width:794px}
+.static #poster{box-shadow:none}
+.static .ctrl{display:none}
+@keyframes blink{50%{opacity:0}}
+@keyframes eq{to{transform:scaleY(.25)}}
+@media print{@page{size:A4;margin:0}body{padding:0;background:none;display:block}.stage{width:210mm}#poster{box-shadow:none}.ctrl{display:none}}
+@media (prefers-reduced-motion:reduce){.cur,.onair::before,.playing .eq i{animation:none}}
+.embed body{padding:0;background:transparent;display:block;min-height:0}.embed .stage{width:100%}.embed #poster{box-shadow:none}.embed .ctrl{display:none}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="menubar">
+    <div class="l"><b>&gt;_</b><strong>교사개발자</strong><span>파일</span><span>편집</span><span>보기</span><span>접속</span></div>
+    <div class="r"><span class="onair"></span><span class="clock"></span></div>
+  </div>
+
+  <div class="win w-hello" style="--x:36;--y:58;--w:556" data-drag data-in="0">
+    <div class="bar"><i></i><i></i><i></i><span>hello.txt</span></div>
+    <div class="body">
+      <div class="term">&gt;&nbsp;<span class="typed"></span><span class="cur"></span></div>
+      <h1>교사<br>개발자의 날</h1>
+      <p class="sub">교실의 문제를<span class="hl">코드로</span>바꾸는 선생님들이<br>올해, 세 번 접속합니다.</p>
+    </div>
+  </div>
+
+  <div class="icons" data-in="250">
+    <div class="ico"><b>.md</b><span>선언문.md</span></div>
+    <div class="ico"><b>zip</b><span>업무경감앱.zip</span></div>
+    <div class="ico dark"><b>ERR</b><span>실패담.log</span></div>
+    <div class="ico"><b>SOS</b><span>사연함</span></div>
+  </div>
+
+  <div class="win w-fm" style="--x:36;--y:470;--w:292" data-drag data-in="350">
+    <div class="bar"><i></i><i></i><i></i><span class="fm-name"></span></div>
+    <div class="body">
+      <div class="ep"></div>
+      <h3 class="fm-title"></h3>
+      <p class="fm-sub"></p>
+      <div class="eq" aria-hidden="true"></div>
+      <div class="prog"></div>
+      <div class="ctl"><span>00:00</span>
+        <button class="play" type="button" aria-label="재생"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg></button>
+        <span class="fm-live">LIVE</span></div>
+    </div>
+  </div>
+
+  <div class="memo" style="--x:356;--y:492;--w:404;--rot:1.6" data-drag data-in="500">
+    <h2>올해 할 일 <small>2026 · EVERY TUESDAY</small></h2>
+    <ol class="todo"></ol>
+  </div>
+
+  <div class="win w-readme" style="--x:36;--y:772;--w:392" data-drag data-in="650">
+    <div class="bar"><i></i><i></i><i></i><span>readme.txt</span></div>
+    <div class="body">
+      <h2>듣기만 해도<span class="hl">괜찮아요.</span></h2>
+      <p>선언문으로 열고 닫는 세 번의 방송.<br>질문과 자료는 <b>sendev.kr</b> 한 곳에서 모읍니다.</p>
+      <dl class="facts"></dl>
+    </div>
+  </div>
+
+  <div class="win w-qr" style="--x:568;--y:808;--w:190;--rot:-1.5" data-drag data-in="800">
+    <div class="bar"><i></i><i></i><i></i><span>접속.qr</span></div>
+    <div class="body"><a class="qr-link" target="_blank" rel="noopener"><img src="../shared/qr.svg" alt="QR 코드"></a><span class="qr-label"></span></div>
+  </div>
+
+  <div class="stickers"></div>
+  <svg class="ptr" style="left:calc(var(--p)*206);top:calc(var(--p)*680)" viewBox="0 0 24 34" aria-hidden="true">
+    <path d="M2 2v26l7-6 5 10 5-2-5-10h9z" fill="#fff" stroke="#0E1311" stroke-width="2.2" stroke-linejoin="round"/></svg>
+
+  <div class="taskbar">
+    <span class="start">&gt;_ <em>시작</em></span>
+    <div class="tasks"><span>hello.txt</span><span class="fm-name"></span><span>readme.txt</span></div>
+    <span class="host"></span>
+  </div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="reset">↻ 바탕화면 정리</button></div>
+
+<script>
+const { STATIC, ANIMATE, fi, F, dday, pendTag } = ENV;
+const S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const poster = $('#poster');
+
+// 메뉴바: 웹은 라이브 D-day, PNG는 고정 문구
+$('.onair').textContent = `ON AIR ${dday}`;
+$('.clock').textContent = STATIC ? '2026 SEASON 1' : `${F.dow} ${F.mmdd}`;
+$('.host').innerHTML = `주최 <b>${POSTER.host}</b> · 기획 <b>${POSTER.team}</b>`;
+
+// FM 플레이어 = 강조 회차
+$$('.fm-name').forEach(e => e.textContent = `교사개발자FM_EP0${fi + 1}.mp3`);
+$('.ep').textContent = `EP.0${fi + 1} · ${F.step} · ${F.mmdd} ${F.dow}`;
+$('.fm-title').innerHTML = F.short;
+$('.fm-sub').textContent = F.main;
+$('.eq').innerHTML = [62,88,45,96,70,38,82,58,92,48,74,30,66,86].map((h, i) => `<i style="--h:${h};--d:${(i * .37) % .9}"></i>`).join('');
+$('.play').addEventListener('click', () => {
+  const on = poster.classList.toggle('playing');
+  $('.play').innerHTML = on ? '<svg viewBox="0 0 10 10"><path d="M2 1h2v8H2zM6 1h2v8H6z" fill="currentColor"/></svg>'
+                            : '<svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg>';
+  $('.play').setAttribute('aria-label', on ? '일시정지' : '재생');
+});
+
+// 메모: 일정 3개
+$('.todo').innerHTML = S.map((s, i) => `<li class="${i < fi ? 'done' : ''}${i === fi ? ' next' : ''}">
+  <i class="box"></i>
+  <div class="d"><b>${s.mmdd}</b><small>${s.dow}요일 · 0${i + 1}</small></div>
+  <div class="t"><em>${i === fi ? 'NEXT' : s.step}</em>${s.short}<span>${s.format}${s.pending && POSTER.showPending ? ' · 세부 조정 중' : ''}</span></div>
+</li>`).join('');
+
+$('.facts').innerHTML = `
+  <div><dt>WHEN</dt><dd>${F.mmdd} (${F.dow}) ${F.time ?? '시간 추후 공지'}${F.time ? '' : pendTag}</dd></div>
+  <div><dt>APPLY</dt><dd>${F.apply ?? '신청 링크 추후 공지'}${F.apply ? '' : pendTag}</dd></div>`;
+$('.qr-link').href = POSTER.cta.url;
+$('.qr-label').textContent = POSTER.cta.label;
+
+// 스티커 3종
+const SPOTS = [{ x: 548, y: 36 }, { x: 290, y: 690 }, { x: 452, y: 962 }];
+$('.stickers').innerHTML = S.map((s, i) =>
+  `<div class="sticker${i === 2 ? ' alt' : ''}" data-drag data-in="${950 + i * 140}" data-pop style="--x:${SPOTS[i].x};--y:${SPOTS[i].y};--rot:${s.rot}" aria-label="${i + 1}회차 스티커">${s.sticker}</div>`).join('');
+
+// 아이콘 선택
+$$('.ico').forEach(ic => ic.addEventListener('click', () => { $$('.ico').forEach(x => x.classList.toggle('sel', x === ic)); }));
+
+// 드래그: 창은 제목줄, 메모·스티커는 어디든
+const unit = () => poster.getBoundingClientRect().width / 794;
+let z = 10;
+const home = new Map();
+$$('[data-drag]').forEach(el => {
+  home.set(el, [el.style.getPropertyValue('--x'), el.style.getPropertyValue('--y')]);
+  if (STATIC) return;
+  const handle = el.querySelector('.bar') || el;
+  el.addEventListener('pointerdown', () => { if (!el.classList.contains('sticker')) el.style.zIndex = ++z; });
+  handle.addEventListener('pointerdown', e => {
+    if (e.target.closest('button,a')) return;
+    e.preventDefault();
+    const u = unit(), sx = e.clientX, sy = e.clientY;
+    const ox = +el.style.getPropertyValue('--x'), oy = +el.style.getPropertyValue('--y');
+    el.classList.add('dragging'); handle.setPointerCapture(e.pointerId);
+    const move = ev => {
+      el.style.setProperty('--x', Math.round(Math.min(760, Math.max(-60, ox + (ev.clientX - sx) / u))));
+      el.style.setProperty('--y', Math.round(Math.min(1060, Math.max(30, oy + (ev.clientY - sy) / u))));
+    };
+    const up = () => { el.classList.remove('dragging'); handle.removeEventListener('pointermove', move); handle.removeEventListener('pointerup', up); };
+    handle.addEventListener('pointermove', move); handle.addEventListener('pointerup', up);
+  });
+});
+
+// 등장 연출
+const TYPE = 'connect teacher-dev-day --season 2026';
+function play() {
+  const typed = $('.typed');
+  if (!ANIMATE) { typed.textContent = TYPE; return; }
+  $$('[data-in]').forEach(el => {
+    const r = getComputedStyle(el).transform;
+    el.animate(el.hasAttribute('data-pop')
+      ? [{ opacity: 0, transform: `${r === 'none' ? '' : r} scale(1.8)` }, { opacity: 1, transform: r }]
+      : [{ opacity: 0, transform: `${r === 'none' ? '' : r} translateY(14px) scale(.96)` }, { opacity: 1, transform: r }],
+      { duration: el.hasAttribute('data-pop') ? 380 : 520, delay: +el.dataset.in, easing: 'cubic-bezier(.2,.9,.25,1.15)', fill: 'backwards' });
+  });
+  let k = 0; typed.textContent = ''; clearInterval(play.t);
+  play.t = setInterval(() => { typed.textContent = TYPE.slice(0, ++k); if (k >= TYPE.length) clearInterval(play.t); }, 30);
+}
+play();
+$('#reset').addEventListener('click', () => {
+  home.forEach(([x, y], el) => { el.style.setProperty('--x', x); el.style.setProperty('--y', y); el.style.zIndex = ''; });
+  play();
+});
+</script>
+</body>
+</html>

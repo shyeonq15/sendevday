@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="교실의 문제를 코드로 바꾸는 선생님들이 세 번, 접속합니다. 10.27 · 11.24 · 12.15">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<style>
+/* 색·서체는 SNS 운영 기획안(EVENT 시리즈)과 동일 */
+:root{
+  --ink:#0E1311;
+  --lime:#CCFF00;
+  --paper:#F3F3EE;
+  --coral:#FF5C39;
+  --sans:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  min-height:100vh;background:#1A211D;color:var(--ink);font-family:var(--sans);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  padding:16px;word-break:keep-all;-webkit-font-smoothing:antialiased;
+}
+/* 포스터는 794×1123(A4 @96dpi) 기준으로 설계하고 --p(1단위)로 비율 그대로 확대·축소 */
+.stage{
+  container-type:inline-size;
+  width:min(100%, calc((100vh - 76px) * 794 / 1123), 900px);
+}
+#poster{
+  --p:calc(100cqw / 794);
+  position:relative;width:100%;aspect-ratio:794/1123;overflow:hidden;
+  background:var(--lime);
+  box-shadow:0 30px 80px rgba(0,0,0,.45);
+}
+canvas.dots{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pad{position:absolute;left:calc(var(--p)*56);right:calc(var(--p)*56)}
+.mono{font-family:var(--mono)}
+
+/* ① 헤더 */
+.top{top:calc(var(--p)*44);height:calc(var(--p)*50);display:flex;align-items:center;justify-content:space-between;
+  border-bottom:calc(var(--p)*1.5) solid var(--ink);padding-bottom:calc(var(--p)*14);box-sizing:content-box}
+.logo{display:flex;align-items:center;gap:calc(var(--p)*10);font-weight:800;font-size:calc(var(--p)*17);letter-spacing:-.02em}
+.logo i{display:grid;place-items:center;width:calc(var(--p)*38);height:calc(var(--p)*38);border-radius:calc(var(--p)*9);
+  background:var(--ink);color:var(--lime);font:800 calc(var(--p)*14)/1 var(--mono);font-style:normal}
+.meta{font:700 calc(var(--p)*12)/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:calc(var(--p)*10)}
+.dday{display:none;align-items:center;gap:calc(var(--p)*8);background:var(--ink);color:var(--lime);
+  padding:calc(var(--p)*8) calc(var(--p)*12);border-radius:99px}
+.dday::before{content:"";width:calc(var(--p)*7);height:calc(var(--p)*7);border-radius:50%;background:var(--coral);animation:blink 1.4s infinite}
+.live .dday{display:inline-flex}
+.live .season{display:none}
+
+/* ② 터미널 한 줄 + 타이틀 */
+.term{top:calc(var(--p)*136);font:700 calc(var(--p)*17)/1 var(--mono);display:flex;align-items:center;gap:calc(var(--p)*2)}
+.term b{font-weight:800;margin-right:calc(var(--p)*10)}
+.cur{display:inline-block;width:calc(var(--p)*10);height:calc(var(--p)*19);background:var(--ink);margin-left:calc(var(--p)*3);animation:blink 1s steps(1) infinite}
+h1{top:calc(var(--p)*170);margin:0;font-weight:800;font-size:calc(var(--p)*122);line-height:1.02;letter-spacing:-.055em}
+h1 .ln{display:block;overflow:hidden;padding-bottom:calc(var(--p)*4)}
+h1 .ln>span{display:inline-block}
+.sub{top:calc(var(--p)*446);margin:0;font-size:calc(var(--p)*26);line-height:1.5;font-weight:650;letter-spacing:-.03em}
+.hl{position:relative;display:inline-block;color:var(--lime);padding:0 calc(var(--p)*8);margin:0 calc(var(--p)*2)}
+.hl::before{content:"";position:absolute;inset:calc(var(--p)*2) 0;background:var(--ink);z-index:-1;transform-origin:left}
+.hl{z-index:0}
+
+/* ③ 세 번의 접속 */
+.ses-h{top:calc(var(--p)*546);display:flex;justify-content:space-between;align-items:center;
+  font:700 calc(var(--p)*12)/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.ses-h span:last-child{font-family:var(--sans);letter-spacing:-.01em;text-transform:none;font-size:calc(var(--p)*14);font-weight:600}
+.sessions{top:calc(var(--p)*570);display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:calc(var(--p)*1.5) solid var(--ink);border-bottom:calc(var(--p)*1.5) solid var(--ink)}
+.card{position:relative;padding:calc(var(--p)*20) calc(var(--p)*18) calc(var(--p)*22);height:calc(var(--p)*228);
+  cursor:pointer;outline:none;transition:background .25s,color .25s}
+.card+.card{border-left:calc(var(--p)*1.5) solid var(--ink)}
+.card:hover:not(.focus),.card:focus-visible:not(.focus){background:rgba(14,19,17,.07)}
+.card.focus{background:var(--ink);color:#fff}
+.card .no{font:800 calc(var(--p)*13)/1 var(--mono);letter-spacing:.06em}
+.card .no em{font-style:normal;font-family:var(--sans);font-weight:700;margin-left:calc(var(--p)*6);letter-spacing:0}
+.card.focus .no{color:var(--lime)}
+.next{position:absolute;left:calc(var(--p)*18);top:calc(var(--p)*44);display:none;align-items:center;gap:calc(var(--p)*6);
+  font:800 calc(var(--p)*10)/1 var(--mono);letter-spacing:.14em;color:var(--lime)}
+.next::before{content:"";width:calc(var(--p)*6);height:calc(var(--p)*6);border-radius:50%;background:var(--coral)}
+.card.focus .next{display:inline-flex}
+.date{margin-top:calc(var(--p)*56);font:800 calc(var(--p)*46)/1 var(--mono);letter-spacing:-.04em}
+.date small{font-size:calc(var(--p)*13);letter-spacing:.08em;margin-left:calc(var(--p)*6);font-weight:700;opacity:.7}
+.face{position:absolute;left:calc(var(--p)*18);right:calc(var(--p)*18);top:calc(var(--p)*150);transition:opacity .3s,transform .3s}
+.face h3{margin:0;font-size:calc(var(--p)*17);line-height:1.38;font-weight:750;letter-spacing:-.03em}
+.face p{margin:calc(var(--p)*8) 0 0;font-size:calc(var(--p)*13);line-height:1.45;opacity:.72;font-weight:500}
+.face.back{top:calc(var(--p)*104);opacity:0;transform:translateY(calc(var(--p)*8));pointer-events:none}
+.face.back dl{margin:0;display:grid;gap:calc(var(--p)*7)}
+.face.back dt{font:800 calc(var(--p)*10)/1 var(--mono);letter-spacing:.12em;opacity:.6}
+.face.back dd{margin:0;font-size:calc(var(--p)*13);line-height:1.4;font-weight:600}
+.card.flip .face.front,.card.flip .date{opacity:0;transform:translateY(calc(var(--p)*-8))}
+.date{transition:opacity .3s,transform .3s}
+.card.flip .face.back{opacity:1;transform:none}
+.card.focus .face.back dt{color:var(--lime);opacity:1}
+.pending{display:inline-flex;align-items:center;gap:calc(var(--p)*5);font:700 calc(var(--p)*10)/1 var(--mono);color:var(--coral);letter-spacing:.06em}
+.pending::before{content:"";width:calc(var(--p)*5);height:calc(var(--p)*5);border-radius:50%;background:currentColor}
+
+/* 스티커 3종: 회차마다 하나씩 모으는 장치 */
+.sticker{position:absolute;right:calc(var(--p)*16);top:calc(var(--p)*16);width:calc(var(--p)*72);height:calc(var(--p)*72);
+  border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--lime);
+  font:800 calc(var(--p)*14)/1.05 var(--mono);text-align:center;letter-spacing:-.02em;
+  box-shadow:0 0 0 calc(var(--p)*3) var(--lime),0 0 0 calc(var(--p)*4.5) var(--ink);
+  transform:rotate(var(--r,-8deg));transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.card.focus .sticker{background:var(--lime);color:var(--ink);box-shadow:0 0 0 calc(var(--p)*3) var(--ink),0 0 0 calc(var(--p)*4.5) var(--lime)}
+.card:hover .sticker{transform:rotate(calc(var(--r,-8deg) + 14deg)) scale(1.07)}
+.hint{display:none}
+.live .hint{display:inline}
+
+/* ④ 하단 밴드 */
+.band{position:absolute;left:0;right:0;bottom:0;height:calc(var(--p)*300);background:var(--ink);color:#fff;
+  padding:calc(var(--p)*32) calc(var(--p)*56) 0;display:grid;grid-template-columns:1fr auto;column-gap:calc(var(--p)*36)}
+.band h2{margin:0;font-size:calc(var(--p)*32);font-weight:800;letter-spacing:-.04em;line-height:1.2}
+.band h2 em{font-style:normal;color:var(--lime)}
+.band .lede{margin:calc(var(--p)*10) 0 0;font-size:calc(var(--p)*15);line-height:1.55;color:rgba(255,255,255,.7)}
+.band .lede b{color:#fff;font-weight:700}
+.facts{display:flex;gap:calc(var(--p)*28);margin-top:calc(var(--p)*22)}
+.facts dt{font:800 calc(var(--p)*10)/1 var(--mono);letter-spacing:.14em;color:var(--lime);margin-bottom:calc(var(--p)*7)}
+.facts dd{margin:0;font-size:calc(var(--p)*14);font-weight:650;line-height:1.35}
+.facts dd .pending{margin-top:calc(var(--p)*5);display:flex}
+.qr{display:flex;flex-direction:column;align-items:center;gap:calc(var(--p)*9);text-decoration:none;color:inherit}
+.qr span:first-child{display:block;width:calc(var(--p)*128);height:calc(var(--p)*128);padding:calc(var(--p)*10);background:var(--lime);border-radius:calc(var(--p)*8);transition:transform .25s}
+.qr:hover span:first-child{transform:translateY(calc(var(--p)*-3))}
+.qr img{display:block;width:100%;height:100%}
+.qr span:last-child{font:700 calc(var(--p)*12)/1 var(--mono);letter-spacing:.06em}
+.foot{grid-column:1/-1;align-self:end;display:flex;justify-content:space-between;
+  border-top:1px solid rgba(255,255,255,.14);padding:calc(var(--p)*14) 0 calc(var(--p)*20);margin-top:calc(var(--p)*22);
+  font-size:calc(var(--p)*11.5);color:rgba(255,255,255,.55)}
+.foot b{color:rgba(255,255,255,.85);font-weight:650}
+
+/* 포스터 밖 컨트롤 (PNG에는 안 나옴) */
+.ctrl{display:flex;gap:8px}
+.ctrl button{font:600 13px/1 var(--sans);color:#d9ded9;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:9px 14px;cursor:pointer}
+.ctrl button:hover{border-color:var(--lime);color:var(--lime)}
+
+/* 정적(PNG·인쇄) 모드 */
+body.static{padding:0;background:var(--lime);display:block;min-height:0}
+body.static .stage{width:794px}
+body.static #poster{box-shadow:none}
+body.static .ctrl{display:none}
+body.static .cur{animation:none}
+@keyframes blink{50%{opacity:0}}
+@media print{
+  @page{size:A4;margin:0}
+  body{padding:0;background:none;display:block}
+  .stage{width:210mm}
+  #poster{box-shadow:none}
+  .ctrl,.hint{display:none}
+}
+@media (prefers-reduced-motion:reduce){.cur,.dday::before{animation:none}}
+.embed body{padding:0;background:transparent;display:block;min-height:0}.embed .stage{width:100%}.embed #poster{box-shadow:none}.embed .ctrl{display:none}
+</style>
+</head>
+<body>
+<div class="stage">
+  <article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+    <canvas class="dots" aria-hidden="true"></canvas>
+
+    <header class="pad top" data-in="0">
+      <div class="logo"><i>&gt;_</i>교사개발자</div>
+      <div class="meta"><span class="season">Seoul · 2026 Season 1</span><span class="dday"></span></div>
+    </header>
+
+    <div class="pad term" aria-hidden="true"><b>&gt;</b><span class="typed"></span><span class="cur"></span></div>
+
+    <h1 class="pad"><span class="ln"><span>교사</span></span><span class="ln"><span>개발자의 날</span></span></h1>
+
+    <p class="pad sub" data-in="900">교실의 문제를<span class="hl">코드로</span>바꾸는 선생님들이<br>올해, 세 번 접속합니다.</p>
+
+    <div class="pad ses-h" data-in="1100"><span>3 Sessions · Every Tuesday<span class="hint"> · Tap to flip ↺</span></span><span>스티커 3종을 모아 보세요</span></div>
+    <div class="pad sessions" role="list"></div>
+
+    <section class="band" data-in="1500" data-from="up">
+      <div>
+        <h2>듣기만 해도 <em>괜찮아요.</em></h2>
+        <p class="lede">선언문으로 열고 닫는 세 번의 방송.<br>질문과 자료는 <b>sendev.kr</b> 한 곳에서 모읍니다.</p>
+        <dl class="facts"></dl>
+      </div>
+      <a class="qr" target="_blank" rel="noopener"><span><img src="assets/qr.svg" alt="QR 코드"></span><span></span></a>
+      <div class="foot"><span>주최 <b>서울특별시교육청</b> · 기획 <b>교사개발자 문화조성분과</b></span><span class="mono">sendev.kr</span></div>
+    </section>
+  </article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 다시 보기</button></div>
+
+<script>
+/* ───────── 포스터 내용: 수정은 여기서만 ─────────
+   null 인 값은 '추후 공지'로 표시되고, 초안 단계에서는 코랄 점으로 미정 표시가 붙습니다. */
+const POSTER = {
+  terminal: 'connect teacher-dev-day --season 2026',
+  cta: { url: 'https://sendev.kr', label: 'sendev.kr' },
+  showPending: true,                       // 최종본에서는 false
+  sessions: [
+    { date: '2026-10-27', step: '시작', sticker: '>_<br>init', rot: -8,
+      title: '「교사개발자 FM」 첫 방송<br>만들기 전과 후',
+      format: '온라인 생방송 · 교육청 스튜디오',
+      main: '생활지도·수업·행정 교사 게스트 3명의 DJ 인터뷰',
+      join: '「나는 어떤 교사 개발자?」 유형 테스트 · 보이는 라디오',
+      time: null, apply: null, pending: false },
+    { date: '2026-11-24', step: '실패', sticker: 'ERR<br>!', rot: 6,
+      title: '실패의 날<br>× 외국인 개발자 커뮤니티',
+      format: '오프라인 + 실시간 송출',
+      main: '외국인 개발자 발표 · 교사 개발자 발표 2명',
+      join: '외국인·교사 개발자가 섞여 앉는 네트워킹',
+      time: null, apply: null, pending: true },
+    { date: '2026-12-15', step: '구출', sticker: 'fix<br>✓', rot: -4,
+      title: '「구해줘요, 교사 개발자!」<br>1년 마무리',
+      format: '온라인 생방송',
+      main: '미리 받은 사연을 교사 개발자가 해결하고 견적 공개',
+      join: '사연은 미리 제출, 당일은 시청·반응',
+      time: null, apply: null, pending: true },
+  ],
+};
+/* ─────────────────────────────────────────────── */
+
+const q = new URLSearchParams(location.search || location.hash.slice(1));
+if (q.has('embed')) document.documentElement.classList.add('embed');
+const STATIC = q.has('static');
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ANIMATE = !STATIC && !REDUCED;
+const $ = s => document.querySelector(s);
+const poster = $('#poster');
+const DOW = ['일','월','화','수','목','금','토'];
+const parse = d => { const [y,m,dd] = d.split('-').map(Number); return new Date(y, m-1, dd); };
+const mmdd = d => d.slice(5).replace('-', '.');
+const today = new Date(); today.setHours(0,0,0,0);
+
+// 강조할 회차: ?focus=N, 없으면 오늘 이후 가장 가까운 회차
+const S = POSTER.sessions;
+let fi = Number(q.get('focus')) - 1;
+if (!(fi >= 0 && fi < S.length)) { fi = S.findIndex(s => parse(s.date) >= today); if (fi < 0) fi = S.length - 1; }
+const F = S[fi];
+
+if (STATIC) document.body.classList.add('static');
+const pendTag = POSTER.showPending ? '<span class="pending">미정</span>' : '';
+
+// 세션 카드
+$('.sessions').innerHTML = S.map((s, i) => {
+  const d = parse(s.date);
+  return `<div class="card${i === fi ? ' focus' : ''}" role="listitem" tabindex="0" style="--r:${s.rot}deg" data-in="${1250 + i*120}">
+    <div class="no">0${i+1}<em>${s.step}</em></div>
+    <span class="next">NEXT</span>
+    <div class="sticker" aria-hidden="true">${s.sticker}</div>
+    <div class="date">${mmdd(s.date)}<small>${DOW[d.getDay()]}</small></div>
+    <div class="face front"><h3>${s.title}</h3><p>${s.format}</p></div>
+    <div class="face back"><dl>
+      <div><dt>MAIN</dt><dd>${s.main}</dd></div>
+      <div><dt>JOIN</dt><dd>${s.join}</dd></div>
+      ${s.pending && POSTER.showPending ? '<span class="pending">세부 내용 조정 중</span>' : ''}
+    </dl></div>
+  </div>`;
+}).join('');
+document.querySelectorAll('.card').forEach(c => {
+  const t = () => c.classList.toggle('flip');
+  c.addEventListener('click', t);
+  c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); t(); } });
+});
+
+// 하단 정보 (강조 회차 기준)
+const fd = parse(F.date);
+$('.facts').innerHTML = `
+  <div><dt>WHEN</dt><dd>${mmdd(F.date)} (${DOW[fd.getDay()]})<br>${F.time ?? '시간 추후 공지'}${F.time ? '' : pendTag}</dd></div>
+  <div><dt>WHERE</dt><dd>${F.format.split(' · ')[0]}<br>${fi+1}회차 · ${F.step}</dd></div>
+  <div><dt>APPLY</dt><dd>${F.apply ?? '신청 링크 추후 공지'}${F.apply ? '' : pendTag}</dd></div>`;
+const qr = $('.qr'); qr.href = POSTER.cta.url; qr.lastElementChild.textContent = POSTER.cta.label;
+
+// 라이브 D-day (웹에서만)
+if (!STATIC) {
+  const n = Math.round((fd - today) / 864e5);
+  poster.classList.add('live');
+  $('.dday').textContent = (n > 0 ? `D-${n}` : n === 0 ? 'D-DAY' : 'ON AIR') + ` · ${mmdd(F.date)}`;
+}
+
+// 점 격자: 커서 근처 점이 커짐
+const cv = $('canvas.dots'), cx = cv.getContext('2d');
+let mouse = null, W, H, P, raf;
+function size() {
+  const r = poster.getBoundingClientRect(), dpr = devicePixelRatio || 1;
+  W = r.width; H = r.height; P = W / 794;
+  cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+function draw() {
+  cx.clearRect(0, 0, W, H);
+  const g = 24 * P, top = 120 * P, bot = 560 * P;
+  for (let y = top; y < bot; y += g) for (let x = W * .42; x < W - 40 * P; x += g) {
+    const fade = 1 - (y - top) / (bot - top);
+    let r = 1.3 * P, a = .16 * fade;
+    if (mouse) {
+      const d = Math.hypot(x - mouse.x, y - mouse.y), k = Math.max(0, 1 - d / (130 * P));
+      r += 2.6 * P * k * k; a += .45 * k * k;
+    }
+    cx.globalAlpha = a; cx.fillStyle = '#0E1311';
+    cx.beginPath(); cx.arc(x, y, r, 0, 7); cx.fill();
+  }
+}
+size(); addEventListener('resize', size);
+if (!STATIC) {
+  poster.addEventListener('pointermove', e => {
+    const r = poster.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top };
+    cancelAnimationFrame(raf); raf = requestAnimationFrame(draw);
+  });
+  poster.addEventListener('pointerleave', () => { mouse = null; draw(); });
+}
+
+// 등장 연출
+const typed = $('.typed');
+function play() {
+  if (!ANIMATE) { typed.textContent = POSTER.terminal; return; }
+  const P = parseFloat(getComputedStyle(poster).width) / 794;
+  const ease = 'cubic-bezier(.2,.8,.2,1)';
+  document.querySelectorAll('[data-in]').forEach(el => el.animate(
+    [{ opacity: 0, transform: `translateY(${(el.dataset.from === 'up' ? 60 : 18) * P}px)` }, { opacity: 1, transform: 'none' }],
+    { duration: 700, delay: +el.dataset.in, easing: ease, fill: 'backwards' }));
+  document.querySelectorAll('h1 .ln>span').forEach((el, i) => el.animate(
+    [{ transform: 'translateY(105%)' }, { transform: 'none' }],
+    { duration: 900, delay: 350 + i * 140, easing: ease, fill: 'backwards' }));
+  // 키워드 하이라이트: 잉크 박스가 왼쪽부터 칠해진 뒤 라임 글자가 켜짐
+  const hl = document.querySelector('.hl');
+  hl.animate([{ transform: 'scaleX(0)' }, { transform: 'none' }],
+    { pseudoElement: '::before', duration: 500, delay: 1150, easing: ease, fill: 'backwards' });
+  hl.animate([{ color: 'transparent' }, { color: 'transparent', offset: .6 }, { color: '#CCFF00' }],
+    { duration: 800, delay: 1150, fill: 'backwards' });
+  document.querySelectorAll('.sticker').forEach((el, i) => el.animate(
+    [{ transform: 'rotate(-90deg) scale(0)' }, { transform: `rotate(${S[i].rot}deg) scale(1)` }],
+    { duration: 650, delay: 1500 + i * 160, easing: 'cubic-bezier(.3,1.6,.5,1)', fill: 'backwards' }));
+  let k = 0; typed.textContent = '';
+  clearInterval(play.t);
+  play.t = setInterval(() => { typed.textContent = POSTER.terminal.slice(0, ++k); if (k >= POSTER.terminal.length) clearInterval(play.t); }, 32);
+}
+play();
+$('#replay').addEventListener('click', () => { document.querySelectorAll('.card').forEach(c => c.classList.remove('flip')); play(); });
+</script>
+</body>
+</html>

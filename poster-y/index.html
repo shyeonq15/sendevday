@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="노트북 위 스티커처럼: 10.27 보이는 라디오 · 11.24 외국인 개발자와 · 12.15 구해줘요, 교사 개발자!">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="../shared/core.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<script src="../shared/core.js"></script>
+<style>
+/* 시안 Y · 노트북 뚜껑 위 스티커: 회차마다 다른 스티커(라디오 · 지구본 · 구명튜브). 스티커는 끌어서 옮길 수 있음 */
+:root{--sky:#4FC3FF}
+#poster{background:var(--lilac);color:var(--ink);--intro-bg:var(--lilac)}
+.wide body{background:var(--lilac)}
+.lid{position:absolute;left:calc(var(--p)*26);right:calc(var(--p)*26);top:calc(var(--p)*26);bottom:calc(var(--p)*70);border-radius:calc(var(--p)*34);
+  background:radial-gradient(120% 80% at 30% 20%,#33393D,#1E2225 70%);box-shadow:inset 0 0 0 calc(var(--p)*3) #464D52,0 calc(var(--p)*18) calc(var(--p)*30) rgba(40,30,90,.25)}
+.wide .lid{bottom:calc(var(--p)*52)}
+.lid::after{content:">_";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:800 calc(var(--p)*90)/1 var(--mono);color:rgba(255,255,255,.05)}
+.hinge{position:absolute;left:calc(var(--p)*120);right:calc(var(--p)*120);bottom:calc(var(--p)*58);height:calc(var(--p)*10);border-radius:0 0 calc(var(--p)*10) calc(var(--p)*10);background:#14171A}
+.wide .hinge{bottom:calc(var(--p)*42)}
+.foot{position:absolute;left:calc(var(--p)*40);right:calc(var(--p)*40);bottom:calc(var(--p)*20);display:flex;justify-content:space-between;font:600 calc(var(--p)*11.5)/1.3 var(--sans)}
+.wide .foot{bottom:calc(var(--p)*14)}
+.foot b{font-weight:850}
+
+/* 스티커 공통: 흰 테두리 다이컷 + 그림자 */
+.st{position:absolute;z-index:2;touch-action:none;user-select:none;cursor:grab;transform:rotate(var(--r,0deg));transition:transform .25s cubic-bezier(.3,1.6,.5,1);
+  filter:drop-shadow(0 0 0 #fff) drop-shadow(calc(var(--p)*3) 0 0 #fff) drop-shadow(calc(var(--p)*-3) 0 0 #fff) drop-shadow(0 calc(var(--p)*3) 0 #fff) drop-shadow(0 calc(var(--p)*-3) 0 #fff) drop-shadow(0 calc(var(--p)*7) calc(var(--p)*6) rgba(0,0,0,.45))}
+.st:hover{transform:rotate(var(--r,0deg)) scale(1.04)}
+.st.drag{cursor:grabbing;transform:rotate(0) scale(1.1);z-index:20;transition:none}
+.st svg{display:block;width:100%;height:auto;overflow:visible}
+button.st{border:0;padding:0;background:none;font:inherit;color:inherit}
+button.st:focus-visible{outline:calc(var(--p)*3) solid var(--coral);outline-offset:calc(var(--p)*6)}
+.ttl{background:var(--lime);padding:calc(var(--p)*14) calc(var(--p)*22) calc(var(--p)*16);border-radius:calc(var(--p)*8)}
+.ttl small{display:block;font:800 calc(var(--p)*12)/1 var(--mono);letter-spacing:.08em}
+.ttl b{display:block;margin-top:calc(var(--p)*8);font:900 calc(var(--p)*68)/.98 var(--sans);letter-spacing:-.07em}
+.wide .ttl b{font-size:calc(var(--p)*62)}
+.sub{background:#fff;padding:calc(var(--p)*12) calc(var(--p)*16);border-radius:calc(var(--p)*14);font:750 calc(var(--p)*15.5)/1.5 var(--sans);letter-spacing:-.03em}
+.sub b{font-weight:900;background:var(--lime);padding:0 calc(var(--p)*4)}
+.pill{padding:calc(var(--p)*10) calc(var(--p)*16);border-radius:99px;font:800 calc(var(--p)*16)/1 var(--mono);white-space:nowrap}
+.eq{background:var(--sky);border-radius:calc(var(--p)*4);font-size:calc(var(--p)*20)}
+.hs{background:var(--coral);color:#fff;font-family:var(--sans)}
+.ok{background:#fff;font:800 calc(var(--p)*15)/1 var(--sans)}
+.kao{width:calc(var(--p)*92);height:calc(var(--p)*92);border-radius:50%;background:var(--lime);display:grid;place-items:center;font:800 calc(var(--p)*19)/1 var(--mono)}
+.tag{width:calc(var(--p)*170);background:#fff;border-radius:calc(var(--p)*10);overflow:hidden;text-align:center}
+.tag .h{background:var(--coral);color:#fff;padding:calc(var(--p)*8) 0 calc(var(--p)*6);font:900 calc(var(--p)*20)/1 var(--sans)}
+.tag .h small{display:block;font:700 calc(var(--p)*10)/1 var(--mono);margin-top:calc(var(--p)*3)}
+.tag .n{padding:calc(var(--p)*12) 0 calc(var(--p)*14);font:900 calc(var(--p)*24)/1 var(--sans);letter-spacing:-.04em}
+.tag .n i{font-style:normal;font:800 calc(var(--p)*15)/1 var(--mono);color:#6B5BD6;margin-left:calc(var(--p)*4)}
+.qr{background:#fff;border-radius:calc(var(--p)*14);padding:calc(var(--p)*10) calc(var(--p)*10) calc(var(--p)*8);text-align:center;text-decoration:none;color:var(--ink);display:block}
+.qr img{display:block;width:100%;aspect-ratio:1}
+.qr span{display:block;margin-top:calc(var(--p)*6);font:800 calc(var(--p)*12)/1 var(--mono)}
+.ses .nx{position:absolute;right:2%;top:-2%;z-index:3;background:var(--coral);color:#fff;font:800 calc(var(--p)*13)/1 var(--mono);padding:calc(var(--p)*7) calc(var(--p)*10);transform:rotate(10deg)}
+.hint{position:absolute;z-index:1;font:700 calc(var(--p)*11)/1 var(--mono);color:rgba(255,255,255,.45)}
+.static .hint{display:none}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="lid" aria-hidden="true"></div>
+  <div class="hinge" aria-hidden="true"></div>
+  <div class="st ttl" data-k="ttl"><small>&gt;_ SEOUL · 2026</small><b>교사<br>개발자의 날</b></div>
+  <div class="st sub" data-k="sub">교실의 문제를 코드로 바꾸는 선생님들이<br><b>매달 마지막 화요일 저녁</b> 모입니다</div>
+  <div class="st prom" data-k="prom" aria-label="프롬이"></div>
+  <div class="sessions" style="display:contents"></div>
+  <div class="st pill eq" data-k="eq">누구나 == 개발자</div>
+  <div class="st kao" data-k="kao">{^_^}</div>
+  <div class="st tag" data-k="tag"><div class="h">HELLO<small>my name is</small></div><div class="n">선생님<i>&gt;_</i></div></div>
+  <div class="st neq" data-k="neq"></div>
+  <div class="st pill hs" data-k="hs">#교사개발자</div>
+  <div class="st pill ok" data-k="ok">✓ 코딩 몰라도 OK</div>
+  <div class="st star" data-k="star"></div>
+  <a class="st qr" data-k="qr" target="_blank" rel="noopener"><img src="../shared/qr.svg" alt="sendev.kr QR 코드"><span>SCAN ME ↗</span></a>
+  <span class="hint" data-k="hint">스티커를 누르면 자세히 · 끌어서 옮겨 보세요</span>
+  <div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span class="apply"></span></div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 처음부터</button></div>
+<script>
+const { STATIC, fi, F } = ENV, S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const poster = $('#poster');
+$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.qr').href = POSTER.cta.url;
+$('.apply').innerHTML = '신청과 자료는 sendev.kr' + (F.apply ? '' : ENV.pendTag);
+$('.prom').innerHTML = KIT.flat({ face: 'happy', line: '#0E1311' });
+$('.neq').innerHTML = KIT.pix(['W..LLLL', 'W......', 'W..LLLL', 'W......', '.......', 'W......'], { colors: { W: '#CFC4FF', L: '#CFC4FF' } });
+$('.star').innerHTML = `<svg viewBox="0 0 100 100"><path d="M50 2 61 30 92 22 74 48 98 66 66 70 64 98 46 76 20 94 26 64 2 52 30 38 18 10 44 24Z" fill="#CCFF00"/><text x="50" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-weight="800" font-size="20" fill="#0E1311">NEW!</text></svg>`;
+
+const ink = '#0E1311', SANS = "'Pretendard Variable',Pretendard,sans-serif", MONO = "'JetBrains Mono',monospace";
+const t = (x, y, s, w, fill, txt, f = SANS, a = 'middle') => `<text x="${x}" y="${y}" font-family="${f}" font-size="${s}" font-weight="${w}" fill="${fill}" text-anchor="${a}">${txt}</text>`;
+const [s1, s2, s3] = S;
+
+// 1회: 보이는 라디오
+let dots = '';
+for (let y = -48; y <= 48; y += 12) for (let x = -48; x <= 48; x += 12) if (x * x + y * y < 50 * 50) dots += `<circle cx="${95 + x}" cy="${165 + y}" r="3.6" fill="#CCFF00"/>`;
+const RADIO = `<svg viewBox="0 0 320 280">
+  <line x1="236" y1="76" x2="290" y2="14" stroke="${ink}" stroke-width="6" stroke-linecap="round"/><circle cx="290" cy="14" r="9" fill="#FF5C39"/>
+  <rect x="98" y="38" width="124" height="56" rx="22" fill="none" stroke="${ink}" stroke-width="11"/>
+  <rect x="18" y="72" width="284" height="190" rx="32" fill="#CCFF00" stroke="${ink}" stroke-width="6"/>
+  <circle cx="95" cy="165" r="60" fill="${ink}"/>${dots}
+  <rect x="168" y="98" width="116" height="78" rx="10" fill="${ink}"/>
+  ${t(226, 132, 13, 800, '#CFC4FF', 'FM ' + s1.mo + '월', MONO)}${t(226, 164, 36, 900, '#CCFF00', s1.mo + '.' + s1.dd)}
+  ${t(226, 204, 15, 800, ink, s1.dow + ' ' + s1.time.slice(0, 5), MONO)}
+  ${t(226, 236, 16, 900, ink, '교사개발자 FM')}
+  <rect x="26" y="42" width="78" height="26" rx="13" fill="#FF5C39"/>${t(65, 60, 13, 800, '#fff', '● ON AIR', MONO)}
+</svg>`;
+
+// 2회: 지구본 + 말풍선
+const bub = (x, y, w, fill, txt, tail = 'l') => `<g><rect x="${x}" y="${y}" width="${w}" height="34" rx="12" fill="${fill}" stroke="${ink}" stroke-width="4"/>
+  <path d="M${tail === 'l' ? x + 16 : x + w - 16} ${y + 32} l${tail === 'l' ? -6 : 6} 14 l${tail === 'l' ? 16 : -16} -14z" fill="${fill}" stroke="${ink}" stroke-width="4" stroke-linejoin="round"/>
+  <rect x="${x + 6}" y="${y + 24}" width="${w - 12}" height="10" fill="${fill}"/>${t(x + w / 2, y + 23, 15, 800, ink, txt)}</g>`;
+const GLOBE = `<svg viewBox="0 0 320 310">
+  <circle cx="160" cy="170" r="108" fill="#4FC3FF" stroke="${ink}" stroke-width="6"/>
+  <path d="M90 110 q30 -20 55 0 q10 25 -15 35 q-30 5 -40 -35z M180 90 q35 5 45 30 q-10 30 -40 20 q-20 -25 -5 -50z M120 210 q40 -15 70 10 q-10 30 -45 35 q-30 -10 -25 -45z" fill="#CCFF00" stroke="${ink}" stroke-width="3"/>
+  <ellipse cx="160" cy="170" rx="50" ry="108" fill="none" stroke="${ink}" stroke-width="3.5"/>
+  <ellipse cx="160" cy="170" rx="108" ry="40" fill="none" stroke="${ink}" stroke-width="3.5"/>
+  ${bub(4, 36, 92, '#fff', 'Hello!')}${bub(222, 18, 82, '#CFC4FF', '안녕!', 'r')}${bub(228, 256, 80, '#CCFF00', 'Hola!', 'r')}${bub(0, 244, 104, '#fff', 'Bonjour')}
+  <g transform="rotate(-6 160 172)"><rect x="34" y="138" width="252" height="70" fill="${ink}"/>
+  ${t(160, 178, 36, 900, '#CCFF00', s2.mo + '.' + s2.dd + ' ' + s2.dow)}${t(160, 198, 12.5, 700, '#fff', '실패의 날 × 외국인 개발자', SANS)}</g>
+</svg>`;
+
+// 3회: 구명튜브 SOS
+const BUOY = `<svg viewBox="0 0 300 300">
+  <circle cx="150" cy="156" r="128" fill="none" stroke="${ink}" stroke-width="3" stroke-dasharray="10 8"/>
+  <circle cx="150" cy="156" r="118" fill="#fff" stroke="${ink}" stroke-width="6"/>
+  <circle cx="150" cy="156" r="89" fill="none" stroke="#FF5C39" stroke-width="56" stroke-dasharray="69.9 69.9" transform="rotate(-22 150 156)"/>
+  <circle cx="150" cy="156" r="62" fill="#CCFF00" stroke="${ink}" stroke-width="6"/>
+  ${t(150, 160, 34, 900, ink, s3.mo + '.' + s3.dd)}${t(150, 182, 13, 800, ink, s3.dow + ' ' + s3.time.slice(0, 5), MONO)}
+  <g transform="rotate(-10 150 24)"><rect x="96" y="6" width="108" height="40" rx="6" fill="#FF5C39" stroke="${ink}" stroke-width="4"/>${t(150, 36, 26, 900, '#fff', 'SOS!', MONO)}</g>
+  <rect x="38" y="262" width="224" height="36" rx="6" fill="${ink}"/>${t(150, 287, 16, 900, '#fff', '구해줘요, 교사 개발자!')}
+</svg>`;
+
+const NAMES = ['서로의 경험을 잇는 날', '실패의 날 × 외국인 개발자', '구해줘요, 교사 개발자!'];
+$('.sessions').outerHTML = [RADIO, GLOBE, BUOY].map((svg, i) =>
+  `<button class="st ses" type="button" data-k="s${i + 1}" data-i="${i}" aria-label="${S[i].mo}월 ${S[i].dd}일 ${NAMES[i]} 자세히 보기">${i === fi ? '<span class="nx">NEXT!</span>' : ''}${svg}</button>`).join('');
+
+// 배치표 [x, y, 너비(없으면 자동), 회전]
+const POS = {
+  tall: { ttl: [56, 60, 0, -4], sub: [62, 262, 0, 2], prom: [574, 54, 160, 10], s1: [36, 368, 340, -6], s2: [404, 330, 340, 7], s3: [224, 680, 300, -3],
+    eq: [46, 650, 0, -12], kao: [612, 250, 0, 0], tag: [560, 690, 0, 9], neq: [500, 920, 64, 0], hs: [66, 960, 0, 4], ok: [52, 870, 0, -4],
+    star: [354, 236, 86, 0], qr: [580, 868, 150, 5], hint: [254, 1018, 0, 0] },
+  wide: { ttl: [54, 48, 0, -4], sub: [58, 220, 0, 2], prom: [452, 54, 128, 10], s1: [598, 34, 290, -6], s2: [884, 52, 280, 7], s3: [690, 318, 250, -3],
+    eq: [60, 392, 0, -10], kao: [486, 222, 0, 0], tag: [970, 382, 0, 9], neq: [470, 300, 54, -8], hs: [292, 532, 0, 4], ok: [60, 478, 0, -4],
+    star: [576, 276, 70, 0], qr: [470, 410, 124, 5], hint: [60, 594, 0, 0] },
+};
+function place() {
+  const L = POS[CORE.isWide() ? 'wide' : 'tall'];
+  $$('[data-k]').forEach(el => {
+    const p = L[el.dataset.k]; if (!p || el.dataset.moved) return;
+    el.style.left = `calc(var(--p)*${p[0]})`; el.style.top = `calc(var(--p)*${p[1]})`;
+    if (p[2]) el.style.width = `calc(var(--p)*${p[2]})`;
+    el.style.setProperty('--r', p[3] + 'deg');
+  });
+}
+place(); addEventListener('resize', place);
+
+// 스티커 끌어서 옮기기 (조금만 움직이면 클릭으로 처리)
+let dragged = false;
+if (!STATIC) $$('.st').forEach(el => {
+  el.addEventListener('pointerdown', e => {
+    if (e.button) return;
+    const r = poster.getBoundingClientRect(), sx = e.clientX, sy = e.clientY, ox = el.offsetLeft, oy = el.offsetTop;
+    let moved = false;
+    const mv = ev => {
+      const dx = ev.clientX - sx, dy = ev.clientY - sy;
+      if (!moved && Math.hypot(dx, dy) < 6) return;
+      if (!moved) { moved = true; el.classList.add('drag'); el.setPointerCapture(e.pointerId); }
+      el.style.left = `${ox + dx}px`; el.style.top = `${oy + dy}px`; el.dataset.moved = 1;
+    };
+    const up = () => { el.classList.remove('drag'); removeEventListener('pointermove', mv); removeEventListener('pointerup', up); dragged = moved; setTimeout(() => dragged = false, 0); };
+    addEventListener('pointermove', mv); addEventListener('pointerup', up);
+  });
+});
+poster.addEventListener('click', e => { if (dragged) { e.stopPropagation(); e.preventDefault(); } }, true);
+$('.prom').addEventListener('click', e => { e.stopPropagation(); $('.prom').innerHTML = KIT.flat({ face: ['wink', 'happy', 'idle'][Date.now() % 3], line: '#0E1311' }); });
+$('#replay').addEventListener('click', () => { $$('[data-moved]').forEach(el => delete el.dataset.moved); place(); });
+
+const FACE = ['happy', 'worry', 'happy'];
+CORE.init({
+  cards: '.ses',
+  face: i => KIT.flat({ face: FACE[i], line: '#fff' }),
+  dots: { color: '#0E1311', alpha: 0, hot: 0 },
+  reveal() {
+    const els = $$('.st');
+    els.forEach((el, i) => el.animate([{ opacity: 0, transform: `rotate(${(i % 2 ? 1 : -1) * 40}deg) scale(1.8)` }, { opacity: 1, transform: `rotate(var(--r)) scale(.92)`, offset: .7 }, { opacity: 1, transform: 'rotate(var(--r))' }],
+      { duration: 420, delay: 150 + i * 110, easing: 'cubic-bezier(.3,1.2,.5,1)', fill: 'backwards' }));
+  },
+});
+</script>
+</body>
+</html>

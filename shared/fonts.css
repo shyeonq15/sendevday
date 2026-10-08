@@ -1,0 +1,4 @@
+/* 로컬 폰트 (SIL OFL 1.1 — 라이선스 전문은 fonts/LICENSE-*.txt) */
+@font-face{font-family:"Pretendard Variable";font-weight:45 920;font-style:normal;font-display:swap;src:url("fonts/PretendardVariable.woff2") format("woff2-variations")}
+@font-face{font-family:Galmuri11;font-weight:400;font-display:swap;src:url("fonts/Galmuri11.woff2") format("woff2")}
+@font-face{font-family:Galmuri11;font-weight:700;font-display:swap;src:url("fonts/Galmuri11-Bold.woff2") format("woff2")}

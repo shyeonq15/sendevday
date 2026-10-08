@@ -1,0 +1,3 @@
+node_modules/
+# npm run png 으로 다시 만들 수 있는 출력물
+out/

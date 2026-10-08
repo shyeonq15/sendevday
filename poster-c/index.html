@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="교실의 문제를 코드로 바꾸는 선생님들이 세 번, 접속합니다. 10.27 · 11.24 · 12.15">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<script src="../shared/data.js"></script>
+<style>
+/* 시안 C · 코드 에디터: 포스터 전체가 하나의 소스 파일 */
+:root{
+  --ink:#0E1311;--ink2:#161D19;--lime:#CCFF00;--paper:#F3F3EE;--lilac:#CFC4FF;--coral:#FF5C39;
+  --cm:#6F7A73;--pn:#AEB6B1;
+  --sans:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100vh;background:#1A211D;color:var(--ink);font-family:var(--sans);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:14px;padding:16px;word-break:keep-all;-webkit-font-smoothing:antialiased}
+.stage{container-type:inline-size;width:min(100%, calc((100vh - 76px) * 794 / 1123), 900px)}
+#poster{--p:calc(100cqw / 794);position:relative;width:100%;aspect-ratio:794/1123;overflow:hidden;background:var(--lime);
+  box-shadow:0 30px 80px rgba(0,0,0,.45)}
+
+.ed{position:absolute;left:calc(var(--p)*34);right:calc(var(--p)*34);top:calc(var(--p)*34);bottom:calc(var(--p)*58);
+  background:var(--ink);border-radius:calc(var(--p)*14);overflow:hidden;display:flex;flex-direction:column;color:#fff}
+
+/* 탭 줄 */
+.tabs{height:calc(var(--p)*42);flex:none;display:flex;align-items:stretch;background:#0A0E0C;padding-left:calc(var(--p)*16)}
+.dots{display:flex;align-items:center;gap:calc(var(--p)*7);margin-right:calc(var(--p)*18)}
+.dots i{width:calc(var(--p)*11);height:calc(var(--p)*11);border-radius:50%;background:#2B332E}
+.dots i:first-child{background:var(--coral)}
+.tab{display:flex;align-items:center;gap:calc(var(--p)*8);padding:0 calc(var(--p)*16);font:600 calc(var(--p)*12)/1 var(--mono);color:var(--cm)}
+.tab.on{background:var(--ink);color:#fff;box-shadow:inset 0 calc(var(--p)*2) 0 var(--lime)}
+.tab b{color:var(--lime);font-weight:800}
+.run{margin:auto calc(var(--p)*14) auto auto;display:inline-flex;align-items:center;gap:calc(var(--p)*7);background:var(--lime);color:var(--ink);border:0;
+  border-radius:calc(var(--p)*6);padding:calc(var(--p)*7) calc(var(--p)*12);font:800 calc(var(--p)*11.5)/1 var(--mono);cursor:pointer}
+.run svg{width:calc(var(--p)*9)}
+.run:hover{filter:brightness(1.08)}
+
+/* 코드 */
+.code{flex:1;padding:calc(var(--p)*16) 0;font:500 calc(var(--p)*16)/1 var(--mono);position:relative}
+.ln{display:grid;grid-template-columns:calc(var(--p)*58) 1fr;align-items:center;min-height:calc(var(--p)*28);position:relative;padding-right:calc(var(--p)*24)}
+.ln>i{font-style:normal;text-align:right;padding-right:calc(var(--p)*20);color:#3A443E;font-size:calc(var(--p)*12);align-self:start;line-height:calc(var(--p)*28)}
+.ln>span{white-space:pre;line-height:1.75}
+.k{color:var(--lilac)}.s{color:var(--lime)}.c{color:var(--cm)}.f{color:#fff;font-weight:700}.p{color:var(--pn)}
+.big>span{font:800 calc(var(--p)*92)/1.04 var(--sans);letter-spacing:-.055em;color:#fff;white-space:normal}
+.big>span .c{font:500 calc(var(--p)*16)/1 var(--mono);letter-spacing:0;vertical-align:calc(var(--p)*30);margin-right:calc(var(--p)*14)}
+.big>i{line-height:calc(var(--p)*96)}
+.lede>span{font:600 calc(var(--p)*19)/1.6 var(--sans);color:rgba(255,255,255,.78);white-space:normal;letter-spacing:-.02em}
+.lede>span .c{font:500 calc(var(--p)*16)/1 var(--mono);margin-right:calc(var(--p)*14)}
+.hl{position:relative;z-index:0;display:inline-block;color:var(--ink);padding:0 calc(var(--p)*6);margin:0 calc(var(--p)*2);font-weight:750}
+.hl::before{content:"";position:absolute;inset:calc(var(--p)*1) 0;background:var(--lime);z-index:-1}
+.ses{cursor:pointer}
+.ses:hover,.ses.open{background:rgba(255,255,255,.04)}
+.ses.next{background:rgba(204,255,0,.1)}
+.ses.next>i{color:var(--lime)}
+.ses.next::before{content:"";position:absolute;left:calc(var(--p)*12);top:50%;width:calc(var(--p)*9);height:calc(var(--p)*9);margin-top:calc(var(--p)*-4.5);border-radius:50%;background:var(--coral)}
+.lens{color:var(--lime);font:700 calc(var(--p)*11)/1 var(--mono);margin-left:calc(var(--p)*12);opacity:.9;letter-spacing:.06em}
+.date{font-weight:800;font-size:calc(var(--p)*19)}
+.cur{display:inline-block;width:calc(var(--p)*9);height:calc(var(--p)*19);background:var(--lime);vertical-align:middle;margin-left:calc(var(--p)*2);animation:blink 1s steps(1) infinite}
+.static .cur{animation:none}
+
+/* 호버 카드 */
+.hover{position:absolute;z-index:40;left:calc(var(--p)*120);width:calc(var(--p)*420);background:#1D2520;border:1px solid #2F3A33;border-radius:calc(var(--p)*8);
+  padding:calc(var(--p)*14) calc(var(--p)*16);font:500 calc(var(--p)*12.5)/1.55 var(--sans);color:#D8DED9;box-shadow:0 calc(var(--p)*12) calc(var(--p)*30) rgba(0,0,0,.5);
+  opacity:0;transform:translateY(calc(var(--p)*-4));transition:opacity .15s,transform .15s;pointer-events:none}
+.hover.on{opacity:1;transform:none}
+.hover h4{margin:0 0 calc(var(--p)*8);font:800 calc(var(--p)*12)/1 var(--mono);color:var(--lime)}
+.hover dl{margin:0;display:grid;grid-template-columns:calc(var(--p)*44) 1fr;gap:calc(var(--p)*5) calc(var(--p)*8)}
+.hover dt{font:800 calc(var(--p)*10)/1.9 var(--mono);color:var(--cm);letter-spacing:.1em}
+.hover dd{margin:0}
+.pending{display:inline-flex;align-items:center;gap:calc(var(--p)*5);font:700 calc(var(--p)*10.5)/1 var(--mono);color:var(--coral);margin-left:calc(var(--p)*8)}
+.pending::before{content:"";width:calc(var(--p)*6);height:calc(var(--p)*6);border-radius:50%;background:currentColor}
+
+/* 터미널 */
+.term{flex:none;border-top:1px solid #222A25;background:var(--ink2);display:grid;grid-template-columns:1fr auto;column-gap:calc(var(--p)*22);
+  padding:0 calc(var(--p)*24) calc(var(--p)*20)}
+.ttabs{grid-column:1/-1;display:flex;gap:calc(var(--p)*22);font:700 calc(var(--p)*10.5)/1 var(--mono);letter-spacing:.1em;color:var(--cm);padding:calc(var(--p)*12) 0 calc(var(--p)*14)}
+.ttabs b{color:#fff;box-shadow:0 calc(var(--p)*7) 0 calc(var(--p)*-5.5) var(--lime)}
+.out{font:500 calc(var(--p)*13.5)/1.85 var(--mono);color:#D8DED9;min-height:calc(var(--p)*150)}
+.out div{white-space:pre-wrap}
+.out .ok{color:var(--lime)}
+.out .dim{color:var(--cm)}
+.out .w{color:#fff;font-weight:800}
+.qr{display:flex;flex-direction:column;align-items:center;gap:calc(var(--p)*8);text-decoration:none;color:#fff;align-self:start}
+.qr span:first-child{display:block;width:calc(var(--p)*132);height:calc(var(--p)*132);padding:calc(var(--p)*9);background:var(--lime);border-radius:calc(var(--p)*7)}
+.qr img{display:block;width:100%;height:100%}
+.qr span:last-child{font:800 calc(var(--p)*11.5)/1 var(--mono)}
+
+/* 상태 표시줄 */
+.status{height:calc(var(--p)*28);flex:none;background:var(--lime);color:var(--ink);display:flex;align-items:center;gap:calc(var(--p)*16);
+  padding:0 calc(var(--p)*14);font:700 calc(var(--p)*10.5)/1 var(--mono)}
+.status .r{margin-left:auto}
+.onair{display:none;align-items:center;gap:calc(var(--p)*6)}
+.onair::before{content:"";width:calc(var(--p)*6);height:calc(var(--p)*6);border-radius:50%;background:var(--coral);animation:blink 1.4s infinite}
+html:not(.static) .onair{display:inline-flex}
+
+.foot{position:absolute;left:calc(var(--p)*36);right:calc(var(--p)*36);bottom:calc(var(--p)*20);display:flex;justify-content:space-between;
+  font-size:calc(var(--p)*11.5);font-weight:550}
+.foot b{font-weight:750}
+.foot .mono{font:800 calc(var(--p)*11)/1 var(--mono);letter-spacing:.08em}
+
+/* 스티커 */
+.sticker{position:absolute;width:calc(var(--p)*80);height:calc(var(--p)*80);border-radius:50%;display:grid;place-items:center;z-index:30;
+  background:var(--lime);color:var(--ink);font:800 calc(var(--p)*15)/1.05 var(--mono);text-align:center;
+  box-shadow:0 0 0 calc(var(--p)*3.5) var(--ink),0 0 0 calc(var(--p)*5) var(--lime),0 calc(var(--p)*10) calc(var(--p)*18) rgba(0,0,0,.35);
+  transform:rotate(calc(var(--rot) * 1deg));transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.sticker:hover{transform:rotate(calc(var(--rot) * 1deg + 14deg)) scale(1.07)}
+.sticker.alt{background:var(--paper)}
+
+.ctrl{display:flex;gap:8px}
+.ctrl button{font:600 13px/1 var(--sans);color:#d9ded9;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:9px 14px;cursor:pointer}
+.ctrl button:hover{border-color:var(--lime);color:var(--lime)}
+.static body{padding:0;background:var(--lime);display:block;min-height:0}
+.static .stage{width:794px}
+.static #poster{box-shadow:none}
+.static .ctrl{display:none}
+@keyframes blink{50%{opacity:0}}
+@media print{@page{size:A4;margin:0}body{padding:0;background:none;display:block}.stage{width:210mm}#poster{box-shadow:none}.ctrl{display:none}}
+@media (prefers-reduced-motion:reduce){.cur,.onair::before{animation:none}}
+.embed body{padding:0;background:transparent;display:block;min-height:0}.embed .stage{width:100%}.embed #poster{box-shadow:none}.embed .ctrl{display:none}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="ed">
+    <div class="tabs">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="tab on"><b>JS</b>teacher_dev_day.js</div>
+      <div class="tab">선언문.md</div>
+      <div class="tab">사연함.json</div>
+      <button class="run" type="button"><svg viewBox="0 0 10 10"><path d="M1 0l9 5-9 5z" fill="currentColor"/></svg>실행</button>
+    </div>
+    <div class="code"></div>
+    <div class="term">
+      <div class="ttabs"><b>TERMINAL</b><span>OUTPUT</span><span>PROBLEMS 0</span></div>
+      <div class="out" aria-live="polite"></div>
+      <a class="qr" target="_blank" rel="noopener"><span><img src="../shared/qr.svg" alt="QR 코드"></span><span></span></a>
+    </div>
+    <div class="status"><span>⎇ main</span><span>✓ 0 problems</span><span class="onair"></span><span class="r">UTF-8 · JavaScript · Ln 19</span></div>
+  </div>
+  <div class="hover" role="tooltip"></div>
+  <div class="stickers"></div>
+  <div class="foot"><span>주최 <b class="host"></b> · 기획 <b class="team"></b></span><span class="mono">TEACHER DEV DAY · 2026</span></div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 다시 보기</button></div>
+
+<script>
+const { STATIC, ANIMATE, fi, F, dday, pendTag } = ENV;
+const S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const poster = $('#poster');
+$('.host').textContent = POSTER.host;
+$('.team').textContent = POSTER.team;
+$('.onair').textContent = `ON AIR ${dday} · ${F.mmdd}`;
+$('.qr').href = POSTER.cta.url;
+$('.qr span:last-child').textContent = POSTER.cta.label;
+
+// 코드 줄 (k 키워드 · s 문자열 · c 주석 · f 이름 · p 기호)
+const t = (cls, x) => `<span class="${cls}">${x}</span>`;
+const k = x => t('k', x), s = x => t('s', x), c = x => t('c', x), f = x => t('f', x), p = x => t('p', x);
+const LINES = [
+  { h: c('/**') },
+  { h: c('*') + '교사', cls: 'big' },
+  { h: c('*') + '개발자의 날', cls: 'big' },
+  { h: c('*') + '교실의 문제를<span class="hl">코드로</span>바꾸는 선생님들이', cls: 'lede' },
+  { h: c('*') + '올해, 세 번 접속합니다.', cls: 'lede' },
+  { h: c(' */') },
+  { h: '' },
+  { h: `${k('import')} ${p('{')} ${f('교실')} ${p('}')} ${k('from')} ${s('"./우리반"')}${p(';')}` },
+  { h: `${k('const')} 교사 ${p('=')} ${k('new')} ${f('개발자')}${p('({')} 경력${p(':')} ${s('"상관없음"')} ${p('});')}` },
+  { h: '' },
+  { h: `교사${p('.')}${f('접속')}${p('({')}` },
+  ...S.map((x, i) => ({
+    h: `  ${t('s date', `"${x.mmdd}"`)}${p(':')} ${f(x.step)}${p('(),')}  ${c(`// ${x.short.replace(/<br>/g, ' ')}`)}${i === fi ? `<span class="lens">◂ NEXT</span>` : ''}`,
+    cls: `ses${i === fi ? ' next' : ''}`, i })),
+  { h: p('});') },
+  { h: '' },
+  { h: `${c('// TODO:')} ${t('s', '듣기만 해도 괜찮아요')} ${c('✓')}` },
+  { h: `${k('export default')} ${f('교사개발자의날')}${p(';')}<span class="cur"></span>` },
+];
+$('.code').innerHTML = LINES.map((l, n) =>
+  `<div class="ln ${l.cls || ''}"${l.i != null ? ` data-i="${l.i}" tabindex="0"` : ''}><i>${n + 1}</i><span>${l.h}</span></div>`).join('');
+$('.status .r').textContent = `UTF-8 · JavaScript · Ln ${LINES.length}`;
+
+// 회차 줄 호버 → 상세 카드
+const hov = $('.hover');
+const unit = () => poster.getBoundingClientRect().width / 794;
+function show(row) {
+  const x = S[row.dataset.i];
+  hov.innerHTML = `<h4>${x.step}() · ${x.mmdd} ${x.dow}</h4><dl>
+    <dt>FORM</dt><dd>${x.format} · ${x.place}</dd>
+    <dt>MAIN</dt><dd>${x.main}</dd>
+    <dt>JOIN</dt><dd>${x.join}${x.pending && POSTER.showPending ? '<span class="pending">세부 조정 중</span>' : ''}</dd></dl>`;
+  const pr = poster.getBoundingClientRect(), rr = row.getBoundingClientRect();
+  hov.style.top = `${(rr.bottom - pr.top) + 6 * unit()}px`;
+  hov.classList.add('on');
+  $$('.ses').forEach(r => r.classList.toggle('open', r === row));
+}
+const hide = () => { hov.classList.remove('on'); $$('.ses').forEach(r => r.classList.remove('open')); };
+if (!STATIC) $$('.ses').forEach(r => {
+  r.addEventListener('mouseenter', () => show(r));
+  r.addEventListener('mouseleave', hide);
+  r.addEventListener('focus', () => show(r));
+  r.addEventListener('blur', hide);
+  r.addEventListener('click', () => (r.classList.contains('open') ? hide() : show(r)));
+});
+
+// 터미널 출력
+const OUT = [
+  ['', `<span class="dim">$</span> node teacher_dev_day.js`],
+  ['ok', `✓ 세션 3개를 찾았습니다  ${S.map(x => x.mmdd).join(' · ')}`],
+  ['', `→ 다음 접속  <span class="w">${F.mmdd} (${F.dow})</span> ${F.time ?? '시간 추후 공지'}${F.time ? '' : pendTag}`],
+  ['', `→ 신청       ${F.apply ?? '추후 공지'}${F.apply ? '' : pendTag}`],
+  ['', `→ 질문·자료  <span class="w">${POSTER.cta.label}</span>`],
+  ['ok', `> 교사 개발자의 날에 오신 걸 환영합니다<span class="cur"></span>`],
+];
+const out = $('.out');
+function run(delay = 0) {
+  clearTimeout(run.t);
+  if (!ANIMATE) { out.innerHTML = OUT.map(([cl, h]) => `<div class="${cl}">${h}</div>`).join(''); return; }
+  out.innerHTML = '';
+  OUT.forEach(([cl, h], i) => { run.t = setTimeout(() => out.insertAdjacentHTML('beforeend', `<div class="${cl}">${h}</div>`), delay + i * 260); });
+}
+$('.run').addEventListener('click', () => run());
+
+// 스티커 3종
+const SPOTS = [{ x: 560, y: 128 }, { x: 640, y: 520 }, { x: 470, y: 690 }];
+$('.stickers').innerHTML = S.map((x, i) =>
+  `<div class="sticker${i === 1 ? ' alt' : ''}" style="left:calc(var(--p)*${SPOTS[i].x});top:calc(var(--p)*${SPOTS[i].y});--rot:${x.rot}" aria-label="${i + 1}회차 스티커">${x.sticker}</div>`).join('');
+
+// 등장 연출: 코드가 한 줄씩 → 터미널 자동 실행
+function play() {
+  hide();
+  if (!ANIMATE) { run(); return; }
+  $$('.ln').forEach((el, n) => el.animate([{ opacity: 0, transform: 'translateX(-8px)' }, { opacity: 1, transform: 'none' }],
+    { duration: 380, delay: 150 + n * 70, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }));
+  $$('.sticker').forEach((el, i) => el.animate([{ opacity: 0, transform: `rotate(-90deg) scale(.2)` }, { opacity: 1, transform: `rotate(${S[i].rot}deg)` }],
+    { duration: 600, delay: 1500 + i * 180, easing: 'cubic-bezier(.3,1.6,.5,1)', fill: 'backwards' }));
+  run(150 + LINES.length * 70 + 300);
+}
+play();
+$('#replay').addEventListener('click', play);
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="매달 마지막 화요일 저녁, 교실의 문제를 코드로 바꾸는 선생님들이 모입니다.">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="../shared/core.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<script src="../shared/core.js"></script>
+<style>
+/* 시안 R · 노선도: 굵은 노선 하나에 세 개의 역. 세로판은 세로 노선, 가로판은 가로 노선 */
+#poster{background:var(--paper);color:var(--ink);--line:var(--ink)}
+.wide body{background:var(--paper)}
+.lay{padding:calc(var(--p)*44) calc(var(--p)*52) calc(var(--p)*30);grid-template-columns:1fr;grid-template-rows:auto auto auto 1fr auto auto;
+  grid-template-areas:"top" "title" "sub" "route" "join" "foot"}
+.wide .lay{padding:calc(var(--p)*34) calc(var(--p)*52) calc(var(--p)*22);grid-template-columns:1fr auto;column-gap:calc(var(--p)*40);
+  grid-template-rows:auto auto auto 1fr auto;grid-template-areas:"top top" "title join" "sub join" "route route" "foot foot"}
+.top{grid-area:top;display:flex;justify-content:space-between;align-items:center}
+.logo{display:flex;align-items:center;gap:calc(var(--p)*9);font:850 calc(var(--p)*16)/1 var(--sans);letter-spacing:-.02em}
+.logo i{width:calc(var(--p)*32);height:calc(var(--p)*32);display:grid;place-items:center;background:var(--ink);color:var(--lime);border-radius:calc(var(--p)*9);font:800 calc(var(--p)*12)/1 var(--mono);font-style:normal}
+.line-no{display:inline-flex;align-items:center;gap:calc(var(--p)*8);font:800 calc(var(--p)*12)/1 var(--mono);letter-spacing:.06em}
+.line-no b{width:calc(var(--p)*26);height:calc(var(--p)*26);border-radius:50%;background:var(--lime);border:calc(var(--p)*2.5) solid var(--ink);display:grid;place-items:center;font-size:calc(var(--p)*11)}
+h1{grid-area:title;margin:calc(var(--p)*50) 0 0;font:900 calc(var(--p)*92)/1 var(--sans);letter-spacing:-.07em}
+.wide h1{margin-top:calc(var(--p)*34);font-size:calc(var(--p)*80)}
+.sub{grid-area:sub;margin:calc(var(--p)*18) 0 0;font:750 calc(var(--p)*23)/1.45 var(--sans);letter-spacing:-.04em}
+.sub b{font-weight:900;box-shadow:inset 0 calc(var(--p)*-11) 0 var(--lime)}
+.wide .sub{font-size:calc(var(--p)*21)}
+
+/* 노선 */
+.route{grid-area:route;position:relative;display:grid;align-self:center}
+.route::before{content:"";position:absolute;background:var(--line);border-radius:99px}
+html:not(.wide) .route{grid-template-rows:repeat(3,auto);row-gap:calc(var(--p)*30);margin:calc(var(--p)*44) 0 calc(var(--p)*10)}
+html:not(.wide) .route::before{left:calc(var(--p)*38);top:calc(var(--p)*30);bottom:calc(var(--p)*30);width:calc(var(--p)*14)}
+.wide .route{grid-template-columns:repeat(3,1fr);column-gap:calc(var(--p)*30);margin:calc(var(--p)*30) 0 calc(var(--p)*6)}
+.wide .route::before{left:calc(var(--p)*30);right:calc(var(--p)*30);top:calc(var(--p)*38);height:calc(var(--p)*14)}
+.wide .route::after{content:"▶";position:absolute;right:calc(var(--p)*-8);top:calc(var(--p)*28);font-size:calc(var(--p)*28);line-height:1}
+
+.st{position:relative;display:grid;align-items:center;background:none;border:0;padding:0;text-align:left;font-family:var(--sans);color:var(--ink);cursor:pointer}
+html:not(.wide) .st{grid-template-columns:calc(var(--p)*90) 1fr}
+.wide .st{grid-template-rows:calc(var(--p)*90) auto;justify-items:start}
+.st:focus-visible{outline:calc(var(--p)*3) solid var(--coral);outline-offset:calc(var(--p)*6);border-radius:calc(var(--p)*12)}
+.dot{width:calc(var(--p)*76);height:calc(var(--p)*76);border-radius:50%;background:#fff;border:calc(var(--p)*7) solid var(--ink);display:grid;place-items:center;
+  font:800 calc(var(--p)*16)/1 var(--mono);transition:transform .2s;position:relative;z-index:1;margin-left:calc(var(--p)*7)}
+.wide .dot{margin-left:0}
+.st.next .dot{background:var(--lime);width:calc(var(--p)*90);height:calc(var(--p)*90);margin-left:0}
+.st:hover .dot{transform:scale(1.08)}
+.info{padding:calc(var(--p)*4) 0}
+.wide .info{padding-top:calc(var(--p)*16)}
+.d{font:900 calc(var(--p)*58)/1 var(--sans);letter-spacing:-.06em;white-space:nowrap}
+.d small{font-size:calc(var(--p)*24);margin-left:calc(var(--p)*4);letter-spacing:-.02em}
+.wide .d{font-size:calc(var(--p)*54)}
+.meta{margin-top:calc(var(--p)*8);display:flex;flex-wrap:wrap;gap:calc(var(--p)*6) calc(var(--p)*10);align-items:center;font:700 calc(var(--p)*13.5)/1 var(--sans)}
+.meta b{font:800 calc(var(--p)*13.5)/1 var(--mono)}
+.meta i{font-style:normal;padding:calc(var(--p)*5) calc(var(--p)*9);border-radius:99px;border:1.5px solid var(--ink);font-size:calc(var(--p)*12)}
+.st h3{margin:calc(var(--p)*9) 0 0;font:850 calc(var(--p)*19)/1.3 var(--sans);letter-spacing:-.04em}
+.st .nx{display:inline-block;margin-left:calc(var(--p)*10);vertical-align:middle;background:var(--coral);color:#fff;font:700 calc(var(--p)*11)/1 var(--mono);letter-spacing:.06em;padding:calc(var(--p)*6) calc(var(--p)*9);border-radius:99px}
+.st .go{font:700 calc(var(--p)*11)/1 var(--mono);opacity:.45;margin-top:calc(var(--p)*8);letter-spacing:.08em}
+.static .st .go{display:none}
+
+.join{grid-area:join;align-self:end;display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--p)*18);margin-top:calc(var(--p)*20)}
+.wide .join{flex-direction:row;align-self:end;margin-top:0}
+.join strong{display:block;font:850 calc(var(--p)*22)/1.3 var(--sans);letter-spacing:-.04em}
+.join span{display:block;margin-top:calc(var(--p)*8);font:600 calc(var(--p)*14)/1.5 var(--sans)}
+.join .pending{display:inline-flex;margin-top:0}
+.wide .join .txt{display:none}
+.prom{width:calc(var(--p)*80);flex:none;margin-left:auto;cursor:pointer}
+.qr{display:block;flex:none;width:calc(var(--p)*108);height:calc(var(--p)*108);padding:calc(var(--p)*7);background:var(--lime);border-radius:calc(var(--p)*14);border:calc(var(--p)*2.5) solid var(--ink)}
+.qr img{display:block;width:100%;height:100%}
+.foot{grid-area:foot;margin-top:calc(var(--p)*18);display:flex;justify-content:space-between;font:600 calc(var(--p)*11)/1 var(--sans);opacity:.8}
+.wide .foot{margin-top:calc(var(--p)*12)}
+.foot b{font-weight:850}
+.wide-only{display:none}
+.wide .wide-only{display:inline}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="lay">
+    <div class="top"><span class="logo"><i>&gt;_</i>교사개발자</span><span class="line-no"><b>T</b>화요일선 · 2026</span></div>
+    <h1>교사 개발자의 날</h1>
+    <p class="sub">교실의 문제를 코드로 바꾸는 선생님들이<br><b>매달 마지막 화요일 저녁</b> 같은 노선에 탑니다.<span class="wide-only"> 코딩을 몰라도, 이미 잘해도 누구나.</span></p>
+    <div class="route"></div>
+    <div class="join">
+      <div class="txt"><strong>코딩을 몰라도, 이미 잘해도. <br>모든 교사 개발자를 초대합니다.</strong><span class="apply"></span></div>
+      <span class="prom" role="img" aria-label="프롬이"></span>
+      <a class="qr" target="_blank" rel="noopener"><img src="../shared/qr.svg" alt="sendev.kr QR 코드"></a>
+    </div>
+    <div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span>질문과 자료는 sendev.kr</span></div>
+  </div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 처음부터</button></div>
+<script>
+const { fi, F } = ENV, S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.qr').href = POSTER.cta.url;
+$('.apply').innerHTML = '듣기만 해도 괜찮아요. 신청과 자료는 sendev.kr' + (F.apply ? '' : ENV.pendTag);
+$('.prom').innerHTML = KIT.mascot({ face: 'happy' });
+const NAMES = ['서로의 경험을 잇는 날', '실패의 날 × 외국인 개발자', '구해줘요, 교사 개발자!'];
+const PLACE = ['온라인', '서울시교육청 스튜디오', '온라인 · 연말 특집'];
+const FACE = ['happy', 'worry', 'happy'];
+$('.route').innerHTML = S.map((s, i) => `<button class="st${i === fi ? ' next' : ''}" type="button" data-i="${i}" aria-label="${s.mo}월 ${s.dd}일 ${NAMES[i]} 자세히 보기">
+  <span class="dot">0${i + 1}</span>
+  <span class="info">
+    <span class="d">${s.mo}월 ${s.dd}일<small>${s.dow}</small>${i === fi ? '<span class="nx">NEXT</span>' : ''}</span>
+    <span class="meta"><b>${s.time}</b><i>${PLACE[i]}</i></span>
+    <h3>${NAMES[i]}</h3>
+    <span class="go">TAP ▶</span>
+  </span></button>`).join('');
+$('.prom').addEventListener('click', e => { e.stopPropagation(); $('.prom').animate([{ transform: 'none' }, { transform: 'translateY(-30%) rotate(-8deg)' }, { transform: 'none' }], { duration: 460, easing: 'cubic-bezier(.3,1.5,.5,1)' }); });
+
+CORE.init({
+  cards: '.st',
+  face: i => KIT.mascot({ face: FACE[i], dark: true }),
+  dots: { color: '#0E1311', alpha: .09, hot: .5 },
+  reveal() {
+    const wide = document.documentElement.classList.contains('wide');
+    KIT.pop([$('.top')]);
+    KIT.drop([$('h1')], { delay: 100, height: 240 });
+    KIT.pop([$('.sub')], { delay: 450 });
+    $('.route').animate([{ clipPath: wide ? 'inset(0 100% 0 0)' : 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 1100, delay: 600, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'backwards' });
+    KIT.pop($$('.dot'), { delay: 800, stagger: 300 });
+    KIT.pop([$('.join')], { delay: 1500, from: 'translateY(24px)' });
+  },
+});
+</script>
+</body>
+</html>

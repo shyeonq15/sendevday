@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="교실의 문제를 코드로 바꾸는 선생님들, 올해 세 번 쏟아집니다. 10.27 · 11.24 · 12.15">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<style>
+/* 시안 I (H의 깔끔한 글꼴 버전) · D의 밤하늘 게임 화면 + 매끈한 프롬이 + E의 예보 문구 + 큰 날짜 + 게임 대화창 */
+#poster{background:var(--ink);color:#fff}
+.u{position:absolute}
+.pxb{box-shadow:0 calc(var(--p)*-4) 0 var(--b,#fff),0 calc(var(--p)*4) 0 var(--b,#fff),calc(var(--p)*-4) 0 0 var(--b,#fff),calc(var(--p)*4) 0 0 var(--b,#fff)}
+.stars i{position:absolute;width:calc(var(--p)*4);height:calc(var(--p)*4);background:#fff;animation:blink 1.6s steps(1) infinite}
+.hud{left:calc(var(--p)*40);right:calc(var(--p)*40);top:calc(var(--p)*28);display:flex;justify-content:space-between;font:400 calc(var(--p)*15)/1 var(--pixel);color:var(--lime)}
+.hud .hearts{color:var(--pink);letter-spacing:calc(var(--p)*4)}
+.hud .score b{color:#fff;font-weight:400}
+.kicker{left:calc(var(--p)*56);top:calc(var(--p)*84);font:400 calc(var(--p)*14)/1 var(--pixel);color:var(--lilac);letter-spacing:.08em}
+h1{left:calc(var(--p)*50);top:calc(var(--p)*108);margin:0;font:700 calc(var(--p)*92)/1.08 var(--pixel);color:var(--lime);
+  text-shadow:calc(var(--p)*6) calc(var(--p)*6) 0 #6B5BD6;letter-spacing:-.02em}
+h1 span span{display:inline-block}
+.sub{left:calc(var(--p)*56);top:calc(var(--p)*326);margin:0;font-size:calc(var(--p)*21);line-height:1.6;font-weight:700;letter-spacing:-.03em}
+.sub em{font-style:normal;color:var(--ink);background:var(--lime);padding:0 calc(var(--p)*6)}
+
+.hero{left:calc(var(--p)*532);top:calc(var(--p)*46);width:calc(var(--p)*190);cursor:pointer;z-index:4}
+.hero .bw{animation:float 2.6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(calc(var(--p)*-8)) rotate(-2deg)}}
+.bubble{left:calc(var(--p)*398);top:calc(var(--p)*84);background:#fff;color:var(--ink);font:400 calc(var(--p)*13.5)/1 var(--pixel);padding:calc(var(--p)*10) calc(var(--p)*12);white-space:nowrap;--b:#fff;z-index:4}
+
+/* 주간 예보 카드 */
+.fc-h{left:calc(var(--p)*56);top:calc(var(--p)*428);font:400 calc(var(--p)*14)/1 var(--pixel);color:var(--lime)}
+.fc-h span{color:rgba(255,255,255,.55);margin-left:calc(var(--p)*10)}
+.cards{left:calc(var(--p)*50);right:calc(var(--p)*50);top:calc(var(--p)*466);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--p)*22)}
+.card{position:relative;background:var(--paper);color:var(--ink);--b:#3A443E;padding:calc(var(--p)*14) calc(var(--p)*16) calc(var(--p)*18);cursor:pointer;border:0;text-align:left;font-family:var(--sans);transition:transform .15s}
+.card:hover{transform:translateY(calc(var(--p)*-5))}
+.card.focus{background:var(--lime);--b:#fff}
+.card .lv{display:flex;justify-content:space-between;font:400 calc(var(--p)*12)/1 var(--pixel);opacity:.7}
+.card .ill{width:calc(var(--p)*160);margin:calc(var(--p)*6) auto 0}
+.card .dt{font:700 calc(var(--p)*56)/1 var(--pixel);letter-spacing:-.03em;margin-top:calc(var(--p)*8)}
+.card .dw{font:400 calc(var(--p)*14)/1 var(--pixel);margin-top:calc(var(--p)*8)}
+.card h3{margin:calc(var(--p)*12) 0 0;font-size:calc(var(--p)*19);font-weight:850;letter-spacing:-.04em;line-height:1.25}
+.card p{margin:calc(var(--p)*6) 0 0;font-size:calc(var(--p)*12.5);line-height:1.45;font-weight:600;opacity:.72}
+.card .tap{position:absolute;right:calc(var(--p)*12);bottom:calc(var(--p)*10);font:400 calc(var(--p)*11)/1 var(--pixel);opacity:.55;animation:blink 1.2s steps(1) infinite}
+.static .card .tap{display:none}
+.next{position:absolute;left:calc(var(--p)*14);top:calc(var(--p)*-14);background:var(--coral);color:#fff;font:400 calc(var(--p)*11.5)/1 var(--pixel);padding:calc(var(--p)*6) calc(var(--p)*10);z-index:2}
+
+/* 게임 대화창 */
+.dialog{left:calc(var(--p)*40);right:calc(var(--p)*40);top:calc(var(--p)*742);background:var(--ink);--b:#fff;z-index:30;display:none;
+  grid-template-columns:calc(var(--p)*92) 1fr;gap:calc(var(--p)*16);padding:calc(var(--p)*16) calc(var(--p)*20) calc(var(--p)*18);cursor:pointer}
+.dialog.on{display:grid}
+.dialog .face{width:calc(var(--p)*92);align-self:start}
+.dialog .who{font:400 calc(var(--p)*13)/1 var(--pixel);color:var(--lime)}
+.dialog .txt{margin-top:calc(var(--p)*10);font:400 calc(var(--p)*15)/1.75 var(--pixel);min-height:calc(var(--p)*80)}
+.dialog .txt b{color:var(--lime);font-weight:400}
+.dialog .more{position:absolute;right:calc(var(--p)*18);bottom:calc(var(--p)*12);font:400 calc(var(--p)*13)/1 var(--pixel);color:var(--lime);animation:bob .8s steps(2) infinite}
+
+/* 땅 + 정보 */
+.ground{left:0;right:0;top:calc(var(--p)*900);bottom:0;background:#141A17}
+.grass{height:calc(var(--p)*24);background:
+  linear-gradient(90deg,var(--lime) 50%,#9FCC00 50%) 0 0/calc(var(--p)*48) calc(var(--p)*12),
+  linear-gradient(90deg,#9FCC00 50%,var(--lime) 50%) 0 calc(var(--p)*12)/calc(var(--p)*48) calc(var(--p)*12);background-repeat:repeat-x}
+.info{position:absolute;left:calc(var(--p)*56);top:calc(var(--p)*44);font:400 calc(var(--p)*15)/2.05 var(--pixel)}
+.info b{color:var(--lime);font-weight:400;display:inline-block;width:calc(var(--p)*92)}
+.info .pending{font-family:var(--pixel)}
+.qbox{position:absolute;right:calc(var(--p)*56);top:calc(var(--p)*40);display:flex;flex-direction:column;align-items:center;gap:calc(var(--p)*9);color:var(--lime);font:400 calc(var(--p)*12)/1 var(--pixel);text-decoration:none}
+.qbox span:first-child{display:block;width:calc(var(--p)*118);height:calc(var(--p)*118);padding:calc(var(--p)*8);background:var(--lime);--b:#fff}
+.qbox img{display:block;width:100%;height:100%}
+.foot{position:absolute;left:calc(var(--p)*56);right:calc(var(--p)*56);bottom:calc(var(--p)*16);display:flex;justify-content:space-between;font:500 calc(var(--p)*10.5)/1 var(--sans);color:rgba(255,255,255,.5)}
+.foot b{color:rgba(255,255,255,.85);font-weight:650}
+.drip{position:absolute;font:700 calc(var(--p)*14)/1 var(--mono);pointer-events:none;z-index:50;white-space:nowrap}
+
+/* ── 시안 I: H와 같은 구성, 8비트 글꼴·테두리를 깔끔하게 ── */
+#poster{--pixel:var(--sans)}
+.hud{font:700 calc(var(--p)*13)/1 var(--mono);letter-spacing:.06em}
+.hud .hearts{font-family:var(--sans)}
+.kicker{font:700 calc(var(--p)*12.5)/1 var(--mono);letter-spacing:.14em}
+h1{font:900 calc(var(--p)*104)/1.02 var(--sans);letter-spacing:-.065em;text-shadow:calc(var(--p)*5) calc(var(--p)*5) 0 #6B5BD6}
+.sub{top:calc(var(--p)*338)}
+.bubble{font:700 calc(var(--p)*14)/1 var(--sans);border-radius:calc(var(--p)*16) calc(var(--p)*16) calc(var(--p)*16) calc(var(--p)*4);box-shadow:none}
+.fc-h{font:700 calc(var(--p)*15)/1 var(--sans);letter-spacing:-.02em}
+.fc-h span{font-weight:500}
+.pxb{box-shadow:none}
+.card{border-radius:calc(var(--p)*22);border:calc(var(--p)*2.5) solid #3A443E}
+.card.focus{border-color:#fff}
+.card .lv{font:700 calc(var(--p)*11)/1 var(--mono);letter-spacing:.08em}
+.card .dt{font:900 calc(var(--p)*62)/1 var(--sans);letter-spacing:-.06em}
+.card .dw{font:600 calc(var(--p)*14)/1 var(--sans)}
+.card .tap{font:700 calc(var(--p)*10.5)/1 var(--mono)}
+.next{border-radius:99px;font:700 calc(var(--p)*11)/1 var(--mono);letter-spacing:.06em;padding:calc(var(--p)*7) calc(var(--p)*11)}
+.dialog{border-radius:calc(var(--p)*20);border:calc(var(--p)*2.5) solid #fff}
+.dialog .who{font:700 calc(var(--p)*13)/1 var(--sans)}
+.dialog .txt{font:500 calc(var(--p)*15.5)/1.75 var(--sans)}
+.dialog .more{font-family:var(--sans)}
+.info{font:600 calc(var(--p)*15)/2.05 var(--sans)}
+.info b{font:700 calc(var(--p)*12)/1 var(--mono);letter-spacing:.1em}
+.qbox{font:700 calc(var(--p)*11.5)/1 var(--mono)}
+.qbox span:first-child{border-radius:calc(var(--p)*12);border:calc(var(--p)*2.5) solid #fff}
+
+/* 내용 우선: 프롬이 작게, 글씨 크게 */
+.hero{left:calc(var(--p)*600);top:calc(var(--p)*72);width:calc(var(--p)*130)}
+.bubble{left:calc(var(--p)*470);top:calc(var(--p)*92)}
+.sub{font-size:calc(var(--p)*24);top:calc(var(--p)*336)}
+.fc-h{top:calc(var(--p)*462);font-size:calc(var(--p)*17)}
+.cards{top:calc(var(--p)*504)}
+.card{padding:calc(var(--p)*16) calc(var(--p)*18) calc(var(--p)*22)}
+.wxrow{display:flex;justify-content:space-between;align-items:center;margin-top:calc(var(--p)*4)}
+.card .ill{width:calc(var(--p)*100);margin:0 calc(var(--p)*-6) 0 0;flex:none}
+.wx{font:850 calc(var(--p)*26)/1 var(--sans);letter-spacing:-.04em}
+.card .dw{font:650 calc(var(--p)*15)/1 var(--sans);margin-top:calc(var(--p)*8);opacity:.75}
+.card .dt{font-size:calc(var(--p)*64);margin-top:calc(var(--p)*10)}
+.card h3{font-size:calc(var(--p)*24);margin-top:calc(var(--p)*14);line-height:1.2}
+.card p{font-size:calc(var(--p)*15);line-height:1.5;opacity:.8;margin-top:calc(var(--p)*8)}
+.info{font-size:calc(var(--p)*16.5)}
+.dialog{top:calc(var(--p)*724)}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="stars" aria-hidden="true"></div>
+  <div class="u hud"><span class="score">1UP <b>000000</b></span><span class="hearts">♥♥♥</span><span class="lvl"></span></div>
+  <div class="u kicker">SEOUL TEACHER DEV DAY · 2026</div>
+  <h1 class="u"><span class="chars">교사</span><br><span class="chars">개발자의 날</span></h1>
+  <p class="u sub">교실의 문제를 <em>코드로</em> 바꾸는 선생님들,<br>올해 세 번 쏟아집니다.</p>
+
+  <div class="u bubble pxb">같이 접속할래요?</div>
+  <div class="u hero" role="img" aria-label="마스코트 프롬이"><div class="bw"></div></div>
+
+  <div class="u fc-h">▼ 2026 교사 개발자 주간 예보<span class="hint">· 날짜를 눌러 보세요</span></div>
+  <div class="u cards"></div>
+  <div class="u dialog pxb" role="dialog" aria-live="polite"><div class="face"></div><div><div class="who"></div><div class="txt"></div></div><span class="more">▼</span></div>
+
+  <div class="u ground">
+    <div class="grass"></div>
+    <div class="info"></div>
+    <a class="qbox" target="_blank" rel="noopener"><span class="pxb"><img src="../shared/qr.svg" alt="QR 코드"></span><span>INSERT COIN ▶ sendev.kr</span></a>
+    <div class="foot"><span>주최 <b class="host"></b> · 기획 <b class="team"></b></span><span>질문과 자료는 sendev.kr 한 곳에서</span></div>
+  </div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 다시 보기</button></div>
+
+<script>
+const { STATIC, ANIMATE, fi, F, dday, pendTag } = ENV;
+const S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const poster = $('#poster');
+$('.host').textContent = POSTER.host; $('.team').textContent = POSTER.team;
+$('.qbox').href = POSTER.cta.url;
+$('.lvl').textContent = STATIC ? `STAGE ${fi + 1} · ${F.mmdd}` : `STAGE ${fi + 1} · ${dday}`;
+if (STATIC) $('.hint').remove();
+
+// 별
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+$('.stars').innerHTML = Array.from({ length: 30 }, () =>
+  `<i style="left:calc(var(--p)*${(rnd() * 780) | 0});top:calc(var(--p)*${(60 + rnd() * 380) | 0});animation-delay:-${(rnd() * 1.6).toFixed(2)}s;opacity:${(.25 + rnd() * .6).toFixed(2)}"></i>`).join('');
+
+// 프롬이
+const hero = $('.hero .bw');
+hero.innerHTML = KIT.mascot({ face: 'idle', dark: true });
+
+// 예보 카드: 프롬이 × 날씨
+const WX = [
+  { w: '맑음', face: 'happy', weather: 'sun', title: '시작하기 좋은 날', say: '날씨 맑음! 처음이어도 괜찮아요. 오늘은 시작하기 좋은 날이에요.' },
+  { w: '소나기', face: 'worry', weather: 'rain', title: '실패해도 괜찮은 날', say: '조금 젖어도 괜찮아요. 실패한 이야기도 다 같이 나눠요.' },
+  { w: '무지개', face: 'happy', weather: 'rainbow', title: '서로 구해 주는 날', say: '비 온 뒤엔 무지개! 미리 받은 사연을 교사 개발자들이 구해 줘요.' },
+];
+$('.cards').innerHTML = S.map((s, i) => `<button class="card pxb${i === fi ? ' focus' : ''}" type="button" data-i="${i}">
+  ${i === fi ? '<span class="next">NEXT ▶</span>' : ''}
+  <div class="lv"><span>STAGE ${i + 1}</span></div>
+  <div class="wxrow"><div><div class="wx">${WX[i].w}</div><div class="dw">${s.dow}요일 · ${s.step}</div></div><div class="ill">${KIT.mascot(WX[i])}</div></div>
+  <div class="dt">${s.mmdd}</div>
+  <h3>${WX[i].title}</h3>
+  <p>${s.short}<br>${s.format}</p>
+  <span class="tap">TAP ▶</span></button>`).join('');
+
+$('.info').innerHTML = `
+  <div><b>NEXT ▶</b>${F.mmdd} (${F.dow}) ${F.time ?? '시간 추후 공지'}${F.time ? '' : pendTag}</div>
+  <div><b>APPLY ▶</b>${F.apply ?? '신청 링크 추후 공지'}${F.apply ? '' : pendTag}</div>
+  <div><b>TIP ▶</b>우산 없이 오셔도 돼요. 듣기만 해도 괜찮아요.</div>`;
+
+// 게임 대화창: 카드를 누르면 프롬이가 타이핑
+const dlg = $('.dialog');
+let talk = 0;
+async function speak(i) {
+  const my = ++talk, s = S[i], w = WX[i];
+  dlg.querySelector('.face').innerHTML = KIT.mascot({ face: w.face, dark: true });
+  dlg.querySelector('.who').textContent = `프롬이 ▶ STAGE ${i + 1} · ${s.mmdd} (${s.dow}) ${w.title}`;
+  dlg.classList.add('on');
+  const lines = [w.say, `이번 스테이지는 ${s.main}.`, `${s.join}!`];
+  const txt = dlg.querySelector('.txt'); txt.textContent = '';
+  for (const [n, line] of lines.entries()) {
+    if (n) txt.append(document.createElement('br'));
+    const span = document.createElement('span'); txt.append(span);
+    for (let k = 1; k <= line.length; k++) { if (my !== talk) return; span.textContent = line.slice(0, k); await KIT.wait(26); }
+  }
+  if (s.pending && POSTER.showPending) txt.insertAdjacentHTML('beforeend', ' <span class="pending">세부 조정 중</span>');
+}
+$$('.card').forEach(b => b.addEventListener('click', e => {
+  e.stopPropagation();
+  speak(+b.dataset.i);
+  KIT.burst(poster, 160 + b.dataset.i * 236, 560, { n: 14 });
+}));
+dlg.addEventListener('click', e => { e.stopPropagation(); talk++; dlg.classList.remove('on'); });
+
+// 프롬이 점프
+let score = 0;
+$('.hero').addEventListener('click', e => {
+  e.stopPropagation();
+  const P = KIT.unit(poster);
+  hero.innerHTML = KIT.mascot({ face: 'happy', dark: true });
+  $('.hero').animate([{ transform: 'none' }, { transform: `translateY(${-50 * P}px) rotate(-6deg)` }, { transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.3,1.5,.5,1)' })
+    .onfinish = () => { hero.innerHTML = KIT.mascot({ face: 'idle', dark: true }); };
+  score += 100; $('.score b').textContent = String(score).padStart(6, '0');
+  KIT.burst(poster, 627, 160, { n: 16 });
+});
+
+// 아무 데나 누르면 코드 한 방울
+if (!STATIC) poster.addEventListener('click', e => {
+  if (e.target.closest('a,button,.dialog,.hero')) return;
+  dlg.classList.remove('on'); talk++;
+  const r = poster.getBoundingClientRect(), P = KIT.unit(poster), y0 = e.clientY - r.top;
+  for (let n = 0; n < 3; n++) {
+    const d = document.createElement('span'); d.className = 'drip';
+    d.textContent = KIT.SNIPPETS[Math.random() * KIT.SNIPPETS.length | 0];
+    d.style.color = ['#CCFF00', '#CFC4FF', '#FFFFFF'][n];
+    d.style.left = `${e.clientX - r.left + (n - 1) * 40 * P}px`; d.style.top = `${y0}px`; poster.appendChild(d);
+    d.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: `translateY(${900 * P - y0 + 40 * P}px) rotate(${Math.random() * 40 - 20}deg)`, opacity: .15 }],
+      { duration: 900 + n * 180, delay: n * 70, easing: 'cubic-bezier(.5,0,1,.8)' }).onfinish = () => d.remove();
+  }
+});
+
+// 등장: 코드 소나기 → 픽셀 디졸브 → 제목 낙하 → 프롬이 → 예보 카드
+$$('.chars').forEach(el => { el.innerHTML = [...el.textContent].map(c => `<span>${c === ' ' ? '&nbsp;' : c}</span>`).join(''); });
+function play() {
+  if (!ANIMATE) return;
+  dlg.classList.remove('on');
+  KIT.codeRain(poster, { duration: 1900, colors: ['#CCFF00', '#CFC4FF', '#FFFFFF'], bg: '#0E1311', density: 1.5, size: 16 });
+  setTimeout(() => KIT.pixelReveal(poster, { color: '#0E1311', cell: 34, duration: 600 }), 1500);
+  KIT.pop($$('.hud,.kicker'), { delay: 1700, stagger: 90 });
+  KIT.drop($$('h1 .chars span'), { delay: 1800, stagger: 65, height: 300 });
+  KIT.pop([$('.sub')], { delay: 2400 });
+  KIT.drop([$('.hero')], { delay: 2300, height: 500 });
+  KIT.pop([$('.bubble')], { delay: 2900 });
+  setTimeout(() => KIT.burst(poster, 627, 230, { n: 22 }), 2750);
+  KIT.pop([$('.fc-h')], { delay: 2700 });
+  KIT.pop($$('.card'), { delay: 2850, stagger: 160 });
+  KIT.pop([$('.ground')], { delay: 2200, from: 'translateY(120px)' });
+}
+play();
+$('#replay').addEventListener('click', play);
+</script>
+</body>
+</html>

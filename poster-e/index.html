@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="오늘의 예보: 코드 소나기. 10.27 · 11.24 · 12.15 교사 개발자의 날">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<style>
+/* 시안 E · 코드 소나기 주의보: 날씨 예보 + 쏟아져 쌓이는 코드 */
+#poster{background:var(--lime)}
+.u{position:absolute}
+.top{left:calc(var(--p)*44);right:calc(var(--p)*44);top:calc(var(--p)*34);display:flex;justify-content:space-between;align-items:center;font:700 calc(var(--p)*12)/1 var(--mono);letter-spacing:.1em}
+.top .logo{display:flex;align-items:center;gap:calc(var(--p)*8);font:800 calc(var(--p)*15)/1 var(--sans);letter-spacing:-.02em}
+.top .logo i{width:calc(var(--p)*30);height:calc(var(--p)*30);display:grid;place-items:center;background:var(--ink);color:var(--lime);border-radius:calc(var(--p)*8);font:800 calc(var(--p)*12)/1 var(--mono);font-style:normal}
+.alert{left:calc(var(--p)*44);top:calc(var(--p)*96);display:inline-flex;align-items:center;gap:calc(var(--p)*10);background:var(--ink);color:var(--lime);
+  font:400 calc(var(--p)*17)/1 var(--pixel);padding:calc(var(--p)*10) calc(var(--p)*16);border-radius:99px}
+.alert i{width:calc(var(--p)*8);height:calc(var(--p)*8);border-radius:50%;background:var(--coral);animation:blink 1s steps(1) infinite}
+h1{left:calc(var(--p)*40);top:calc(var(--p)*148);margin:0;font-size:calc(var(--p)*116);line-height:1;font-weight:900;letter-spacing:-.065em}
+h1 span{display:inline-block}
+.sub{left:calc(var(--p)*44);top:calc(var(--p)*400);margin:0;font-size:calc(var(--p)*21);line-height:1.55;font-weight:700;letter-spacing:-.03em}
+.sub em{font-style:normal;background:var(--ink);color:var(--lime);padding:0 calc(var(--p)*6)}
+
+.prom-wrap{left:calc(var(--p)*560);top:calc(var(--p)*244);width:calc(var(--p)*200);height:calc(var(--p)*300);cursor:pointer}
+.umb{position:absolute;left:calc(var(--p)*-14);top:0;width:calc(var(--p)*230);transform-origin:50% 90%;animation:sway 2.4s ease-in-out infinite}
+.pr{position:absolute;left:calc(var(--p)*24);top:calc(var(--p)*130);width:calc(var(--p)*150)}
+@keyframes sway{50%{transform:rotate(-5deg)}}
+
+.fly{position:absolute;font:700 calc(var(--p)*13)/1 var(--mono);color:var(--ink);opacity:.38;white-space:nowrap;transform:rotate(8deg)}
+
+/* 예보 카드 */
+.fc-h{left:calc(var(--p)*44);top:calc(var(--p)*500);font:400 calc(var(--p)*14)/1 var(--pixel)}
+.fc{left:calc(var(--p)*44);right:calc(var(--p)*44);top:calc(var(--p)*526);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--p)*14)}
+.card{background:var(--paper);border:calc(var(--p)*2) solid var(--ink);border-radius:calc(var(--p)*18);padding:calc(var(--p)*16) calc(var(--p)*16) calc(var(--p)*16);
+  box-shadow:0 calc(var(--p)*6) 0 var(--ink);position:relative;transition:transform .2s}
+.card:hover{transform:translateY(calc(var(--p)*-4)) rotate(-1deg)}
+.card.focus{background:var(--ink);color:#fff}
+.card .ic{width:calc(var(--p)*58);height:calc(var(--p)*58)}
+.card .wx{position:absolute;right:calc(var(--p)*16);top:calc(var(--p)*20);font:400 calc(var(--p)*13)/1 var(--pixel);text-align:right}
+.card.focus .wx{color:var(--lime)}
+.card .dt{font:800 calc(var(--p)*36)/1 var(--mono);letter-spacing:-.05em;margin-top:calc(var(--p)*14)}
+.card .dt small{font-size:calc(var(--p)*13);letter-spacing:0;margin-left:calc(var(--p)*5);opacity:.6}
+.card h3{margin:calc(var(--p)*8) 0 0;font-size:calc(var(--p)*15);line-height:1.35;font-weight:800;letter-spacing:-.03em}
+.card p{margin:calc(var(--p)*6) 0 0;font-size:calc(var(--p)*12);line-height:1.45;opacity:.7;font-weight:550}
+.next{position:absolute;left:calc(var(--p)*16);top:calc(var(--p)*-13);background:var(--coral);color:#fff;font:400 calc(var(--p)*11)/1 var(--pixel);padding:calc(var(--p)*6) calc(var(--p)*9);border-radius:99px}
+
+.info{left:calc(var(--p)*44);top:calc(var(--p)*778);font-size:calc(var(--p)*14);line-height:1.75;font-weight:650}
+.info b{font:800 calc(var(--p)*10.5)/1 var(--mono);letter-spacing:.12em;display:inline-block;width:calc(var(--p)*62)}
+
+/* 쌓인 코드 더미 */
+.pile{left:0;right:0;bottom:0;height:calc(var(--p)*260)}
+.chip{position:absolute;left:calc(var(--p)*var(--x));bottom:calc(var(--p)*var(--y));transform:rotate(calc(var(--r)*1deg));
+  font:700 calc(var(--p)*14)/1 var(--mono);padding:calc(var(--p)*11) calc(var(--p)*15);border-radius:calc(var(--p)*12);border:calc(var(--p)*2) solid var(--ink);white-space:nowrap;
+  box-shadow:0 calc(var(--p)*4) 0 var(--ink)}
+.c0{background:var(--paper)}.c1{background:var(--lilac)}.c2{background:var(--ink);color:var(--lime)}.c3{background:var(--pink)}.c4{background:#fff}
+.qrchip{position:absolute;right:calc(var(--p)*40);bottom:calc(var(--p)*58);background:#fff;border:calc(var(--p)*2) solid var(--ink);border-radius:calc(var(--p)*14);
+  padding:calc(var(--p)*10);transform:rotate(4deg);box-shadow:0 calc(var(--p)*5) 0 var(--ink);text-align:center;font:800 calc(var(--p)*11)/1 var(--mono);text-decoration:none;color:var(--ink);z-index:5}
+.qrchip img{display:block;width:calc(var(--p)*112);height:calc(var(--p)*112);margin-bottom:calc(var(--p)*8)}
+.host{position:absolute;left:calc(var(--p)*44);top:calc(var(--p)*872);font-size:calc(var(--p)*11);font-weight:600;z-index:5;background:var(--lime);padding:calc(var(--p)*3) calc(var(--p)*6);border-radius:4px}
+.host b{font-weight:800}
+.drip{position:absolute;font:700 calc(var(--p)*14)/1 var(--mono);color:var(--ink);pointer-events:none;z-index:50;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="u top"><span class="logo"><i>&gt;_</i>교사개발자</span><span class="season"></span></div>
+  <div class="u alert"><i></i>오늘의 예보: 코드 소나기 주의보</div>
+  <h1 class="u"><span>교사</span><br><span>개발자의 날</span></h1>
+  <p class="u sub">교실의 문제를 <em>코드로</em> 바꾸는 선생님들,<br>올해 세 번 쏟아집니다.</p>
+
+  <div class="flies" aria-hidden="true"></div>
+  <div class="u prom-wrap" role="img" aria-label="우산을 쓴 프롬이"><div class="umb"></div><div class="pr"></div></div>
+
+  <div class="u fc-h">▼ 2026 교사 개발자 주간 예보</div>
+  <div class="u fc"></div>
+  <div class="u info"></div>
+
+  <div class="u pile" aria-hidden="true"></div>
+  <a class="qrchip" target="_blank" rel="noopener"><img src="../shared/qr.svg" alt="QR 코드"><span class="qrl"></span></a>
+  <div class="host">주최 <b class="h1"></b> · 기획 <b class="h2"></b></div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 다시 보기</button></div>
+
+<script>
+const { STATIC, ANIMATE, fi, F, dday, pendTag } = ENV;
+const S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const poster = $('#poster');
+$('.season').textContent = STATIC ? '2026 SEASON 1' : `${dday} · ${F.mmdd}`;
+$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.qrchip').href = POSTER.cta.url; $('.qrl').textContent = POSTER.cta.label;
+
+// 우산 쓴 프롬이
+$('.umb').innerHTML = KIT.pix([
+  '.......KKKK.......',
+  '....KKKVVVVKKK....',
+  '..KKVVVVVVVVVVKK..',
+  '.KVVVVVWVVVVVVVVK.',
+  'KVVVVVWVVVVVVVVVVK',
+  'KVVVVVVVVVVVVVVVVK',
+  'KKKKVKKKKVKKKKVKKK',
+  '.........K........',
+  '.........K........',
+  '.........K........',
+  '.........K........',
+  '.........K........',
+  '.........K........',
+  '.........K........',
+  '.........K..K.....',
+  '..........KK......',
+]);
+const pr = $('.pr'); pr.innerHTML = KIT.sprite('happy'); KIT.alive(pr, 'happy');
+$('.prom-wrap').addEventListener('click', () => { KIT.burst(poster, 660, 380); });
+
+// 날씨 아이콘
+const ICON = [
+  ['.....K......', '.K...K...K..', '..K.....K...', '....KKK.....', '...KLLLK....', 'KK.KLLLK.KK.', '...KLLLK....', '....KKK.....', '..K.....K...', '.K...K...K..', '.....K......', '............'],
+  ['............', '....KKKK....', '...KWWWWK...', '.KKWWWWWWKK.', 'KWWWWWWWWWWK', 'KWWWWWWWWWWK', '.KKKKKKKKKK.', '.....KLK....', '....KLK.....', '...KLLLK....', '.....KLK....', '.....KK.....'],
+  ['............', '............', '....CCCC....', '..CCLLLLCC..', '.CLLVVVVLLC.', '.CLV....VLC.', 'CLV......VLC', 'CLV......VLC', 'CLV......VLC', '............', '............', '............'],
+];
+const WX = [['맑음', '시작하기 좋은 날'], ['소나기', '실패해도 괜찮은 날'], ['무지개', '서로 구해 주는 날']];
+$('.fc').innerHTML = S.map((s, i) => `<div class="card${i === fi ? ' focus' : ''}">
+  ${i === fi ? '<span class="next">NEXT ▶</span>' : ''}
+  <div class="ic">${KIT.pix(ICON[i], i === fi ? { colors: { K: '#FFFFFF', W: '#0E1311' } } : {})}</div>
+  <div class="wx">${WX[i][0]}<br><span style="opacity:.7">${s.step}</span></div>
+  <div class="dt">${s.mmdd}<small>${s.dow}</small></div>
+  <h3>${WX[i][1]}</h3><p>${s.short}<br>${s.format}</p></div>`).join('');
+
+$('.info').innerHTML = `
+  <div><b>WHEN</b>${F.mmdd} (${F.dow}) ${F.time ?? '시간 추후 공지'}${F.time ? '' : pendTag}</div>
+  <div><b>APPLY</b>${F.apply ?? '신청 링크 추후 공지'}${F.apply ? '' : pendTag}</div>
+  <div><b>TIP</b>우산 없이 오셔도 돼요. 듣기만 해도 괜찮아요.</div>`;
+
+// 공중의 코드 조각 (고정)
+const FLY = [[60, 470, 'save();'], [300, 488, '{ }'], [470, 250, '>_'], [520, 470, 'fix ✓'], [740, 600, '</>'], [420, 130, 'random(모둠)'], [690, 170, '=> ♥']];
+$('.flies').innerHTML = FLY.map(([x, y, t]) => `<span class="fly" style="left:calc(var(--p)*${x});top:calc(var(--p)*${y})">${t}</span>`).join('');
+
+// 바닥에 쌓인 코드 더미
+const PILE = [
+  [-20, 0, -3, 'const 자리 = shuffle(학생);', 4], [262, 2, 2, '출석.check() // 26/26 ✓', 1], [500, -4, -2, 'npm run 우리반', 0],
+  [20, 46, 4, 'if (숙제 === "안냄") 알림();', 3], [330, 44, -5, 'git commit -m "첫 앱"', 2], [80, 92, -6, 'while (쉬는시간) 놀기();', 0],
+  [360, 90, 3, '급식.오늘()', 1], [10, 138, 2, 'import 교실', 2], [190, 134, -3, 'console.log("안녕")', 4], [480, 128, 8, 'ERR! 다시 해 볼까요?', 3],
+  [140, 180, -2, '프롬아 도와줘', 1], [330, 176, 6, 'fix ✓', 0],
+];
+$('.pile').innerHTML = PILE.map(([x, y, r, t, c]) => `<span class="chip c${c}" style="--x:${x};--y:${y};--r:${r}">${t}</span>`).join('');
+
+// 클릭하면 코드 한 방울
+if (!STATIC) poster.addEventListener('click', e => {
+  if (e.target.closest('a,.prom-wrap')) return;
+  const r = poster.getBoundingClientRect(), P = KIT.unit(poster);
+  const d = document.createElement('span'); d.className = 'drip';
+  d.textContent = KIT.SNIPPETS[Math.random() * KIT.SNIPPETS.length | 0];
+  d.style.left = `${e.clientX - r.left}px`; d.style.top = `${e.clientY - r.top}px`; poster.appendChild(d);
+  d.animate([{ transform: 'translateY(0) rotate(0)', opacity: 1 }, { transform: `translateY(${(1123 - (e.clientY - r.top) / P) * P}px) rotate(${Math.random() * 40 - 20}deg)`, opacity: .2 }],
+    { duration: 1100, easing: 'cubic-bezier(.5,0,1,.8)' }).onfinish = () => d.remove();
+});
+
+// 등장: 코드 소나기 → 더미가 쌓이고 → 제목 낙하 → 프롬이 우산
+async function play() {
+  if (!ANIMATE) return;
+  KIT.codeRain(poster, { duration: 2300, colors: ['#0E1311', '#0E1311', '#6B5BD6'], bg: '#CCFF00', density: 1.6, size: 16 });
+  KIT.drop($$('.chip'), { delay: 300, stagger: 120, height: 900 });
+  KIT.drop([$('.qrchip')], { delay: 1700, height: 900 });
+  KIT.pop($$('.top,.alert'), { delay: 1900, stagger: 100 });
+  KIT.drop($$('h1 span'), { delay: 2100, stagger: 140, height: 500 });
+  KIT.pop([$('.sub'), $('.fc-h')], { delay: 2500, stagger: 100 });
+  KIT.pop($$('.card'), { delay: 2700, stagger: 140 });
+  KIT.pop($$('.fly'), { delay: 2600, stagger: 60 });
+  KIT.drop([$('.prom-wrap')], { delay: 2400, height: 600 });
+  KIT.pop([$('.info'), $('.host')], { delay: 3200 });
+  setTimeout(() => KIT.burst(poster, 660, 420, { n: 24 }), 3100);
+}
+play();
+$('#replay').addEventListener('click', play);
+</script>
+</body>
+</html>
