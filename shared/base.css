@@ -44,3 +44,7 @@ body{min-height:100vh;background:#1A211D;color:var(--ink);font-family:var(--sans
 /* 코드 글꼴 합자 끄기: '==' '=>' '!=' 등이 이어진 기호로 바뀌지 않고 그대로 보이게 */
 *,*::before,*::after{font-variant-ligatures:none !important;font-feature-settings:"liga" 0,"calt" 0 !important}
 canvas{font-variant-ligatures:none}
+/* 문장 줄바꿈: 단어 중간에서 끊지 않고, 마지막 줄에 한 단어만 남지 않게 */
+#poster{word-break:keep-all;overflow-wrap:break-word}
+#poster p,#poster li,#poster dd,#poster .line,#poster .how,#poster .note{text-wrap:pretty}
+#poster h1,#poster h2,#poster h3,#poster .theme{text-wrap:balance}

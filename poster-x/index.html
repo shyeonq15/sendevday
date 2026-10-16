@@ -187,6 +187,13 @@ html:not(.wide) .label{right:auto;left:6%;bottom:calc(var(--p)*-28)}
 .qr img{width:calc(var(--p)*80);height:calc(var(--p)*80)}
 .wide .qr img{width:calc(var(--p)*62);height:calc(var(--p)*62)}
 .wide .qrcap{font-size:calc(var(--p)*11)}
+
+/* 카드 문장: 한 문장씩 줄, 붙어 있어야 하는 말은 떨어지지 않게, 줄 길이는 고르게 */
+.eggpop p{word-break:keep-all;text-wrap:balance}
+.eggpop .ln{display:block}
+.eggpop .ln+.ln{margin-top:calc(var(--p)*4)}
+.eggpop .nb{white-space:nowrap}
+html:not(.wide) .eggpop{width:min(92%,calc(var(--p)*560));padding-left:calc(var(--p)*20);padding-right:calc(var(--p)*20)}
 </style>
 </head>
 <body>
@@ -309,9 +316,9 @@ poster.insertAdjacentHTML('beforeend', `<section class="eggpop" role="dialog" ar
   <div class="eg-art">${eggPix(CRACK)}</div>
   <small>[x] 이스터에그 잡기 완료</small>
   <h3 id="eggT">잡았다! 이스터에그</h3>
-  <p>이스터에그는 개발자가 프로그램 속에 <b>몰래 숨겨 두는 작은 선물</b>이에요.<br>교사 개발자의 날 방송 화면에도 <b>회차마다 단어가 하나씩</b> 숨어 있어요.</p>
+  <p><span class="ln">이스터에그는 개발자가 <span class="nb">몰래 숨겨 두는</span> <span class="nb"><b>작은 선물</b>이에요.</span></span><span class="ln">방송 화면에도 <span class="nb"><b>회차마다 단어가 하나씩</b></span> <span class="nb">숨어 있어요.</span></span></p>
   <div class="slots"><span><i>?</i>10월</span><span><i>?</i>11월</span><span><i>?</i>12월</span></div>
-  <p>세 단어를 모으면 1회에 함께 읽는 <b>선언문의 마지막 문장</b>이 완성돼요.<br>찾은 단어는 sendev.kr 시즌 패스에 입력! <em>(선택 참여)</em></p>
+  <p><span class="ln">세 단어를 모으면 <span class="nb"><b>선언문의 마지막 문장</b>이</span> <span class="nb">완성돼요.</span></span><span class="ln">찾은 단어는 <span class="nb">sendev.kr 시즌 패스에</span> <span class="nb">입력! <em>(선택 참여)</em></span></span></p>
   <p class="eg-todo eg-kao" aria-label="신나는 표정">\\(^ㅂ^)/ ✧</p>
   <button class="eg-ok" type="button">이스터에그 찾으러 가기 ▶</button>
 </section>`);
