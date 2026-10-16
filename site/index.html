@@ -213,6 +213,10 @@ html:not(.wide) .eggpop{width:min(92%,calc(var(--p)*560));padding-left:calc(var(
 /* 소개 문구: 코드 줄처럼 한 줄씩 고정 (줄바꿈 금지) */
 .lede{max-width:calc(100% - var(--p)*48)}
 .lede .lc{display:block;white-space:nowrap}
+
+/* '누구나 == 개발자' 라벨: 세로·가로 모두 포스터 가로 가운데 */
+.label,.wide .label,html:not(.wide) .label{left:50%;right:auto;transform:translateX(-50%) rotate(-5deg);transform-origin:50% 50%}
+html:not(.wide) .label{bottom:calc(var(--p)*-46)}
 </style>
 </head>
 <body>
