@@ -209,6 +209,10 @@ html:not(.wide) .eggpop{width:min(92%,calc(var(--p)*560));padding-left:calc(var(
 .wide .qrcap{font-size:calc(var(--p)*11.5)}
 .qrcap{left:50%;right:auto;transform:translate(calc(-50% + var(--qx, 0px)),50%)}
 .qr{padding-bottom:calc(var(--p)*20)}
+
+/* 소개 문구: 코드 줄처럼 한 줄씩 고정 (줄바꿈 금지) */
+.lede{max-width:calc(100% - var(--p)*48)}
+.lede .lc{display:block;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -220,7 +224,7 @@ html:not(.wide) .eggpop{width:min(92%,calc(var(--p)*560));padding-left:calc(var(
       <div class="syms" aria-hidden="true"></div>
       <span class="say">hello, teacher!</span>
       <div class="prom" role="img" aria-label="2D 프롬이"><div class="bw"></div></div>
-      <p class="lede"># 교실의 문제를 <b>코드로</b> 바꾸는 선생님들<br>## <b>매달 마지막 화요일 저녁</b> 모입니다<br><span class="eghint">// FIXME: 알이 가만히 있지를 않음. 잡아 주세요</span></p>
+      <p class="lede"><span class="lc"># 교실의 문제를 <b>코드로</b> 바꾸는 선생님들</span><span class="lc">## <b>매달 마지막 화요일 저녁</b> 모입니다</span><span class="lc eghint">// FIXME: 알이 가만히 있지를 않음. 잡아 주세요</span></p>
       <button class="egg" type="button" aria-label="숨은 이스터에그"></button>
     </div>
     <div class="tapes"></div>
@@ -242,6 +246,12 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const poster = $('#poster');
 $('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
 $('.qr').href = POSTER.insta.url;
+// 소개 문구 줄이 칸보다 길면(휴대폰 글씨 확대) 줄바꿈 대신 그 줄 글씨만 살짝 줄임
+function fitLede() {
+  const lede = $('.lede'), max = lede.parentElement.clientWidth - 2 * lede.offsetLeft;
+  $$('.lede .lc').forEach(l => { l.style.fontSize = ''; const w = l.scrollWidth; if (w > max) l.style.fontSize = (parseFloat(getComputedStyle(l).fontSize) * max / w * .98) + 'px'; });
+}
+addEventListener('resize', fitLede); document.fonts.ready.then(fitLede); fitLede();
 // 인스타 라벨은 QR 가운데. 글씨가 커져 포스터 밖으로 나가면 그만큼만 안쪽으로
 const qrcap = $('.qrcap');
 function fitCap() {
