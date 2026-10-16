@@ -27,7 +27,7 @@
 
 /* 기호 + 프롬이 */
 .art{grid-area:art;position:relative;min-height:calc(var(--p)*300)}
-.sym{position:absolute;cursor:pointer;will-change:translate,transform}
+.sym{position:absolute;cursor:pointer;will-change:translate,transform;transition:translate .5s cubic-bezier(.2,.8,.3,1)}
 .sym svg{width:100%;height:auto}
 .prom{position:absolute;left:50%;top:50%;width:calc(var(--p)*230);transform:translate(-50%,-46%) rotate(-6deg);cursor:pointer;z-index:2}
 .wide .prom{width:calc(var(--p)*210)}
@@ -297,13 +297,23 @@ if (ENV.ANIMATE) {
 // 기호 따라오기: 한 프레임에 한 번만 계산
 const SYMS = $$('.sym');
 let pm = null, pmRaf = 0;
+// 기호가 손가락·마우스를 따라 살짝 움직임 (입장 화면·버튼 위 움직임은 무시)
 if (!STATIC) poster.addEventListener('pointermove', e => {
+  if (e.target.closest('.story,.intro,.page,button')) return;
   pm = e; if (pmRaf) return;
   pmRaf = requestAnimationFrame(() => {
     pmRaf = 0; const r = poster.getBoundingClientRect(), dx = (pm.clientX - r.left) / r.width - .5, dy = (pm.clientY - r.top) / r.height - .5;
     SYMS.forEach(s => { s.style.translate = `${-dx * 30 * s.dataset.d}px ${-dy * 30 * s.dataset.d}px`; });
   });
 });
+
+// 제자리로: 마우스가 나가거나, 휴대폰에서 손을 떼면 부드럽게 가운데로
+const symHome = () => SYMS.forEach(s => { s.style.translate = ''; });
+if (!STATIC) {
+  poster.addEventListener('pointerleave', symHome);
+  poster.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') symHome(); });
+  poster.addEventListener('pointercancel', symHome);
+}
 
 // 리본 테이프
 const NAMES = ['경험을 잇는 날', 'debug 실패의 날 × 외국인 개발자', '구출의 날 · 구해줘요, 교사 개발자!'];
@@ -444,6 +454,7 @@ CORE.init({
   drip: ['#CCFF00', '#CFC4FF', '#4FC3FF'],
   burst: ['#CCFF00', '#CFC4FF', '#4FC3FF', '#FF5C39'],
   reveal() {
+    symHome();
     // 제목 블록 → 기호·프롬이 → 테이프 순서로 빠르게 (약 1초)
     KIT.pop([$('.top')]);
     $$('.bk,.yr,.qr').forEach((b, i) => b.animate([{ transform: 'translateY(-100%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 380, delay: i * 50, easing: 'cubic-bezier(.2,.9,.3,1.1)', fill: 'backwards' }));

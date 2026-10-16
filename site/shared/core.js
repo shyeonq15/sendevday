@@ -59,10 +59,12 @@ window.CORE = (() => {
     sizeDots(); addEventListener('resize', () => { syncLayout(); requestAnimationFrame(sizeDots); });
     if (!STATIC) {
       poster.addEventListener('pointermove', e => {
+        if (e.target.closest('.story,.intro,.page,button')) return;
         const r = poster.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top };
         cancelAnimationFrame(raf); raf = requestAnimationFrame(drawDots);
       });
       poster.addEventListener('pointerleave', () => { mouse = null; drawDots(); });
+      poster.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') { mouse = null; drawDots(); } });
     }
 
     // ── 상세 페이지 · 초대장 마크업 주입
