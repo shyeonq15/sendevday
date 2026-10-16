@@ -178,6 +178,15 @@ html:not(.wide) .label{right:auto;left:6%;bottom:calc(var(--p)*-28)}
 .eggpop .eg-todo{margin-top:calc(var(--p)*14);font:700 calc(var(--p)*12.5)/1.5 var(--mono);color:#6B5BD6}
 .eggpop .eg-todo s{text-decoration:none;background:var(--ink);color:var(--lime);padding:0 calc(var(--p)*5);border-radius:calc(var(--p)*4)}
 .eggpop .eg-kao{font:800 calc(var(--p)*22)/1 var(--mono);color:var(--ink);letter-spacing:.02em;margin-top:calc(var(--p)*16)}
+
+/* QR 아래 인스타 설명 */
+.qr{flex-direction:column;gap:calc(var(--p)*6)}
+.qrcap{display:flex;flex-direction:column;align-items:center;gap:calc(var(--p)*2);font:800 calc(var(--p)*13)/1.15 var(--mono);font-style:normal;color:var(--ink);text-align:center}
+.qrcap b{font:800 calc(var(--p)*9.5)/1 var(--mono);letter-spacing:.14em;opacity:.7}
+.qrcap i{font:700 calc(var(--p)*9.5)/1.25 var(--sans);font-style:normal;opacity:.75;letter-spacing:-.02em}
+.qr img{width:calc(var(--p)*80);height:calc(var(--p)*80)}
+.wide .qr img{width:calc(var(--p)*62);height:calc(var(--p)*62)}
+.wide .qrcap{font-size:calc(var(--p)*11)}
 </style>
 </head>
 <body>
@@ -198,7 +207,7 @@ html:not(.wide) .label{right:auto;left:6%;bottom:calc(var(--p)*-28)}
       <div class="bk b1">교사</div><div class="bk b2">개발자</div>
       <div class="bk b3">의 날</div>
       <div class="yr" aria-label="2026"><i>2</i><i>0</i><i>2</i><i>6</i></div>
-      <a class="qr" target="_blank" rel="noopener" aria-label="sendev.kr"><span><img src="shared/qr.svg" alt="sendev.kr QR 코드"></span></a>
+      <a class="qr" target="_blank" rel="noopener" aria-label="인스타그램 @sendevkorea"><span><img src="shared/qr.svg" alt="인스타그램 @sendevkorea QR 코드"></span><em class="qrcap"><b>INSTAGRAM</b>@sendevkorea</em></a>
     </div>
     <div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span class="apply"></span></div>
   </div>
@@ -210,8 +219,8 @@ const { STATIC, fi, F } = ENV, S = POSTER.sessions;
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const poster = $('#poster');
 $('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
-$('.qr').href = POSTER.cta.url;
-$('.apply').innerHTML = '코딩 몰라도 누구나 편하게 접속 · sendev.kr' + (F.apply ? '' : ENV.pendTag);
+$('.qr').href = POSTER.insta.url;
+$('.apply').innerHTML = '신청·자료는 sendev.kr · 소식과 후기는 인스타그램 @sendevkorea' + (F.apply ? '' : ENV.pendTag);
 
 // 2D 프롬이
 const bw = $('.prom .bw');
@@ -380,6 +389,7 @@ function eggStep(t) {
   requestAnimationFrame(eggStep);
 }
 eggStart();
+document.fonts.ready.then(eggStart); // 글꼴이 다 불러와진 뒤 빈칸 위치 다시 계산
 if (ENV.ANIMATE) {
   requestAnimationFrame(eggStep);
   setTimeout(eggStart, 1600); // 등장 연출이 끝난 뒤 위치 다시 계산

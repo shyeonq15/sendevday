@@ -2,6 +2,7 @@
    null 인 값은 '추후 공지'로 표시되고, showPending 이 true면 코랄 '미정' 표시가 붙습니다. */
 window.POSTER = {
   cta: { url: 'https://sendev.kr', label: 'sendev.kr' },
+  insta: { url: 'https://www.instagram.com/sendevkorea/', handle: '@sendevkorea' },   // 포스터 QR은 인스타로 연결
   host: '서울특별시교육청',
   team: '교사개발자 문화조성분과',
   showPending: false,                      // true면 미정 항목에 코랄 '미정' 표시
