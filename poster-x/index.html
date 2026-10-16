@@ -194,6 +194,21 @@ html:not(.wide) .label{right:auto;left:6%;bottom:calc(var(--p)*-28)}
 .eggpop .ln+.ln{margin-top:calc(var(--p)*4)}
 .eggpop .nb{white-space:nowrap}
 html:not(.wide) .eggpop{width:min(92%,calc(var(--p)*560));padding-left:calc(var(--p)*20);padding-right:calc(var(--p)*20)}
+
+/* QR 칸: 글씨가 커져도(휴대폰 최소 글자 크기) 칸 안에 들어가게 — QR 그림이 남는 높이에 맞춰 줄어듦 */
+.qr{display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:calc(var(--p)*8) calc(var(--p)*6)}
+.qr > span:first-child{flex:1 1 0;min-height:0;height:auto;aspect-ratio:1;max-width:100%;display:flex;padding:calc(var(--p)*5)}
+.qr img,.wide .qr img{width:100%;height:100%;object-fit:contain}
+.qrcap{flex:none;white-space:nowrap}
+
+/* 인스타 라벨: QR 칸 아래 모서리에 걸친 작은 태그 → QR 크기는 그대로, 글씨가 커져도 잘리지 않음 */
+.qr{position:relative;overflow:visible}
+.qrcap{position:absolute;left:50%;bottom:0;transform:translate(-50%,50%);z-index:6;flex-direction:row;gap:calc(var(--p)*6);align-items:center;
+  background:var(--ink);color:#fff;border:calc(var(--p)*2) solid var(--sky);border-radius:99px;padding:calc(var(--p)*6) calc(var(--p)*12);font-size:calc(var(--p)*13)}
+.qrcap b{color:var(--lime);opacity:1;font-size:calc(var(--p)*11)}
+.wide .qrcap{font-size:calc(var(--p)*11.5)}
+.qrcap{left:auto;right:calc(var(--p)*8);transform:translateY(50%)}
+.qr{padding-bottom:calc(var(--p)*20)}
 </style>
 </head>
 <body>
@@ -214,7 +229,7 @@ html:not(.wide) .eggpop{width:min(92%,calc(var(--p)*560));padding-left:calc(var(
       <div class="bk b1">교사</div><div class="bk b2">개발자</div>
       <div class="bk b3">의 날</div>
       <div class="yr" aria-label="2026"><i>2</i><i>0</i><i>2</i><i>6</i></div>
-      <a class="qr" target="_blank" rel="noopener" aria-label="인스타그램 @sendevkorea"><span><img src="../shared/qr.svg" alt="인스타그램 @sendevkorea QR 코드"></span><em class="qrcap"><b>INSTAGRAM</b>@sendevkorea</em></a>
+      <a class="qr" target="_blank" rel="noopener" aria-label="인스타그램 @sendevkorea"><span><img src="../shared/qr.svg" alt="인스타그램 @sendevkorea QR 코드"></span><em class="qrcap"><b>IG</b>@sendevkorea</em></a>
     </div>
     <div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span class="apply"></span></div>
   </div>
