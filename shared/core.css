@@ -108,7 +108,7 @@ canvas.dots{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
 .intro .mon.env{height:auto;margin-top:0;animation:none;perspective:none}
 
 /* 스토리 오프닝 (intro: 'story'): 코드 소나기 위로 메시지가 한 줄씩 → [입장하기] */
-.storyfx{position:absolute;inset:0;z-index:1001;pointer-events:none}
+.storyfx{position:absolute;inset:0;width:100%;height:100%;z-index:1001;pointer-events:none}
 .story{position:absolute;inset:0;z-index:1002;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--p)*14);text-align:center;color:#fff;
   background:radial-gradient(closest-side at 50% 50%,rgba(14,19,17,.92) 0,rgba(14,19,17,.78) 55%,rgba(14,19,17,0) 100%)}
 .story .q{font:700 calc(var(--p)*20)/1.4 var(--mono);color:var(--lime);min-height:1.4em}
@@ -126,3 +126,24 @@ canvas.dots{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
 .story .enter:focus-visible{outline:calc(var(--p)*3) solid var(--coral);outline-offset:calc(var(--p)*6)}
 .story .skip2{pointer-events:auto;position:absolute;right:calc(var(--p)*30);bottom:calc(var(--p)*26);background:none;border:1.5px solid rgba(255,255,255,.5);color:#fff;border-radius:99px;
   font:700 calc(var(--p)*12)/1 var(--sans);padding:calc(var(--p)*9) calc(var(--p)*14);cursor:pointer}
+
+/* 시간표 없는 상세 페이지: 내용 높이만큼만 */
+.page.short{bottom:auto;top:12%}
+.wide .page.short{top:8%;left:12%;right:12%}
+.page .how{align-self:start}
+/* 상세 설명 보강: 순서별 제목 + 설명, 추천 대상 */
+.pg-bd .flow{gap:calc(var(--p)*12)}
+.pg-bd .flow li span{display:flex;flex-direction:column;gap:calc(var(--p)*3)}
+.pg-bd .flow li b{font:850 calc(var(--p)*15)/1.4 var(--sans);letter-spacing:-.02em}
+.pg-bd .flow li em{font:550 calc(var(--p)*13.5)/1.55 var(--sans);font-style:normal;color:#4B544F}
+.pg-bd .for{margin:calc(var(--p)*14) 0 0;font:600 calc(var(--p)*13.5)/1.55 var(--sans);background:#F1EEFF;border-radius:calc(var(--p)*12);padding:calc(var(--p)*11) calc(var(--p)*14)}
+.pg-bd .for b{display:inline-block;margin-right:calc(var(--p)*8);font:800 calc(var(--p)*12)/1 var(--mono);color:#6B5BD6;letter-spacing:.04em}
+.page.short{top:6%}
+.wide .page.short{top:5%}
+.page.short .pg-bd{max-height:calc(var(--p)*780)}
+.wide .page.short .pg-bd{max-height:calc(var(--p)*440)}
+.wide .pg-bd .line{font-size:calc(var(--p)*14)}
+.wide .pg-bd .flow{gap:calc(var(--p)*8)}
+.wide .pg-bd .flow li b{font-size:calc(var(--p)*14)}
+.wide .pg-bd .flow li em{font-size:calc(var(--p)*12.5);line-height:1.45}
+.wide .pg-bd .for{font-size:calc(var(--p)*12.5);margin-top:calc(var(--p)*10)}

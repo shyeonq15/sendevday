@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="2026 교사 개발자의 날 — 함께할 선생님을 모십니다. 매달 마지막 화요일 저녁.">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="../shared/core.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<script src="../shared/core.js"></script>
+<style>
+/* 시안 AA · 모집 공고형: 알약 라벨, 큰 제목, 소개 상자, 영문 띠, 라벨 탭 정보 상자, 동그라미 진행일정, 신청 상자 */
+:root{--bg:#CCFF00;--navy:#0E1311;--soft:#CFC4FF}
+#poster{background:var(--bg);color:var(--navy);--intro-bg:var(--ink)}
+.wide body{background:var(--bg)}
+.lay{padding:calc(var(--p)*34) calc(var(--p)*40) calc(var(--p)*20);row-gap:calc(var(--p)*14);grid-template-columns:1fr 1fr;
+  grid-template-rows:auto auto auto auto auto auto 1fr auto;
+  grid-template-areas:"pill pill" "title title" "intro intro" "band band" "i1 i2" "sch sch" "app app" "foot foot"}
+.wide .lay{padding:calc(var(--p)*26) calc(var(--p)*36) calc(var(--p)*14);column-gap:calc(var(--p)*28);row-gap:calc(var(--p)*12);grid-template-columns:1fr 1fr 1.15fr;
+  grid-template-rows:auto auto auto auto 1fr auto;
+  grid-template-areas:"pill pill sch" "title title sch" "intro intro sch" "band band app" "i1 i2 app" "foot foot foot"}
+.lay>*{min-width:0}
+.pill{grid-area:pill;justify-self:center;display:inline-flex;align-items:center;gap:calc(var(--p)*10);background:var(--navy);color:#fff;border-radius:99px;
+  padding:calc(var(--p)*8) calc(var(--p)*20) calc(var(--p)*8) calc(var(--p)*10);font:800 calc(var(--p)*16)/1 var(--sans);letter-spacing:-.02em}
+.pill b{color:var(--lime);font-weight:900}
+.pill .m{width:calc(var(--p)*30)}
+.wide .pill{justify-self:start;align-self:start}
+.title{grid-area:title;text-align:center;margin:0}
+.title .t1{display:block;font:900 calc(var(--p)*72)/1.05 var(--sans);letter-spacing:-.065em}
+.title .t2{display:inline-block;margin-top:calc(var(--p)*6);font:900 calc(var(--p)*50)/1.1 var(--sans);letter-spacing:-.06em;background:linear-gradient(transparent 55%,var(--lilac) 55%)}
+.wide .title{text-align:left}
+.wide .title .t1{font-size:calc(var(--p)*64)}
+.wide .title .t2{font-size:calc(var(--p)*40)}
+.lead{grid-area:intro;background:#fff;border:calc(var(--p)*2.5) solid var(--navy);border-radius:calc(var(--p)*16);padding:calc(var(--p)*14) calc(var(--p)*20);text-align:center;
+  font:650 calc(var(--p)*15.5)/1.6 var(--sans);letter-spacing:-.02em;position:relative}
+.lead b{font-weight:900;color:var(--navy);background:var(--soft);padding:0 calc(var(--p)*4)}
+.wide .lead{text-align:left;font-size:calc(var(--p)*14)}
+.band{grid-area:band;position:relative;background:var(--navy);border-radius:calc(var(--p)*14);padding:calc(var(--p)*14) calc(var(--p)*22);display:flex;align-items:center;justify-content:space-between;overflow:hidden}
+.band .en{font:800 calc(var(--p)*48)/1 var(--mono);letter-spacing:-.02em;color:transparent;-webkit-text-stroke:calc(var(--p)*2) var(--lime);white-space:nowrap}
+.band .en b{color:var(--lime);-webkit-text-stroke:0;font-weight:800}
+.band .chk{display:grid;grid-template-columns:repeat(4,calc(var(--p)*14));grid-auto-rows:calc(var(--p)*14);flex:none}
+.band .chk i:nth-child(odd){background:var(--lime)}
+.band .chk i:nth-child(4n+2),.band .chk i:nth-child(4n+3){background:var(--lilac)}
+.band .chk i:nth-child(7),.band .chk i:nth-child(8){background:transparent}
+.wide .band .en{font-size:calc(var(--p)*38)}
+
+/* 라벨 탭 정보 상자 */
+.info{position:relative;background:#fff;border:calc(var(--p)*2.5) solid var(--navy);border-radius:calc(var(--p)*16);padding:calc(var(--p)*30) calc(var(--p)*18) calc(var(--p)*14)}
+.i1{grid-area:i1}.i2{grid-area:i2}
+.info h3{position:absolute;left:calc(var(--p)*14);top:calc(var(--p)*-16);margin:0;background:var(--navy);color:#fff;font:900 calc(var(--p)*16)/1 var(--sans);padding:calc(var(--p)*8) calc(var(--p)*16);border-radius:99px}
+.info dl{margin:0;display:grid;grid-template-columns:calc(var(--p)*50) 1fr;gap:calc(var(--p)*9) calc(var(--p)*10);font-size:calc(var(--p)*14)}
+.info dt{font:900 calc(var(--p)*13.5)/1.5 var(--sans);color:#6B5BD6}
+.info dd{margin:0;font:700 calc(var(--p)*14)/1.5 var(--sans);letter-spacing:-.02em}
+.info dd b{font-weight:900}
+.info dd small{display:block;font-weight:600;opacity:.7;font-size:calc(var(--p)*12)}
+.wide .info dl{font-size:calc(var(--p)*13)}
+.wide .info dd{font-size:calc(var(--p)*12.5)}
+
+/* 진행일정 */
+.sch{grid-area:sch;position:relative;background:#fff;border:calc(var(--p)*2.5) solid var(--navy);border-radius:calc(var(--p)*16);padding:calc(var(--p)*34) calc(var(--p)*18) calc(var(--p)*16)}
+.sch h3{position:absolute;left:calc(var(--p)*14);top:calc(var(--p)*-16);margin:0;background:var(--navy);color:#fff;font:900 calc(var(--p)*16)/1 var(--sans);padding:calc(var(--p)*8) calc(var(--p)*16);border-radius:99px}
+.sch .hint{position:absolute;right:calc(var(--p)*16);top:calc(var(--p)*12);font:800 calc(var(--p)*10.5)/1 var(--mono);color:#6B5BD6}
+.static .sch .hint{display:none}
+.steps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--p)*10)}
+.steps::before{content:"";position:absolute;left:16%;right:16%;top:calc(var(--p)*58);border-top:calc(var(--p)*3) dashed var(--navy)}
+.wide .steps{grid-template-columns:1fr;gap:calc(var(--p)*12)}
+.wide .steps::before{left:calc(var(--p)*58);right:auto;top:8%;bottom:8%;border-top:0;border-left:calc(var(--p)*3) dashed var(--navy)}
+.st{position:relative;border:0;background:none;padding:0;cursor:pointer;color:var(--navy);font-family:var(--sans);display:flex;flex-direction:column;align-items:center;text-align:center}
+.wide .st{flex-direction:row;text-align:left;gap:calc(var(--p)*16)}
+.st:focus-visible{outline:calc(var(--p)*3) solid var(--coral);outline-offset:calc(var(--p)*4);border-radius:calc(var(--p)*12)}
+.st .c{position:relative;z-index:1;width:calc(var(--p)*116);height:calc(var(--p)*116);border-radius:50%;background:var(--soft);border:calc(var(--p)*3) solid var(--navy);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .25s cubic-bezier(.3,1.5,.5,1);flex:none}
+.st.next .c{background:var(--lime)}
+.st:hover .c{transform:scale(1.07) rotate(-4deg)}
+.st .c .mo{font:900 calc(var(--p)*19)/1 var(--sans)}
+.st .c .dd{font:900 calc(var(--p)*44)/1 var(--sans);letter-spacing:-.05em}
+.st .c .dw{font:800 calc(var(--p)*12)/1 var(--sans);margin-top:calc(var(--p)*2)}
+.st .c .tap{position:absolute;right:calc(var(--p)*-6);bottom:calc(var(--p)*4);font:800 calc(var(--p)*9.5)/1 var(--mono);background:var(--navy);color:#fff;padding:calc(var(--p)*4) calc(var(--p)*6);border-radius:99px;animation:tapblink 1.4s ease-in-out infinite}
+@keyframes tapblink{50%{opacity:.35}}
+.static .st .tap{display:none}
+.st .nx{position:absolute;left:calc(var(--p)*-4);top:calc(var(--p)*-4);z-index:2;background:var(--coral);color:#fff;font:800 calc(var(--p)*10.5)/1 var(--mono);padding:calc(var(--p)*5) calc(var(--p)*8);transform:rotate(-10deg)}
+.st .tx{display:flex;flex-direction:column;align-items:center}
+.wide .st .tx{align-items:flex-start}
+.st .no{margin-top:calc(var(--p)*10);font:800 calc(var(--p)*11.5)/1 var(--mono);color:#6B5BD6}
+.wide .st .no{margin-top:0}
+.st .nm{margin-top:calc(var(--p)*6);font:900 calc(var(--p)*15.5)/1.3 var(--sans);letter-spacing:-.03em}
+.st .wh{margin-top:calc(var(--p)*7);display:flex;flex-wrap:wrap;justify-content:center;gap:calc(var(--p)*5) calc(var(--p)*7);align-items:center}
+.wide .st .wh{justify-content:flex-start}
+.st .pb{font:900 calc(var(--p)*12)/1 var(--sans);padding:calc(var(--p)*5) calc(var(--p)*9);border-radius:99px;white-space:nowrap}
+.st .pb.on{background:var(--navy);color:#fff}
+.st .pb.off{background:var(--coral);color:#fff}
+.st .tm{font:800 calc(var(--p)*12.5)/1 var(--mono)}
+.wide .st .c{width:calc(var(--p)*100);height:calc(var(--p)*100)}
+.wide .st .c .dd{font-size:calc(var(--p)*38)}
+.wide .st .nm{font-size:calc(var(--p)*16)}
+
+/* 신청 */
+.app{grid-area:app;position:relative;background:var(--navy);color:#fff;border-radius:calc(var(--p)*16);padding:calc(var(--p)*18) calc(var(--p)*22);display:flex;align-items:center;gap:calc(var(--p)*18);align-self:start}
+.wide .app{align-self:stretch}
+.app h3{margin:0;font:900 calc(var(--p)*19)/1 var(--sans);color:var(--lime)}
+.app p{margin:calc(var(--p)*8) 0 0;font:600 calc(var(--p)*13.5)/1.6 var(--sans)}
+.app p b{font-weight:900;color:#fff}
+.app .pending{display:inline-flex}
+.app a{flex:none;display:block;width:calc(var(--p)*92);height:calc(var(--p)*92);padding:calc(var(--p)*6);background:#fff;border-radius:calc(var(--p)*10);margin-left:auto}
+.app img{display:block;width:100%;height:100%}
+.foot{grid-area:foot;display:flex;justify-content:space-between;font:600 calc(var(--p)*11)/1.3 var(--sans);padding:0 calc(var(--p)*4)}
+.foot b{font-weight:850}
+
+html:not(.wide) .lay{grid-template-rows:repeat(7,auto) auto;align-content:space-between;row-gap:calc(var(--p)*18)}
+html:not(.wide) .lead{font-size:calc(var(--p)*17)}
+html:not(.wide) .info{padding-top:calc(var(--p)*34);padding-bottom:calc(var(--p)*18)}
+html:not(.wide) .sch{padding-top:calc(var(--p)*40);padding-bottom:calc(var(--p)*22)}
+.wide .lead{align-self:start}
+
+/* 브랜드 색: 라임 바탕 · 검정 · 연보라 */
+.band .en{-webkit-text-stroke-color:var(--lime)}
+.st .c{background:#fff}
+.st.next .c{background:var(--lilac)}
+.app h3{color:var(--lime)}
+.pill .m{filter:none}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="lay">
+    <div class="pill"><span class="m"></span>2026 서울 <b>교사 개발자</b> 프로젝트</div>
+    <h1 class="title"><span class="t1">교사 개발자의 날</span><span class="t2">함께할 선생님을 모십니다</span></h1>
+    <p class="lead">교실의 문제를 코드로 바꾸는 선생님들이 <b>매달 마지막 화요일 저녁</b> 모입니다.<br>코딩을 몰라도, 듣기만 해도 괜찮아요. <b>누구나 == 개발자</b></p>
+    <div class="band"><span class="en">TEACHER <b>DEV</b> DAY</span><span class="chk" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
+    <section class="info i1"><h3>일시</h3><dl>
+      <dt>언제</dt><dd><b>매달 마지막 화요일 저녁</b><small>12월만 15일(화), 연말 특집</small></dd>
+      <dt>회차</dt><dd>10.27 · 11.24 · 12.15<small>총 3회, 원하는 회차만 참여 가능</small></dd></dl></section>
+    <section class="info i2"><h3>대상</h3><dl>
+      <dt>누구</dt><dd><b>교사라면 누구나</b><small>입문형 · 성장형 · 도전형</small></dd>
+      <dt>장소</dt><dd>1·3회 온라인<small>2회 서울시교육청 현장 + 생중계</small></dd></dl></section>
+    <section class="sch"><h3>진행일정</h3><span class="hint">동그라미를 누르면 자세히</span><div class="steps"></div></section>
+    <section class="app"><div><h3>신청 · 문의</h3><p>신청 링크와 자료는 <b>sendev.kr</b>에서 안내해요<span class="ap"></span><br>질문도 sendev.kr 한 곳에서 받아요.</p></div><a target="_blank" rel="noopener" class="qr"><img src="../shared/qr.svg" alt="sendev.kr QR 코드"></a></section>
+    <div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span>sendev.kr</span></div>
+  </div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 처음부터</button></div>
+<script>
+const { fi, F } = ENV, S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.qr').href = POSTER.cta.url;
+$('.ap').innerHTML = F.apply ? '' : ENV.pendTag;
+$('.pill .m').innerHTML = KIT.flat({ face: 'happy', line: '#fff' });
+const NAMES = ['서로의 경험을 잇는 날', '실패의 날 × 외국인 개발자', '구해줘요, 교사 개발자!'];
+const PL = [['on', '◉ 온라인'], ['off', '⚑ 현장 집합'], ['on', '◉ 온라인']];
+$('.steps').innerHTML = S.map((s, i) => `<button class="st${i === fi ? ' next' : ''}" type="button" data-i="${i}" aria-label="${s.mo}월 ${s.dd}일 ${NAMES[i]} 자세히 보기">
+  <span class="c">${i === fi ? '<span class="nx">NEXT</span>' : ''}<span class="mo">${s.mo}월</span><span class="dd">${s.dd}</span><span class="dw">${s.dow}요일</span><span class="tap" aria-hidden="true">TAP</span></span>
+  <span class="tx"><span class="no">STEP 0${i + 1}</span><span class="nm">${NAMES[i]}</span>
+  <span class="wh"><span class="pb ${PL[i][0]}">${PL[i][1]}</span><span class="tm">${s.time}</span></span></span></button>`).join('');
+
+const FACE = ['happy', 'worry', 'happy'];
+CORE.init({
+  intro: 'story',
+  cards: '.st',
+  face: i => KIT.flat({ face: FACE[i], line: '#fff' }),
+  dots: { color: '#0E1311', alpha: .06, hot: .4 },
+  drip: ['#0E1311', '#6B5BD6', '#0E1311'],
+  reveal() {
+    KIT.pop([$('.pill')]);
+    KIT.drop([$('.title .t1')], { delay: 80, height: 200 });
+    $('.title .t2').animate([{ backgroundSize: '0% 100%' }, { backgroundSize: '100% 100%' }], { duration: 1 });
+    KIT.pop([$('.title .t2'), $('.lead'), $('.band')], { delay: 300, stagger: 90, from: 'translateY(16px)' });
+    KIT.pop($$('.info, .sch, .app'), { delay: 500, stagger: 90, from: 'translateY(20px)' });
+    KIT.pop($$('.st .c'), { delay: 750, stagger: 120, from: 'scale(.3)' });
+  },
+});
+</script>
+</body>
+</html>

@@ -5,7 +5,8 @@
   "scripts": {
     "qr": "node scripts/make-qr.mjs",
     "png": "node scripts/render-png.mjs",
-    "thumbs": "node scripts/build-thumbs.mjs"
+    "thumbs": "node scripts/build-thumbs.mjs",
+    "site": "node scripts/build-site.mjs"
   },
   "devDependencies": {
     "playwright-core": "^1.63.0",

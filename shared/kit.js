@@ -127,21 +127,81 @@ window.KIT = (() => {
     </svg>`;
   }
 
+  // ── 2D 플랫 데브쌤: who 'm'(짙은 재킷·청록 바지) | 'f'(청록 재킷·짙은 바지)
+  //    pose: look(살펴보고) · think(고민하고) · design(설계하고) · make(만들어요)
+  function devssam({ who = 'm', pose = 'look', cls = '' } = {}) {
+    const ink = '#0E1311', skin = '#FFD3B6', hair = '#6B3F2A', shirt = '#CFC4FF', shoe = '#F4EFE4';
+    const jacket = who === 'm' ? '#3A3F44' : '#1E6B72', pants = who === 'm' ? '#1E6B72' : '#3A3F44';
+    const hairBack = who === 'f' ? `<path d="M24 52 Q22 14 60 14 Q98 14 96 52 L99 96 Q86 104 80 84 L40 84 Q34 104 21 96 Z" fill="${hair}"/>` : '';
+    const hairTop = who === 'm'
+      ? `<path d="M29 54 Q24 14 62 14 Q98 16 92 52 Q86 34 66 34 Q52 28 40 40 Q34 46 29 54 Z" fill="${hair}"/><path d="M58 16 Q80 10 90 30 Q76 22 62 26 Z" fill="#7E4C33"/>`
+      : `<path d="M28 56 Q24 14 60 14 Q96 14 92 56 Q84 30 60 32 Q40 30 28 56 Z" fill="${hair}"/><path d="M40 22 Q60 12 80 22 Q62 20 46 34 Z" fill="#7E4C33"/>`;
+    const arm = (d, hx, hy, extra = '') => `<path d="${d}" fill="none" stroke="${jacket}" stroke-width="13" stroke-linecap="round"/><circle cx="${hx}" cy="${hy}" r="6.5" fill="${skin}"/>${extra}`;
+    const R = {
+      look: arm('M84 98 Q100 72 74 40', 72, 40),
+      think: arm('M84 98 Q96 116 66 86', 64, 84),
+      design: arm('M84 98 Q96 126 80 126', 79, 125, `<path d="M79 125 L70 110" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`),
+      make: arm('M84 98 Q102 92 97 68', 97, 64, `<path d="M97 62 L97 50" stroke="${skin}" stroke-width="5" stroke-linecap="round"/>`),
+    }[pose] || '';
+    const mouth = pose === 'think' ? `<path d="M56 74 Q60 72 64 74" fill="none" stroke="${ink}" stroke-width="2.6" stroke-linecap="round"/>`
+      : `<path d="M54 71 Q60 79 66 71 Z" fill="${ink}"/>`;
+    const eyeY = pose === 'look' ? 58 : 56;
+    return `<svg class="devssam ${cls}" viewBox="0 0 120 216" aria-hidden="true" style="display:block;overflow:visible">
+      ${hairBack}
+      <path d="M38 148 L36 200 L57 200 L59 150 Z" fill="${pants}"/><path d="M61 150 L63 200 L84 200 L82 148 Z" fill="${pants}"/>
+      <ellipse cx="46" cy="204" rx="14" ry="6.5" fill="${shoe}"/><ellipse cx="74" cy="204" rx="14" ry="6.5" fill="${shoe}"/>
+      <path d="M38 202 L44 202" stroke="#CCFF00" stroke-width="3" stroke-linecap="round"/><path d="M76 202 L82 202" stroke="#CCFF00" stroke-width="3" stroke-linecap="round"/>
+      <path d="M34 94 Q60 82 86 94 L92 152 L28 152 Z" fill="${jacket}"/>
+      <path d="M50 88 L60 116 L70 88 Z" fill="${shirt}"/>
+      ${who === 'f' ? `<path d="M42 104 L42 116" stroke="#CCFF00" stroke-width="3" stroke-linecap="round"/>` : ''}
+      <circle cx="31" cy="58" r="7" fill="${skin}"/><circle cx="89" cy="58" r="7" fill="${skin}"/>
+      <circle cx="60" cy="54" r="30" fill="${skin}"/>
+      ${hairTop}
+      <path d="M44 ${eyeY - 12} L54 ${eyeY - 13}" stroke="${hair}" stroke-width="3" stroke-linecap="round"/><path d="M66 ${eyeY - 13} L76 ${eyeY - 12}" stroke="${hair}" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="50" cy="${eyeY}" rx="5.5" ry="7" fill="${ink}"/><ellipse cx="70" cy="${eyeY}" rx="5.5" ry="7" fill="${ink}"/>
+      <circle cx="51.8" cy="${eyeY - 2.5}" r="1.9" fill="#fff"/><circle cx="71.8" cy="${eyeY - 2.5}" r="1.9" fill="#fff"/>
+      <ellipse cx="41" cy="68" rx="6" ry="3.5" fill="#FFB8CB"/><ellipse cx="79" cy="68" rx="6" ry="3.5" fill="#FFB8CB"/>
+      ${mouth}
+      <g transform="rotate(-10 72 124)"><rect x="54" y="110" width="38" height="28" rx="5" fill="#2A2F33"/>
+        <rect x="59" y="115" width="12" height="7" rx="2" fill="${shirt}"/><circle cx="84" cy="118" r="3.5" fill="#CCFF00"/><rect x="59" y="126" width="22" height="4" rx="2" fill="#555B60"/></g>
+      ${arm('M36 98 Q34 126 56 128', 57, 128)}
+      ${R}
+    </svg>`;
+  }
+
   // ── 2D 플랫 프롬이: 그라데이션·그림자 없이 면과 선만
-  //    face: happy · idle · wink · worry   body: 몸 색   line: 안테나 선 색(어두운 배경이면 흰색)
-  function flat({ face = 'happy', body = '#FFFFFF', line = '#0E1311', tag = '#CCFF00', cls = '' } = {}) {
+  //    face: happy · idle · wink · worry · star   body: 몸 색   line: 안테나 선 색(어두운 배경이면 흰색)
+  //    acc: headset(1회 보이는 라디오) · bug(2회 디버깅) · cape(3회 구출 히어로)
+  function flat({ face = 'happy', body = '#FFFFFF', line = '#0E1311', tag = '#CCFF00', cls = '', acc = '' } = {}) {
     const ink = '#0E1311';
     const eye = (x, kind) => kind === 'arc'
       ? `<path d="M${x - 11} ${100} Q${x} ${84} ${x + 11} ${100}" fill="none" stroke="${ink}" stroke-width="8" stroke-linecap="round"/>`
-      : `<ellipse cx="${x}" cy="94" rx="9" ry="12" fill="${ink}"/>`;
+      : kind === 'star'
+        ? `<path d="M${x} 80 L${x + 4} 90 L${x + 14} 94 L${x + 4} 98 L${x} 108 L${x - 4} 98 L${x - 14} 94 L${x - 4} 90Z" fill="${ink}"/>`
+        : `<ellipse cx="${x}" cy="94" rx="9" ry="12" fill="${ink}"/>`;
     const eyes = face === 'happy' ? eye(76, 'arc') + eye(124, 'arc')
       : face === 'wink' ? eye(76, 'dot') + eye(124, 'arc')
+      : face === 'star' ? eye(76, 'star') + eye(124, 'star')
       : eye(76, 'dot') + eye(124, 'dot');
+    // 몸 뒤에 그리는 소품
+    const back = {
+      headset: `<path d="M22 104 Q22 22 100 22 Q178 22 178 104" fill="none" stroke="${line === ink ? ink : "#CFC4FF"}" stroke-width="9" stroke-linecap="round"/>`,
+      cape: `<path d="M44 92 L8 176 Q100 196 192 176 L156 92 Z" fill="#FF5C39"/>`,
+    }[acc] || '';
+    // 몸 앞에 그리는 소품
+    const front = {
+      headset: `<rect x="4" y="84" width="26" height="40" rx="11" fill="#CCFF00" stroke="${ink}" stroke-width="5"/><rect x="170" y="84" width="26" height="40" rx="11" fill="#CCFF00" stroke="${ink}" stroke-width="5"/>
+        <path d="M18 122 Q22 146 52 144" fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round"/><circle cx="56" cy="144" r="7" fill="${ink}"/>`,
+      bug: `<g transform="translate(166 40) rotate(18)"><g stroke="${ink}" stroke-width="3.5" stroke-linecap="round"><line x1="-13" y1="-4" x2="-22" y2="-10"/><line x1="-13" y1="6" x2="-23" y2="8"/><line x1="13" y1="-4" x2="22" y2="-10"/><line x1="13" y1="6" x2="23" y2="8"/><line x1="-5" y1="-15" x2="-9" y2="-24"/><line x1="5" y1="-15" x2="9" y2="-24"/></g>
+        <ellipse cx="0" cy="2" rx="14" ry="17" fill="#CFC4FF" stroke="${ink}" stroke-width="4"/><line x1="0" y1="-14" x2="0" y2="18" stroke="${ink}" stroke-width="3"/></g>`,
+      cape: `<path d="M150 150 L157 164 L172 166 L161 176 L164 190 L150 183 L136 190 L139 176 L128 166 L143 164Z" fill="#CCFF00" stroke="${ink}" stroke-width="3.5" stroke-linejoin="round"/>`,
+    }[acc] || '';
     const brows = face === 'worry' ? `<path d="M62 78 L88 70" stroke="${ink}" stroke-width="6" stroke-linecap="round"/><path d="M138 78 L112 70" stroke="${ink}" stroke-width="6" stroke-linecap="round"/>` : '';
     const mouth = face === 'worry'
       ? `<path d="M88 124 Q94 118 100 124 Q106 130 112 124" fill="none" stroke="${ink}" stroke-width="6" stroke-linecap="round"/>`
       : `<path d="M86 116 Q100 134 114 116 Z" fill="${ink}"/>`;
     return `<svg class="flat ${cls}" viewBox="0 0 200 190" aria-hidden="true" style="display:block;overflow:visible">
+      ${back}
       <line x1="100" y1="46" x2="100" y2="28" stroke="${line}" stroke-width="7" stroke-linecap="round"/>
       <rect x="72" y="4" width="56" height="28" rx="9" fill="${tag}"/>
       <text x="100" y="24.5" font-family="JetBrains Mono,monospace" font-size="16" font-weight="800" fill="${ink}" text-anchor="middle">&gt;_</text>
@@ -149,7 +209,7 @@ window.KIT = (() => {
       <rect x="18" y="42" width="164" height="112" rx="52" fill="${body}"/>
       ${brows}${eyes}
       <ellipse cx="56" cy="118" rx="12" ry="7" fill="#FFB8CB"/><ellipse cx="144" cy="118" rx="12" ry="7" fill="#FFB8CB"/>
-      ${mouth}
+      ${mouth}${front}
     </svg>`;
   }
 
@@ -262,5 +322,5 @@ window.KIT = (() => {
     });
   }
 
-  return { fxDpr, sprite, pix, mascot, flat, alive, wait, unit, codeRain, pixelReveal, type, burst, pop, drop, SNIPPETS };
+  return { fxDpr, sprite, pix, mascot, flat, devssam, alive, wait, unit, codeRain, pixelReveal, type, burst, pop, drop, SNIPPETS };
 })();

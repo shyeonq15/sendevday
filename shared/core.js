@@ -98,16 +98,19 @@ window.CORE = (() => {
     let lastCard = null;
     function openPage(i, card) {
       const s = S[i], d = s.detail;
-      $('.lb', page).textContent = `${i + 1}회 · 운영 계획(안)`;
+      $('.lb', page).textContent = `${i + 1}회 · ${['경험', '실패', '구출'][i] || ''}`;
       $('h2', page).textContent = d.name;
       $('.meta', page).innerHTML = `<span>${s.mo}월 ${s.dd}일 ${s.dow}요일</span><span>${s.time}</span><span>${d.place}</span>`;
       $('.ic', page).innerHTML = o.face ? o.face(i) : '';
+      // o.timetable: 분 단위 시간표 표시 여부 (false면 핵심만)
+      $('.pg-bd', page).classList.toggle('no-tt', !o.timetable); page.classList.toggle('short', !o.timetable);
       $('.pg-bd', page).innerHTML = `
-        <div class="full"><h5>THEME · 주제</h5><p class="theme">${d.theme}</p><p class="line">${d.line}</p></div>
-        <div><h5>FLOW · 이런 걸 해요</h5><ol>${d.flow.map(x => `<li>${x}</li>`).join('')}</ol></div>
-        <div class="tt-wrap"><h5>TIMETABLE · 시간표</h5><table class="tt"><tbody>${d.timetable.map(([t, a, b]) => `<tr><td>${t}</td><td>${a}</td><td>${b}</td></tr>`).join('')}</tbody></table></div>
-        <div class="how"><b>참여 방법</b> · ${d.how}</div>
-        <p class="note full">아직 확정 전인 운영 계획(안)이라 순서와 시간은 바뀔 수 있어요. 최신 안내는 sendev.kr에서 확인해 주세요.</p>`;
+        <div class="full"><p class="theme">${d.theme}</p><p class="line">${d.line}</p></div>
+        <div class="${o.timetable ? '' : 'full'}"><h5>이런 걸 해요</h5><ol class="flow">${d.flow.map(x => Array.isArray(x) ? `<li><span><b>${x[0]}</b><em>${x[1]}</em></span></li>` : `<li>${x}</li>`).join('')}</ol>
+          ${d.for ? `<p class="for"><b>이런 분께 추천</b>${d.for}</p>` : ''}</div>
+        ${o.timetable ? `<div class="tt-wrap"><h5>시간표</h5><table class="tt"><tbody>${d.timetable.map(([t, a, b]) => `<tr><td>${t}</td><td>${a}</td><td>${b}</td></tr>`).join('')}</tbody></table></div>` : ''}
+        <div class="how ${o.timetable ? '' : 'full'}"><b>참여 방법</b> · ${d.how}</div>
+        <p class="note full">${o.timetable ? '시간표는 운영 계획(안)이라 바뀔 수 있어요. ' : ''}신청과 최신 안내는 sendev.kr에서 확인해 주세요.</p>`;
       $('.pg-bd', page).scrollTop = 0;
       page.classList.add('on');
       lastCard = card;

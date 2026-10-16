@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>교사 개발자의 날 2026</title>
+<meta name="description" content="누구나 == 개발자. 매달 마지막 화요일 저녁, 교사 개발자의 날.">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="../shared/core.css">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<script src="../shared/core.js"></script>
+<style>
+/* 시안 Z · 책 표지 스타일: 모눈 + 외곽선 타이포, 세로 큰 제목, 타원 일러스트 3개, 아래 칸 나눈 검정 띠 */
+:root{--yel:#FFE600;--grid:#F1FFC2;--gl:rgba(150,205,0,.55);--off:#F6F6F1}
+#poster{background:var(--off);color:var(--ink);--intro-bg:var(--ink)}
+.wide body{background:var(--off)}
+.lay{grid-template-columns:calc(var(--p)*228) 1fr calc(var(--p)*170);
+  grid-template-rows:calc(var(--p)*150) calc(var(--p)*270) auto auto 1fr auto auto;
+  grid-template-areas:"box title spark" "mid mid side" "line line line" "band band band" "ovs ovs ovs" "bot bot bot" "foot foot foot";
+  border-left:1.5px solid var(--ink);border-right:1.5px solid var(--ink);margin:0 calc(var(--p)*22)}
+.wide .lay{margin:0 calc(var(--p)*18);grid-template-columns:calc(var(--p)*178) 1fr calc(var(--p)*112) 1.32fr;
+  grid-template-rows:calc(var(--p)*118) 1fr auto auto auto auto;
+  grid-template-areas:"box title spark ovs" "mid mid side ovs" "line line line ovs" "band band band ovs" "bot bot bot bot" "foot foot foot foot"}
+.lay>*{min-width:0}
+.cell{border-bottom:1.5px solid var(--ink);position:relative}
+
+/* 상단 */
+.box{grid-area:box;background:var(--ink);color:#fff;padding:calc(var(--p)*18) calc(var(--p)*20);display:flex;flex-direction:column;justify-content:center;
+  font:800 calc(var(--p)*17)/1.3 var(--sans);letter-spacing:-.03em;text-align:center}
+.box b{color:var(--lime);font-weight:900}
+.wide .box{font-size:calc(var(--p)*14)}
+.title{grid-area:title;display:flex;align-items:center;padding:0 calc(var(--p)*22);font:900 calc(var(--p)*82)/1 var(--sans);letter-spacing:-.07em;border-left:1.5px solid var(--ink)}
+.wide .title{font-size:calc(var(--p)*64);padding:0 calc(var(--p)*16)}
+.spark{grid-area:spark;border-left:1.5px solid var(--ink)}
+.spark svg{position:absolute;inset:0;width:100%;height:100%}
+.tw{transform-box:fill-box;transform-origin:center;animation:twinkle 3s ease-in-out infinite}
+.tw.b{animation-delay:-1.5s}
+@keyframes twinkle{50%{transform:rotate(45deg) scale(.82)}}
+
+/* 모눈 + 외곽선 타이포 */
+.mid{grid-area:mid;display:grid;grid-template-columns:calc(var(--p)*34) 1fr;overflow:hidden}
+.stripe{background:var(--yel);border-right:1.5px solid var(--ink)}
+.gridbox{position:relative;background:var(--grid) linear-gradient(var(--gl) 1px,transparent 1px) 0 0/calc(var(--p)*16) calc(var(--p)*16),
+  linear-gradient(90deg,var(--gl) 1px,transparent 1px) 0 0/calc(var(--p)*16) calc(var(--p)*16);padding:calc(var(--p)*18) calc(var(--p)*20)}
+.gridbox::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(150,205,0,.25) 2px,transparent 2px) 0 0/calc(var(--p)*64) calc(var(--p)*64),linear-gradient(90deg,rgba(150,205,0,.25) 2px,transparent 2px) 0 0/calc(var(--p)*64) calc(var(--p)*64)}
+.outline{position:relative;font:800 calc(var(--p)*66)/1.02 var(--mono);letter-spacing:-.03em;color:#fff;-webkit-text-stroke:calc(var(--p)*2.4) var(--ink);paint-order:stroke fill;margin:0}
+.wide .outline{font-size:calc(var(--p)*50)}
+.by{position:absolute;right:calc(var(--p)*18);top:calc(var(--p)*16);font:800 calc(var(--p)*12.5)/1.35 var(--sans);text-align:right}
+.vol{position:absolute;right:calc(var(--p)*18);bottom:calc(var(--p)*14);font:800 calc(var(--p)*15)/1 var(--mono);letter-spacing:.04em}
+.side{grid-area:side;border-left:1.5px solid var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;font:900 calc(var(--p)*118)/.98 var(--sans);letter-spacing:-.06em}
+.wide .side{font-size:calc(var(--p)*80)}
+
+/* 마름모 줄 · 검정 띠 */
+.line{grid-area:line;display:flex;align-items:center;gap:calc(var(--p)*14);padding:calc(var(--p)*10) calc(var(--p)*20);font:700 calc(var(--p)*14)/1.3 var(--sans)}
+.line .dm{display:flex;gap:calc(var(--p)*4);flex:none}
+.line .dm i{width:calc(var(--p)*11);height:calc(var(--p)*11);border:1.5px solid var(--ink);transform:rotate(45deg)}
+.line .dm i:nth-child(odd){background:var(--lime)}
+.wide .line{font-size:calc(var(--p)*12)}
+.band{grid-area:band;background:var(--ink);color:#fff;padding:calc(var(--p)*20) calc(var(--p)*22);text-align:center;font:900 calc(var(--p)*25)/1.3 var(--sans);letter-spacing:-.04em}
+.band em{font-style:normal;color:var(--lime)}
+.band u{text-decoration:none;color:var(--yel)}
+.wide .band{font-size:calc(var(--p)*19);padding:calc(var(--p)*15) calc(var(--p)*14)}
+
+/* 타원 일러스트 */
+.ovs{grid-area:ovs;display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--p)*16);padding:calc(var(--p)*20) calc(var(--p)*22) calc(var(--p)*18);align-items:start}
+.wide .ovs{border-left:1.5px solid var(--ink);gap:calc(var(--p)*14);padding:calc(var(--p)*18) calc(var(--p)*20);align-content:center;align-items:center}
+.ov{border:0;background:none;padding:0;cursor:pointer;color:var(--ink);font-family:var(--sans);display:flex;flex-direction:column;align-items:center;text-align:center}
+.ov:focus-visible{outline:calc(var(--p)*3) solid var(--coral);outline-offset:calc(var(--p)*4)}
+.ov .art{position:relative;width:100%;transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.ov:hover .art{transform:rotate(-4deg) scale(1.04)}
+.ov svg{display:block;width:100%;height:auto;overflow:visible}
+.ov .tap{position:absolute;right:4%;top:6%;font:800 calc(var(--p)*10)/1 var(--mono);background:var(--ink);color:#fff;padding:calc(var(--p)*4) calc(var(--p)*7);border-radius:99px;animation:tapblink 1.4s ease-in-out infinite}
+@keyframes tapblink{50%{opacity:.35}}
+.static .ov .tap{display:none}
+.ov .nx{position:absolute;left:0;top:2%;background:var(--coral);color:#fff;font:800 calc(var(--p)*11)/1 var(--mono);padding:calc(var(--p)*5) calc(var(--p)*8);transform:rotate(-8deg)}
+.ov .no{margin-top:calc(var(--p)*10);font:800 calc(var(--p)*12)/1 var(--mono);letter-spacing:.06em}
+.ov .d{margin-top:calc(var(--p)*5);font:900 calc(var(--p)*29)/1 var(--sans);letter-spacing:-.05em;white-space:nowrap}
+.ov .d small{font-size:calc(var(--p)*15);letter-spacing:-.02em;margin-left:calc(var(--p)*2)}
+.ov .nm{margin-top:calc(var(--p)*6);font:800 calc(var(--p)*14.5)/1.3 var(--sans);letter-spacing:-.03em}
+.ov .wh{margin-top:calc(var(--p)*8);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:calc(var(--p)*5) calc(var(--p)*7)}
+.ov .pb{font:900 calc(var(--p)*12.5)/1 var(--sans);padding:calc(var(--p)*5) calc(var(--p)*9);border-radius:99px;white-space:nowrap}
+.ov .pb.on{background:var(--ink);color:#fff}
+.ov .pb.off{background:var(--coral);color:#fff}
+.ov .tm{font:800 calc(var(--p)*13)/1 var(--mono)}
+.wide .ov .d{font-size:calc(var(--p)*25)}
+.wide .ov .nm{font-size:calc(var(--p)*13)}
+
+/* 아래 검정 띠: 칸 나눈 표 + 누구나 환영 */
+.bot{grid-area:bot;position:relative;background:var(--ink);color:#fff;padding:calc(var(--p)*6) 0 calc(var(--p)*16);overflow:hidden}
+.tbl{display:grid;grid-template-columns:repeat(3,1fr)}
+.tbl span{text-align:center;padding:calc(var(--p)*13) 0;font:800 calc(var(--p)*17)/1.2 var(--sans);color:var(--lime);border-bottom:1.5px solid rgba(204,255,0,.45)}
+.tbl span+span{border-left:1.5px solid rgba(204,255,0,.45)}
+.tbl span:nth-child(4){border-left:0}
+.tbl span:nth-child(n+4){color:#fff;font-size:calc(var(--p)*15)}
+.welcome{display:flex;align-items:center;justify-content:center;gap:calc(var(--p)*22);margin-top:calc(var(--p)*16)}
+.welcome strong{font:900 calc(var(--p)*44)/1 var(--sans);letter-spacing:-.06em;color:var(--lime)}
+.welcome a{display:block;width:calc(var(--p)*78);height:calc(var(--p)*78);padding:calc(var(--p)*5);background:#fff;border-radius:calc(var(--p)*8)}
+.welcome img{display:block;width:100%;height:100%}
+.bot .sp{position:absolute;width:calc(var(--p)*40)}
+.wide .bot{display:grid;grid-template-columns:1.5fr 1fr;align-items:center;padding:calc(var(--p)*4) 0 calc(var(--p)*4)}
+.wide .tbl span{padding:calc(var(--p)*10) 0;font-size:calc(var(--p)*15)}
+.wide .tbl span:nth-child(n+4){font-size:calc(var(--p)*13);border-bottom:0}
+.wide .welcome{margin:0}
+.wide .welcome strong{font-size:calc(var(--p)*40)}
+.wide .welcome a{width:calc(var(--p)*70);height:calc(var(--p)*70)}
+.foot{grid-area:foot;display:flex;justify-content:space-between;padding:calc(var(--p)*12) calc(var(--p)*16) calc(var(--p)*14);font:600 calc(var(--p)*11)/1.3 var(--sans)}
+.foot b{font-weight:850}
+.foot .pending{margin-left:calc(var(--p)*4)}
+
+/* 다듬기 */
+.wide .title br{display:none}
+.outline{font-family:var(--sans);font-weight:900;letter-spacing:-.04em;line-height:1}
+html:not(.wide) .outline{font-size:calc(var(--p)*70)}
+.wide .outline{font-size:calc(var(--p)*66)}
+html:not(.wide) .title{font-size:calc(var(--p)*66);line-height:1;padding:0 calc(var(--p)*18)}
+html:not(.wide) .lay{grid-template-rows:calc(var(--p)*150) calc(var(--p)*240) auto auto 1fr auto auto}
+html:not(.wide) .side{font-size:calc(var(--p)*104)}
+html:not(.wide) .ov .art{width:82%}
+html:not(.wide) .ovs{padding-top:calc(var(--p)*14);padding-bottom:calc(var(--p)*12)}
+html:not(.wide) .band{padding:calc(var(--p)*15) calc(var(--p)*20);font-size:calc(var(--p)*23)}
+html:not(.wide) .tbl span{padding:calc(var(--p)*10) 0}
+html:not(.wide) .welcome{margin-top:calc(var(--p)*10)}
+html:not(.wide) .welcome strong{font-size:calc(var(--p)*38)}
+html:not(.wide) .welcome a{width:calc(var(--p)*64);height:calc(var(--p)*64)}
+</style>
+</head>
+<body>
+<div class="stage">
+<article id="poster" aria-label="교사 개발자의 날 2026 포스터">
+  <div class="lay">
+    <div class="cell box">교실을<br>바꾸는<br>2026<br><b>교사 개발자 모임</b></div>
+    <h1 class="cell title" style="margin:0">교사<br class="tb"> 개발자</h1>
+    <div class="cell spark" aria-hidden="true"></div>
+    <div class="cell mid">
+      <div class="stripe"></div>
+      <div class="gridbox">
+        <p class="outline">TEACHER<br>DEV DAY<br>2026</p>
+        <div class="by">서울특별시교육청<br>주최</div>
+        <div class="vol">SEASON 1</div>
+      </div>
+    </div>
+    <div class="cell side" aria-label="의 날"><span>의</span><span>날</span></div>
+    <div class="cell line"><span class="dm" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>교실의 문제를 코드로 바꾸는 선생님들의 모임</div>
+    <div class="band"><em>누구나 == 개발자</em>, <u>매달 마지막 화요일</u> 저녁에 모여요</div>
+    <div class="ovs"></div>
+    <div class="bot">
+      <div class="tbl"><span>입문형</span><span>성장형</span><span>도전형</span><span>코딩 몰라도 OK</span><span>듣기만 해도 OK</span><span>질문은 sendev.kr</span></div>
+      <div class="welcome"><strong>누구나 환영!</strong><a target="_blank" rel="noopener" class="qr"><img src="../shared/qr.svg" alt="sendev.kr QR 코드"></a></div>
+    </div>
+    <div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span class="apply"></span></div>
+  </div>
+</article>
+</div>
+<div class="ctrl"><button type="button" id="replay">↻ 처음부터</button></div>
+<script>
+const { fi, F } = ENV, S = POSTER.sessions;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const poster = $('#poster');
+$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.qr').href = POSTER.cta.url;
+$('.apply').innerHTML = '신청과 자료는 sendev.kr' + (F.apply ? '' : ENV.pendTag);
+
+const ink = '#0E1311', LIME = '#CCFF00', YEL = '#FFE600';
+const star = (cx, cy, r, fill, cls = '') => `<path class="tw ${cls}" d="M${cx} ${cy - r} Q${cx + r * .18} ${cy - r * .18} ${cx + r} ${cy} Q${cx + r * .18} ${cy + r * .18} ${cx} ${cy + r} Q${cx - r * .18} ${cy + r * .18} ${cx - r} ${cy} Q${cx - r * .18} ${cy - r * .18} ${cx} ${cy - r}Z" fill="${fill}" stroke="${ink}" stroke-width="2.2" stroke-linejoin="round"/>`;
+$('.spark').innerHTML = `<svg viewBox="0 0 170 150" preserveAspectRatio="xMidYMid meet">
+  <circle cx="58" cy="50" r="22" fill="${YEL}" stroke="${ink}" stroke-width="2.2"/><circle cx="112" cy="102" r="22" fill="${YEL}" stroke="${ink}" stroke-width="2.2"/>
+  ${star(112, 48, 28, LIME)}${star(56, 104, 28, LIME, 'b')}</svg>`;
+
+// 타원 일러스트
+const T = (x, y, s, txt, w = 800) => `<text x="${x}" y="${y}" font-family="'Pretendard Variable',Pretendard,sans-serif" font-size="${s}" font-weight="${w}" fill="${ink}" text-anchor="middle">${txt}</text>`;
+const oval = (fill, art, label) => `<svg viewBox="0 0 160 230"><ellipse cx="80" cy="115" rx="76" ry="111" fill="${fill}" stroke="${ink}" stroke-width="3"/>${art}${T(80, 196, 15, label[0])}${T(80, 214, 15, label[1])}</svg>`;
+const N = (x, y, r = 11) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" stroke="${ink}" stroke-width="3"/>`;
+const ART = [
+  // 1회: 서로 이어지는 경험 (노드 연결)
+  `<g stroke="${ink}" stroke-width="3"><line x1="50" y1="62" x2="104" y2="48"/><line x1="50" y1="62" x2="66" y2="116"/><line x1="104" y1="48" x2="116" y2="104"/><line x1="66" y1="116" x2="116" y2="104"/><line x1="66" y1="116" x2="92" y2="150"/><line x1="116" y1="104" x2="92" y2="150"/></g>
+   ${N(50, 62)}${N(104, 48, 9)}${N(66, 116, 13)}${N(116, 104, 10)}${N(92, 150, 9)}${T(66, 121, 11, '&gt;_')}`,
+  // 2회: 버그 + 실패 폭발
+  `<path d="M80 34 L90 58 L114 50 L104 74 L128 84 L104 94 L114 118 L90 110 L80 134 L70 110 L46 118 L56 94 L32 84 L56 74 L46 50 L70 58Z" fill="#fff" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+   <g stroke="${ink}" stroke-width="3" stroke-linecap="round"><line x1="66" y1="80" x2="54" y2="72"/><line x1="66" y1="90" x2="52" y2="92"/><line x1="94" y1="80" x2="106" y2="72"/><line x1="94" y1="90" x2="108" y2="92"/><line x1="74" y1="70" x2="68" y2="60"/><line x1="86" y1="70" x2="92" y2="60"/></g>
+   <ellipse cx="80" cy="88" rx="15" ry="19" fill="${ink}"/><line x1="80" y1="72" x2="80" y2="106" stroke="#fff" stroke-width="2"/>
+   ${T(80, 160, 15, 'ERR! → fix', 900)}`,
+  // 3회: 구명튜브 SOS
+  `<circle cx="80" cy="96" r="50" fill="#fff" stroke="${ink}" stroke-width="3"/>
+   <circle cx="80" cy="96" r="38" fill="none" stroke="#FF5C39" stroke-width="22" stroke-dasharray="29.8 29.8" transform="rotate(-22 80 96)"/>
+   <circle cx="80" cy="96" r="25" fill="${LIME}" stroke="${ink}" stroke-width="3"/>${T(80, 102, 15, 'SOS', 900)}
+   ${star(132, 52, 12, '#fff')}${star(30, 146, 9, '#fff', 'b')}`,
+];
+const FILL = [LIME, YEL, LIME];
+const LABEL = [['경험', '나눔'], ['실패', '× 외국인'], ['교사', '구출 작전']];
+const NAMES = ['서로의 경험을 잇는 날', '실패의 날 × 외국인 개발자', '구해줘요, 교사 개발자!'];
+const PL = [['on', '◉ 온라인'], ['off', '⚑ 현장 집합'], ['on', '◉ 온라인']];
+$('.ovs').innerHTML = S.map((s, i) => `<button class="ov" type="button" data-i="${i}" aria-label="${s.mo}월 ${s.dd}일 ${NAMES[i]} 자세히 보기">
+  <span class="art">${oval(FILL[i], ART[i], LABEL[i])}${i === fi ? '<span class="nx">NEXT!</span>' : ''}<span class="tap" aria-hidden="true">TAP</span></span>
+  <span class="no">#0${i + 1}</span>
+  <span class="d">${s.mo}월 ${s.dd}일<small>(${s.dow})</small></span>
+  <span class="nm">${NAMES[i]}</span>
+  <span class="wh"><span class="pb ${PL[i][0]}">${PL[i][1]}</span><span class="tm">${s.time}</span></span></button>`).join('');
+
+// 아래 띠 반짝이
+const SP = [[3, 20], [92, 14], [70, 72]];
+$('.bot').insertAdjacentHTML('beforeend', SP.map(([x, y], i) => `<svg class="sp" viewBox="0 0 40 40" style="left:${x}%;top:${y}%" aria-hidden="true">${star(20, 20, 16, '#fff', i % 2 ? 'b' : '')}</svg>`).join(''));
+
+const FACE = ['happy', 'worry', 'happy'];
+CORE.init({
+  intro: 'story',
+  cards: '.ov',
+  face: i => KIT.flat({ face: FACE[i], line: '#fff' }),
+  dots: { color: '#0E1311', alpha: 0, hot: .25 },
+  drip: ['#0E1311', '#9BCB00', '#0E1311'],
+  rainBg: '#0E1311',
+  reveal() {
+    $$('.cell,.band').forEach((c, i) => c.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: i * 55, easing: 'cubic-bezier(.2,.9,.3,1.1)', fill: 'backwards' }));
+    KIT.pop($$('.ov .art'), { delay: 350, stagger: 110, from: 'scale(.4) rotate(-20deg)' });
+    KIT.pop($$('.ov .d, .ov .wh'), { delay: 550, stagger: 40, from: 'translateY(10px)' });
+    $('.bot').animate([{ transform: 'translateY(40px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 420, delay: 500, easing: 'cubic-bezier(.2,.9,.3,1.1)', fill: 'backwards' });
+  },
+});
+</script>
+</body>
+</html>

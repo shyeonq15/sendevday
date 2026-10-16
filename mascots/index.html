@@ -1,0 +1,62 @@
+<title>데브쌤 마스코트 비교</title>
+<link rel="stylesheet" href="shared/fonts.css">
+<style>
+/* Layout: 위 A(잘라 낸 3D 컷) · 아래 C(2D 플랫), 각 줄에 남·여 4포즈 + 포스터 바탕색 미리보기 */
+:root{--ink:#0E1311;--lime:#CCFF00;--lilac:#CFC4FF;--paper:#F3F3EE;--fg:#F3F3EE;--muted:#9AA39D;--line:rgba(243,243,238,.14);
+  --sans:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--ink);color:var(--fg);font-family:var(--sans);margin:0}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:20px;padding-block:28px 56px}
+h1{margin:0;font-size:clamp(24px,4vw,34px);font-weight:850;letter-spacing:-.04em}
+h1 mark{background:var(--lime);color:var(--ink);padding:0 6px}
+.lead{margin:10px 0 0;color:var(--muted);max-width:62ch;line-height:1.6}
+section{margin-top:30px;border:1px solid var(--line);border-radius:18px;padding:18px}
+.hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+.hd b{font:800 13px/1 var(--sans);background:var(--lime);color:var(--ink);padding:6px 10px;border-radius:99px}
+.hd h2{margin:0;font-size:20px;font-weight:850;letter-spacing:-.03em}
+.hd p{margin:0;color:var(--muted);font-size:14px}
+.row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}
+.cell{border-radius:14px;padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.cell img,.cell svg{height:190px;width:auto;max-width:100%}
+.cell span{font-size:13px;font-weight:700}
+.on-dark{background:#1A211D}
+.on-lime{background:var(--lime);color:var(--ink)}
+.duo{margin-top:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.duo .cell img{height:230px}
+.who{margin-top:16px;font-size:13px;font-weight:800;color:var(--lilac)}
+.notes{margin:12px 0 0;padding-left:18px;color:var(--muted);font-size:14px;line-height:1.6}
+@media (max-width:640px){.row{grid-template-columns:repeat(2,minmax(0,1fr))}.duo{grid-template-columns:1fr}}
+</style>
+
+<div class="wrap">
+  <h1>데브쌤 마스코트 <mark>A vs C</mark></h1>
+  <p class="lead">A는 보내 주신 3D 이미지에서 잘라 배경을 지운 컷, C는 포스터의 2D 프롬이와 같은 스타일로 새로 그린 그림이에요. 포스터 바탕색(검정·라임) 위에서 어떻게 보이는지 함께 확인해 보세요.</p>
+
+  <section>
+    <div class="hd"><b>A</b><h2>3D 원본에서 잘라 낸 컷</h2><p>원본 느낌 그대로 · 캡처 화질이라 크게 키우면 흐려요</p></div>
+    <div class="duo">
+      <div class="cell on-dark"><img src="assets/mascot/duo.png" alt="데브쌤 두 명과 프롬이"><span>함께 (검정 위)</span></div>
+      <div class="cell on-lime"><img src="assets/mascot/duo.png" alt="데브쌤 두 명과 프롬이"><span>함께 (라임 위)</span></div>
+    </div>
+    <div class="who">남성형 데브쌤</div><div class="row" id="am"></div>
+    <div class="who">여성형 데브쌤</div><div class="row" id="af"></div>
+    <ul class="notes"><li>둘이 함께 있는 컷은 둘레에 연한 테두리가 남아서, 검정 위에서는 스티커처럼 보여요.</li><li>3D 프롬이 단독 컷은 몸이 흰색이라 배경과 구분이 안 돼 자동으로 떼어 내지 못했어요.</li></ul>
+  </section>
+
+  <section>
+    <div class="hd"><b>C</b><h2>2D 플랫으로 새로 그린 데브쌤</h2><p>포스터 스타일과 통일 · 아무리 키워도 선명해요</p></div>
+    <div class="who">남성형 데브쌤</div><div class="row" id="cm"></div>
+    <div class="who">여성형 데브쌤</div><div class="row" id="cf"></div>
+    <ul class="notes"><li>색은 원본과 같게 맞췄어요(짙은 재킷·청록 바지 / 청록 재킷·짙은 바지, 연보라 셔츠, 라임 포인트).</li><li>표정·포즈·머리 모양은 원하시는 대로 더 다듬을 수 있어요.</li></ul>
+  </section>
+</div>
+
+<script src="shared/kit.js"></script>
+<script>
+const POSES = [['look', '살펴보고'], ['think', '고민하고'], ['design', '설계하고'], ['make', '만들어요']];
+const bg = i => i % 2 ? 'on-lime' : 'on-dark';
+for (const w of ['m', 'f']) {
+  document.getElementById('a' + w).innerHTML = POSES.map(([k, t], i) => `<div class="cell ${bg(i)}"><img src="assets/mascot/${w}-${k}.png" alt="${t}"><span>${t}</span></div>`).join('');
+  document.getElementById('c' + w).innerHTML = POSES.map(([k, t], i) => `<div class="cell ${bg(i)}">${KIT.devssam({ who: w, pose: k })}<span>${t}</span></div>`).join('');
+}
+</script>

@@ -8,7 +8,9 @@ import { chromium } from 'playwright-core';
 import { mkdir } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const DRAFTS = Object.fromEntries('abcdefghijklmnopqrstuvwxy'.split('').map(k => [k, k === 'a' ? 'poster' : `poster-${k}`]));
+const DRAFTS = Object.fromEntries('abcdefghijklmnopqrstuvwxyz'.split('').map(k => [k, k === 'a' ? 'poster' : `poster-${k}`]));
+// 두 글자 키 시안
+DRAFTS.aa = 'poster-aa';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const [which, focus] = process.argv.slice(2);
 const drafts = which ? [which] : Object.keys(DRAFTS);
@@ -18,7 +20,7 @@ const browser = await chromium.launch({ channel: 'msedge' });
 // 가로형(16:9) 시안은 1600×900 @2x = 3200×1800px
 const WIDE = new Set(['k']);
 // 한 파일로 세로·가로를 모두 지원하는 시안: 세로(out/n-01.png)와 가로(out/n-wide-01.png)를 함께 출력
-const DUAL = new Set(['n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y']);
+const DUAL = new Set(['n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'aa']);
 const A4 = { viewport: { width: 794, height: 1123 }, deviceScaleFactor: 3.125 };
 const HD = { viewport: { width: 1600, height: 900 }, deviceScaleFactor: 2 };
 const pages = { a4: await browser.newPage(A4), hd: await browser.newPage(HD) };
