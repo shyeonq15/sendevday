@@ -207,7 +207,7 @@ html:not(.wide) .eggpop{width:min(92%,calc(var(--p)*560));padding-left:calc(var(
   background:var(--ink);color:#fff;border:calc(var(--p)*2) solid var(--sky);border-radius:99px;padding:calc(var(--p)*6) calc(var(--p)*12);font-size:calc(var(--p)*13)}
 .qrcap b{color:var(--lime);opacity:1;font-size:calc(var(--p)*11)}
 .wide .qrcap{font-size:calc(var(--p)*11.5)}
-.qrcap{left:auto;right:calc(var(--p)*8);transform:translateY(50%)}
+.qrcap{left:50%;right:auto;transform:translate(calc(-50% + var(--qx, 0px)),50%)}
 .qr{padding-bottom:calc(var(--p)*20)}
 </style>
 </head>
@@ -242,6 +242,15 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const poster = $('#poster');
 $('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
 $('.qr').href = POSTER.insta.url;
+// 인스타 라벨은 QR 가운데. 글씨가 커져 포스터 밖으로 나가면 그만큼만 안쪽으로
+const qrcap = $('.qrcap');
+function fitCap() {
+  qrcap.style.setProperty('--qx', '0px');
+  const pr = poster.getBoundingClientRect(), c = qrcap.getBoundingClientRect(), m = 6;
+  const over = c.right - (pr.right - m), under = (pr.left + m) - c.left;
+  qrcap.style.setProperty('--qx', over > 0 ? -over + 'px' : under > 0 ? under + 'px' : '0px');
+}
+addEventListener('resize', fitCap); document.fonts.ready.then(fitCap); fitCap();
 $('.apply').innerHTML = '신청·자료는 sendev.kr · 소식과 후기는 인스타그램 @sendevkorea' + (F.apply ? '' : ENV.pendTag);
 
 // 2D 프롬이
