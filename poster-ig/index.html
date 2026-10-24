@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>교사 개발자의 날 인스타 9분할</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&display=swap">
+<script src="../shared/data.js"></script>
+<script src="../shared/kit.js"></script>
+<style>
+/* 인스타그램 프로필 9분할(3×3, 칸마다 3:4) — 1080×1440 CSS px로 그리고 3배로 찍으면 3240×4320, 칸 하나 1080×1440
+   칸 경계: 가로 360·720, 세로 480·960. 글자는 경계에 걸리지 않게 칸 안에만 둡니다. ?grid 로 경계선 보기 */
+:root{--ink:#0E1311;--lime:#CCFF00;--lilac:#CFC4FF;--sky:#4FC3FF;--coral:#FF5C39;
+  --sans:"Pretendard Variable",Pretendard,"Malgun Gothic",sans-serif;--mono:"JetBrains Mono",Consolas,monospace;--pixel:Galmuri11,var(--mono)}
+*{box-sizing:border-box}
+html,body{margin:0;background:#1A211D}
+body{min-height:100vh;display:grid;place-items:center;word-break:keep-all;-webkit-font-smoothing:antialiased}
+.stage{width:1080px;height:1440px;transform-origin:center;flex:none}
+.static body{display:block;min-height:0}
+#ig{position:relative;width:1080px;height:1440px;overflow:hidden;background:var(--ink);color:#fff;font-family:var(--sans);
+  background-image:radial-gradient(rgba(204,255,0,.07) 1.4px,transparent 1.6px);background-size:22px 22px}
+#ig > *{position:absolute}
+
+/* 1행 */
+.top{left:0;right:0;top:0;height:56px;background:var(--ink);display:flex;justify-content:space-between;align-items:center;padding:0 30px;font:800 17px/1 var(--mono);letter-spacing:.08em}
+.top b{color:var(--lime)}
+.top .c{color:var(--lilac)}
+.blk{display:flex;align-items:center;color:var(--ink);font-weight:900;letter-spacing:-.06em;line-height:1;overflow:hidden}
+.b1{left:0;top:56px;width:360px;height:214px;background:var(--lilac);font-size:150px;padding-left:30px}
+.b2{left:360px;top:56px;width:720px;height:214px;background:var(--lime);font-size:150px}
+.b2 .g1{position:absolute;left:34px}
+.b2 .g2{position:absolute;left:392px}
+.b2 small{position:absolute;right:30px;bottom:20px;font:800 16px/1.35 var(--mono);letter-spacing:.06em;text-align:right}
+.b3{left:0;top:270px;width:513px;height:186px;background:#fff;font-size:116px;padding-left:34px;letter-spacing:.06em;align-items:flex-start;padding-top:20px}
+.yr{left:513px;top:270px;width:207px;height:186px;display:grid;grid-template-columns:1fr 1fr}
+.yr i{display:grid;place-items:center;font:500 82px/1 var(--sans);font-style:normal;background:var(--ink);color:#fff}
+.yr i:nth-child(1),.yr i:nth-child(4){background:#fff;color:var(--ink)}
+.qr{left:720px;top:270px;width:360px;height:186px;background:var(--sky);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px}
+.qr span{background:#fff;padding:6px;width:122px;height:122px}
+.qr img{display:block;width:100%;height:100%}
+.qr em{font:800 12.5px/1.3 var(--mono);font-style:normal;color:var(--ink);text-align:center;letter-spacing:.06em}
+.label{left:30px;top:410px;transform:rotate(-3deg);background:var(--sky);color:var(--ink);font:900 31px/1 var(--mono);padding:12px 22px;letter-spacing:-.02em;box-shadow:5px 5px 0 var(--ink)}
+
+/* 2행: 기호 · 프롬이 · 소개 */
+.sym svg,.egg svg{display:block;width:100%;height:auto}
+.say{left:410px;top:598px;transform:rotate(4deg);background:var(--lime);color:var(--ink);font:800 23px/1 var(--mono);padding:14px 18px;border-radius:4px;box-shadow:6px 6px 0 var(--lilac);white-space:nowrap}
+.prom{left:428px;top:678px;width:236px;transform:rotate(-6deg)}
+.lede{left:30px;top:842px;font:400 18px/1.62 var(--pixel);color:rgba(255,255,255,.88);-webkit-font-smoothing:none}
+.lede b{font-weight:400;color:var(--lime)}
+.lede span{display:block;white-space:nowrap}
+.lede .in{padding-left:1.2em}
+.fix{left:858px;top:812px;font:400 15px/1.6 var(--pixel);color:#8A938D;white-space:nowrap}
+
+/* 3행: 회차 카드 */
+.card{top:990px;width:320px;height:388px;color:var(--ink);padding:24px 26px 26px;display:flex;flex-direction:column}
+.card.c0{left:20px;background:var(--lime);transform:rotate(-1.4deg)}
+.card.c1{left:380px;background:var(--lilac);transform:rotate(1.1deg)}
+.card.c2{left:740px;background:#fff;transform:rotate(-.9deg)}
+.card .hd{display:flex;justify-content:space-between;align-items:center}
+.card .no{font:800 21px/1 var(--mono);background:var(--ink);color:#fff;padding:8px 10px}
+.card .k{font:800 27px/1 var(--mono);white-space:nowrap}
+.card .d{margin-top:16px;font-weight:900;font-size:80px;line-height:.98;letter-spacing:-.055em}
+.card .d small{font-size:27px;letter-spacing:-.02em;margin-left:4px}
+.card hr{margin:16px 0 14px;border:0;border-top:2.5px solid var(--ink)}
+.card .t{font:850 22px/1.28 var(--sans);letter-spacing:-.035em}
+.card .wh{margin-top:auto;display:flex;align-items:center;gap:12px}
+.card .pb{font:900 16px/1 var(--sans);padding:8px 13px;border-radius:99px;white-space:nowrap}
+.card .pb.on{background:var(--ink);color:#fff}
+.card .pb.off{background:var(--coral);color:#fff}
+.card .tm{font:800 20px/1 var(--mono)}
+.nx{left:262px;top:968px;transform:rotate(4deg);background:var(--coral);color:#fff;font:800 19px/1 var(--mono);padding:9px 12px;z-index:2}
+.ft{top:1400px;font:600 14px/1 var(--sans);color:rgba(255,255,255,.72);white-space:nowrap}
+.ft b{color:#fff;font-weight:800}
+
+/* 칸 경계선 미리보기 (?grid) */
+.seam{display:none;background:rgba(255,92,57,.9);z-index:9}
+.grid .seam{display:block}
+</style>
+</head>
+<body>
+<div class="stage">
+<div id="ig" aria-label="교사 개발자의 날 2026 인스타그램 9분할 포스터">
+  <div class="top"><span><b>&gt;_</b> TEACHER_DEV_DAY.md</span><span class="c">// SEOUL 2026</span></div>
+  <div class="blk b1">교사</div>
+  <div class="blk b2"><span class="g1">개발</span><span class="g2">자</span><small>DEVELOPER<br>DAY_</small></div>
+  <div class="blk b3">의 날</div>
+  <div class="yr" aria-label="2026"><i>2</i><i>0</i><i>2</i><i>6</i></div>
+  <div class="qr"><span><img src="../shared/qr.svg" alt="인스타그램 @sendevkorea QR 코드"></span><em>INSTAGRAM<br>@sendevkorea</em></div>
+  <div class="label">누구나 == 개발자</div>
+
+  <span class="say">hello, teacher!</span>
+  <div class="prom"></div>
+  <p class="lede" style="margin:0"><span># 교실의 문제를</span><span class="in"><b>코드로</b> 바꾸는 선생님들</span><span>## <b>매달 한 번,</b></span><span class="in"><b>화요일 저녁</b> 모입니다</span></p>
+  <div class="egg"></div>
+  <p class="fix" style="margin:0">// FIXME:<br>알이 가만히<br>있지를 않음.<br>잡아 주세요</p>
+
+  <div class="ft" style="left:30px">주최 <b>서울특별시교육청</b></div>
+  <div class="ft" style="left:390px">기획 <b>교사개발자 문화조성분과</b></div>
+  <div class="ft" style="left:750px">신청 <b>sendev.kr</b> · 소식 <b>@sendevkorea</b></div>
+</div>
+</div>
+<script>
+const ig = document.getElementById('ig'), S = POSTER.sessions;
+const add = html => ig.insertAdjacentHTML('beforeend', html);
+
+// 픽셀 코딩 기호 (시안 X와 같은 모양) — [기호, x, y, 너비]
+const G = {
+  hash: ['.B..B.', 'BBBBBB', '.B..B.', '.B..B.', 'BBBBBB', '.B..B.'],
+  neq: ['W..LLLL', 'W......', 'W..LLLL', 'W......', '.......', 'W......'],
+  semi: ['.VV', '.VV', '...', '.VV', '.V.', 'V..'],
+  brace: ['..VV...VV..', '.V.......V.', '.V.......V.', 'V.........V', '.V.......V.', '.V.......V.', '..VV...VV..'],
+  quote: ['WW.WW', 'WW.WW', '.W..W', 'W..W.'],
+  prompt: ['L.....', '.L....', '..L...', '.L....', 'L..LLL'],
+  star: ['..C..', 'C.C.C', '.CCC.', 'C.C.C', '..C..'],
+  tag: ['..L.....L..L..', '.L.....L....L.', 'L.....L......L', '.L...L......L.', '..L.L......L..'],
+  bracket: ['VV..VV', 'V....V', 'V....V', 'V....V', 'VV..VV'],
+};
+const PLACE = [
+  // 4번 칸 (왼쪽 가운데)
+  ['neq', 36, 512, 118], ['star', 232, 516, 58], ['tag', 108, 640, 184], ['prompt', 44, 716, 110], ['semi', 258, 720, 28],
+  // 5번 칸 (가운데)
+  ['hash', 492, 498, 108],
+  // 6번 칸 (오른쪽 가운데)
+  ['quote', 776, 518, 76], ['star', 994, 552, 52], ['brace', 776, 640, 192], ['bracket', 960, 786, 50],
+];
+PLACE.forEach(([g, x, y, w]) => add(`<span class="sym" style="left:${x}px;top:${y}px;width:${w}px">${KIT.pix(G[g], { colors: { B: '#4FC3FF' } })}</span>`));
+document.querySelector('.prom').innerHTML = KIT.flat({ face: 'happy', line: '#fff' });
+const egg = document.querySelector('.egg');
+egg.style.cssText = 'left:780px;top:800px;width:72px';
+egg.innerHTML = KIT.pix(['...KKKK...', '..KWWWWK..', '.KWWLWWWK.', '.KWLLLWWK.', 'KWWWLWWWWK', 'KWWWWWVWWK', 'KWVWWWVVWK', 'KWVVWWWWWK', '.KWWWWWWK.', '..KKKKKK..'],
+  { colors: { K: '#0E1311', W: '#FFFFFF', L: '#CCFF00', V: '#CFC4FF' } });
+
+// 회차 카드 — 날짜·시간은 shared/data.js
+const TITLE = ['경험을 잇는 날', 'debug 실패의 날<br>× 외국인 개발자 커뮤니티', '구출의 날 ·<br>구해줘요, 교사 개발자!'];
+const PL = [['on', '◉ 온라인'], ['off', '⚑ 현장 집합'], ['on', '◉ 온라인']];
+const KAO = ['{^_^}', '(;_;)', '\\(^o^)/'];
+S.forEach((s, i) => add(`<div class="card c${i}">
+  <div class="hd"><span class="no">#0${i + 1}</span><span class="k">${KAO[i]}</span></div>
+  <div class="d">${s.mo}월<br>${s.dd}일<small>(${s.dow})</small></div>
+  <hr><div class="t">${TITLE[i]}</div>
+  <div class="wh"><span class="pb ${PL[i][0]}">${PL[i][1]}</span><span class="tm">${s.time}</span></div></div>`));
+add('<span class="nx">NEXT!</span>');
+
+// 칸 경계선
+[[360, 0, 2, 1440], [720, 0, 2, 1440], [0, 480, 1080, 2], [0, 960, 1080, 2]].forEach(([x, y, w, h]) => add(`<i class="seam" style="left:${x - (w > 2 ? 0 : 1)}px;top:${y - (h > 2 ? 0 : 1)}px;width:${w}px;height:${h}px"></i>`));
+const q = new URLSearchParams(location.search);
+if (q.has('grid')) ig.classList.add('grid');
+
+// 화면 크기에 맞춰 축소 미리보기 (PNG 출력 시에는 원래 크기)
+const stage = document.querySelector('.stage');
+function fit() {
+  if (ENV.STATIC) return;
+  const k = Math.min(1, (innerWidth - 32) / 1080, (innerHeight - 32) / 1440);
+  stage.style.transform = `scale(${k})`; stage.style.margin = `${(1440 * k - 1440) / 2}px ${(1080 * k - 1080) / 2}px`;
+}
+addEventListener('resize', fit); fit();
+</script>
+</body>
+</html>

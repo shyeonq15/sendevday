@@ -12,6 +12,8 @@ const SHARED = ['base.css', 'core.css', 'fonts.css', 'data.js', 'kit.js', 'core.
 await rm(out, { recursive: true, force: true });
 await mkdir(out + 'shared/fonts', { recursive: true });
 for (const f of SHARED) await copyFile(root + 'shared/' + f, out + 'shared/' + f);
+// 링크 미리보기 썸네일 (npm run og 로 생성)
+await copyFile(root + 'assets/og.png', out + 'og.png');
 
 // 포스터 페이지: ../shared/ → shared/
 const html = (await readFile(root + 'poster-x/index.html', 'utf8')).split('../shared/').join('shared/');
