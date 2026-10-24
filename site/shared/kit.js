@@ -300,16 +300,16 @@ window.KIT = (() => {
   }
 
   // ── 통통 등장: 요소들을 차례로 튀어나오게
-  function pop(els, { delay = 0, stagger = 110, from = 'scale(.3)' } = {}) {
+  function pop(els, { delay = 0, stagger = 110, from = 'scale(.3)', duration = 520 } = {}) {
     if (!ENV.ANIMATE) return;
     [...els].forEach((el, i) => {
       const r = getComputedStyle(el).transform, base = r === 'none' ? '' : r;
       el.animate([{ transform: `${base} ${from}`, opacity: 0 }, { transform: `${base} scale(1.08)`, opacity: 1, offset: .7 }, { transform: base || 'none', opacity: 1 }],
-        { duration: 520, delay: delay + i * stagger, easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'backwards' });
+        { duration, delay: delay + i * stagger, easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'backwards' });
     });
   }
   // 위에서 떨어져 통 튕기기
-  function drop(els, { delay = 0, stagger = 90, height = 420 } = {}) {
+  function drop(els, { delay = 0, stagger = 90, height = 420, duration = 820 } = {}) {
     if (!ENV.ANIMATE) return;
     [...els].forEach((el, i) => {
       const r = getComputedStyle(el).transform, base = r === 'none' ? '' : r;
@@ -318,7 +318,7 @@ window.KIT = (() => {
         { transform: `${base} translateY(0)`, opacity: 1, offset: .55, easing: 'cubic-bezier(0,.4,.5,1)' },
         { transform: `${base} translateY(-24px)`, offset: .75, easing: 'cubic-bezier(.5,0,1,.6)' },
         { transform: base || 'none' }],
-        { duration: 820, delay: delay + i * stagger, fill: 'backwards' });
+        { duration, delay: delay + i * stagger, fill: 'backwards' });
     });
   }
 

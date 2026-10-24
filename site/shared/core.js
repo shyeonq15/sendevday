@@ -248,10 +248,10 @@ window.CORE = (() => {
       const enter = () => {
         if (my !== storyRun) return;
         alive = false;
-        st.animate([{ opacity: 1 }, { opacity: 0, transform: 'scale(1.06)' }], { duration: 450, fill: 'forwards' }).onfinish = () => st.remove();
+        st.animate([{ opacity: 1 }, { opacity: 0, transform: 'scale(1.06)' }], { duration: 220, fill: 'forwards' }).onfinish = () => st.remove();
         const t0 = performance.now();
-        (function f(t) { fade = Math.max(0, 1 - (t - t0) / 900); if (fade > 0) requestAnimationFrame(f); })(t0);
-        setTimeout(reveal, 250);
+        (function f(t) { fade = Math.max(0, 1 - (t - t0) / 380); if (fade > 0) requestAnimationFrame(f); })(t0);
+        setTimeout(reveal, 40);
       };
       $('.enter', st).addEventListener('click', enter);
       $('.skip2', st).addEventListener('click', enter);

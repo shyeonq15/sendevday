@@ -490,14 +490,14 @@ CORE.init({
   burst: ['#CCFF00', '#CFC4FF', '#4FC3FF', '#FF5C39'],
   reveal() {
     symHome();
-    // 제목 블록 → 기호·프롬이 → 테이프 순서로 빠르게 (약 1초)
-    KIT.pop([$('.top')]);
-    $$('.bk,.yr,.qr').forEach((b, i) => b.animate([{ transform: 'translateY(-100%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 380, delay: i * 50, easing: 'cubic-bezier(.2,.9,.3,1.1)', fill: 'backwards' }));
+    // 제목 블록 → 기호·프롬이 → 테이프 순서로 휘리릭 (약 0.6초)
+    KIT.pop([$('.top')], { duration: 300 });
+    $$('.bk,.yr,.qr').forEach((b, i) => b.animate([{ transform: 'translateY(-100%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 280, delay: i * 30, easing: 'cubic-bezier(.2,.9,.3,1.1)', fill: 'backwards' }));
     $$('.sym').forEach((s, i) => s.animate([{ transform: 'scale(0) rotate(-90deg)', opacity: 0 }, { transform: 'scale(1.15)', opacity: 1, offset: .7 }, { transform: 'none', opacity: 1 }],
-      { duration: 340, delay: 120 + i * 25, easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'backwards' }));
-    KIT.drop([$('.prom')], { delay: 150, height: 300 });
-    KIT.pop([$('.label'), $('.say'), $('.lede')], { delay: 350, stagger: 60 });
-    $$('.tape').forEach((t, i) => t.animate([{ transform: `translateX(${i % 2 ? '' : '-'}110%)` }, { transform: getComputedStyle(t).transform }], { duration: 420, delay: 300 + i * 90, easing: 'cubic-bezier(.2,.9,.3,1.05)', fill: 'backwards' }));
+      { duration: 260, delay: 60 + i * 15, easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'backwards' }));
+    KIT.drop([$('.prom')], { delay: 80, height: 300, duration: 560 });
+    KIT.pop([$('.label'), $('.say'), $('.lede')], { delay: 160, stagger: 40, duration: 380 });
+    $$('.tape').forEach((t, i) => t.animate([{ transform: `translateX(${i % 2 ? '' : '-'}110%)` }, { transform: getComputedStyle(t).transform }], { duration: 320, delay: 140 + i * 60, easing: 'cubic-bezier(.2,.9,.3,1.05)', fill: 'backwards' }));
   },
 });
 </script>
