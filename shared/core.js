@@ -83,7 +83,7 @@ window.CORE = (() => {
           <div class="neck"></div><div class="stand"></div><div class="peek"></div>
         </div>` : `<div class="env" role="button" tabindex="0" aria-label="봉투 열기">
           <div class="back"></div>
-          <div class="letter"><small>${L.small || 'INVITATION · 2026'}</small><strong>${L.strong || '교사 개발자의 날에<br>초대합니다'}</strong><span>${L.span || '매달 마지막 화요일 저녁, 교실의 문제를 코드로 바꾸는 선생님들의 모임'}</span></div>
+          <div class="letter"><small>${L.small || 'INVITATION · 2026'}</small><strong>${L.strong || '교사 개발자의 날에<br>초대합니다'}</strong><span>${L.span || '매달 한 번 화요일 저녁, 교실의 문제를 코드로 바꾸는 선생님들의 모임'}</span></div>
           <div class="front"></div>
           <div class="addr"><div><b>TO.</b>선생님</div><div><b>FROM.</b>교사 개발자의 날</div></div>
           <div class="stamp">SEOUL<br>2026</div>
@@ -182,7 +182,7 @@ window.CORE = (() => {
     // 노트북 화면 터미널
     const term = $('.mterm', intro);
     async function typeTerm() {
-      const LINES = [['<b>$</b> ', 'connect teacher-dev-day --2026'], ['<i>✓</i> ', '10월 · 11월 · 12월 마지막 화요일'], ['<i>✓</i> ', '참가 조건: 교실을 바꾸고 싶은 마음']];
+      const LINES = [['<b>$</b> ', 'connect teacher-dev-day --2026'], ['<i>✓</i> ', '11.3 · 11.24 · 12.15 화요일 저녁'], ['<i>✓</i> ', '참가 조건: 교실을 바꾸고 싶은 마음']];
       term.innerHTML = '';
       for (const [pre, t] of LINES) {
         const line = document.createElement('div'), s = document.createElement('span');

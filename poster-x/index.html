@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>교사 개발자의 날 2026</title>
-<meta name="description" content="누구나 == 개발자. 매달 마지막 화요일 저녁, 교사 개발자의 날.">
+<meta name="description" content="누구나 == 개발자. 매달 한 번 화요일 저녁, 교사 개발자의 날.">
 <link rel="stylesheet" href="../shared/fonts.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -213,6 +213,17 @@ html:not(.wide) .eggpop{width:min(92%,calc(var(--p)*560));padding-left:calc(var(
 /* 소개 문구: 코드 줄처럼 한 줄씩 고정 (줄바꿈 금지) */
 .lede{max-width:calc(100% - var(--p)*48)}
 .lede .lc{display:block;white-space:nowrap}
+/* 가로판 테이프 제목: 길면(× 외국인 개발자 커뮤니티) 단어 단위로 줄바꿈해 카오모지와 겹치지 않게 */
+.wide .tape .t b{white-space:normal;word-break:keep-all;text-wrap:balance}
+/* 회차별 D-day 칩: 다음 회차는 검정 채움, 당일은 코랄. 인쇄용 PNG(?static)에서는 날짜가 지나면 틀리므로 숨김 */
+.tape .dd{font-style:normal;font:800 calc(var(--p)*11.5)/1 var(--mono);letter-spacing:.02em;padding:calc(var(--p)*3) calc(var(--p)*7);border:calc(var(--p)*1.5) solid var(--ink);border-radius:99px;white-space:nowrap}
+.tape .dd.next{background:var(--ink);color:var(--lime)}
+.tape .dd.today{background:var(--coral);border-color:var(--coral);color:#fff}
+.wide .tape .wh{flex-wrap:nowrap;column-gap:calc(var(--p)*8)}
+.wide .tape .wh>*{flex:none;white-space:nowrap}
+.wide .tape .tm{font-size:calc(var(--p)*14.5)}
+.wide .tape .dd{font-size:calc(var(--p)*12)}
+.static .tape .dd{display:none}
 
 /* '누구나 == 개발자' 라벨: 세로·가로 모두 포스터 가로 가운데 */
 .label,.wide .label,html:not(.wide) .label{left:50%;right:auto;transform:translateX(-50%) rotate(-5deg);transform-origin:50% 50%}
@@ -228,7 +239,7 @@ html:not(.wide) .label{bottom:calc(var(--p)*-46)}
       <div class="syms" aria-hidden="true"></div>
       <span class="say">hello, teacher!</span>
       <div class="prom" role="img" aria-label="2D 프롬이"><div class="bw"></div></div>
-      <p class="lede"><span class="lc"># 교실의 문제를 <b>코드로</b> 바꾸는 선생님들</span><span class="lc">## <b>매달 마지막 화요일 저녁</b> 모입니다</span><span class="lc eghint">// FIXME: 알이 가만히 있지를 않음. 잡아 주세요</span></p>
+      <p class="lede"><span class="lc"># 교실의 문제를 <b>코드로</b> 바꾸는 선생님들</span><span class="lc">## <b>매달 한 번, 화요일 저녁</b> 모입니다</span><span class="lc eghint">// FIXME: 알이 가만히 있지를 않음. 잡아 주세요</span></p>
       <button class="egg" type="button" aria-label="숨은 이스터에그"></button>
     </div>
     <div class="tapes"></div>
@@ -330,7 +341,7 @@ if (!STATIC) {
 }
 
 // 리본 테이프
-const NAMES = ['경험을 잇는 날', 'debug 실패의 날 × 외국인 개발자', '구출의 날 · 구해줘요, 교사 개발자!'];
+const NAMES = ['경험을 잇는 날', 'debug 실패의 날 × 외국인 개발자 커뮤니티', '구출의 날 · 구해줘요, 교사 개발자!'];
 const PL = [['on', '온라인', '만들기 전과 후, 우리 교실 이야기'], ['off', '현장 집합', '서울시교육청(예정) · 생중계'], ['on', '온라인', '연말 특집 보이는 라디오']];
 const KAO = ['{^_^}', '(;_;)', '\\(^o^)/'];
 // 상세 페이지 프롬이: 1회 헤드셋(보이는 라디오) · 2회 버그 · 3회 히어로 망토
@@ -339,7 +350,7 @@ $('.tapes').innerHTML = S.map((s, i) => `<button class="tape" type="button" data
   ${i === fi ? '<span class="nx">NEXT!</span>' : ''}
   <span class="no">#0${i + 1}</span>
   <span class="d">${s.mo}월 ${s.dd}일<small>(${s.dow})</small></span>
-  <span class="t"><b>${NAMES[i]}</b><span class="wh"><i class="pb ${PL[i][0]}">${PL[i][0] === 'on' ? '◉ ' : '⚑ '}${PL[i][1]}</i><span class="tm">${s.time}</span><span class="pl">${PL[i][2]}</span></span></span>
+  <span class="t"><b>${NAMES[i]}</b><span class="wh"><i class="pb ${PL[i][0]}">${PL[i][0] === 'on' ? '◉ ' : '⚑ '}${PL[i][1]}</i><span class="tm">${s.time}</span><i class="dd${i === fi ? ' next' : ''}${s.days === 0 ? ' today' : ''}">${s.dday}</i><span class="pl">${PL[i][2]}</span></span></span>
   <span class="k">${KAO[i]}<i class="tapin" aria-hidden="true">TAP</i></span></button>`).join('');
 
 // 프롬이: 누르면 표정 바뀌고 말풍선 변경
@@ -365,7 +376,7 @@ poster.insertAdjacentHTML('beforeend', `<section class="eggpop" role="dialog" ar
   <small>[x] 이스터에그 잡기 완료</small>
   <h3 id="eggT">잡았다! 이스터에그</h3>
   <p><span class="ln">이스터에그는 개발자가 <span class="nb">몰래 숨겨 두는</span> <span class="nb"><b>작은 선물</b>이에요.</span></span><span class="ln">방송 화면에도 <span class="nb"><b>회차마다 단어가 하나씩</b></span> <span class="nb">숨어 있어요.</span></span></p>
-  <div class="slots"><span><i>?</i>10월</span><span><i>?</i>11월</span><span><i>?</i>12월</span></div>
+  <div class="slots"><span><i>?</i>1회</span><span><i>?</i>2회</span><span><i>?</i>3회</span></div>
   <p><span class="ln">세 단어를 모으면 <span class="nb"><b>선언문의 마지막 문장</b>이</span> <span class="nb">완성돼요.</span></span><span class="ln">찾은 단어는 <span class="nb">sendev.kr 시즌 패스에</span> <span class="nb">입력! <em>(선택 참여)</em></span></span></p>
   <p class="eg-todo eg-kao" aria-label="신나는 표정">\\(^ㅂ^)/ ✧</p>
   <button class="eg-ok" type="button">이스터에그 찾으러 가기 ▶</button>

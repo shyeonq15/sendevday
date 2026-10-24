@@ -232,7 +232,7 @@ window.KIT = (() => {
   // ── 코드 소나기: 코드 조각이 위에서 쏟아졌다가 사라짐
   const SNIPPETS = ['const 자리 = shuffle(학생);', '출석.check() // 26/26 ✓', '>_', '{ }', '</>', 'if (숙제 === "안냄") 알림();',
     '급식.오늘()', 'while (쉬는시간) 놀기();', 'import 교실', 'git commit -m "첫 앱"', 'npm run 우리반', 'ERR! 다시 해 볼까요?',
-    'fix ✓', 'console.log("안녕")', '프롬아 도와줘', 'random(모둠)', '학급.공지()', 'save();', '=> ♥', '10.27', '11.24', '12.15'];
+    'fix ✓', 'console.log("안녕")', '프롬아 도와줘', 'random(모둠)', '학급.공지()', 'save();', '=> ♥', '11.3', '11.24', '12.15'];
   function codeRain(poster, { duration = 2400, colors = ['#0E1311'], bg = null, font = 'mono', size = 15, density = 1 } = {}) {
     if (!ENV.ANIMATE) return Promise.resolve();
     const { cv, cx, W, H, P } = canvasOver(poster);
