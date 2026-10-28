@@ -246,8 +246,11 @@ html:not(.wide) .b1,html:not(.wide) .b2,html:not(.wide) .b3{grid-column:span 3}
 .qr.ig .qrcap{border-color:var(--lilac)}
 /* 세로판: QR 태그와 겹치지 않게 누구나 == 개발자 라벨은 의 날 아래 가운데로 */
 html:not(.wide) .label{left:25%}
-/* 가로판: 배지가 두 개인 2회 리본은 시간·D-day를 다음 줄로 (넘쳐서 잘리지 않게) */
-.wide .tape:nth-child(2) .wh{flex-wrap:wrap;row-gap:calc(var(--p)*6)}
+/* 가로판: 시간·D-day는 날짜 바로 아래로 → 오른쪽엔 제목·배지만 남아 2회도 넘치지 않음 */
+.tape .dsub{display:none}
+.wide .tape .dsub{display:flex;align-items:center;gap:calc(var(--p)*8);margin-top:calc(var(--p)*8);letter-spacing:0}
+.wide .tape .dsub .tm{font-size:calc(var(--p)*14.5)}
+.wide .tape .wh .tm,.wide .tape .wh .dd{display:none}
 /* 가로판: 오른쪽 아래 '처음부터' 버튼과 하단 문구가 겹치지 않게 */
 .wide .foot{padding-right:calc(var(--p)*36 + 130px)}
 /* 사전 신청: 세 칸 중 가장 눈에 띄게 코랄 칸 + 굵은 한글 태그 */
@@ -385,7 +388,7 @@ const FACE = ['wink', 'worry', 'happy'], ACC = ['headset', 'bug', 'cape'];
 $('.tapes').innerHTML = S.map((s, i) => `<button class="tape" type="button" data-i="${i}" aria-label="${s.mo}월 ${s.dd}일 ${NAMES[i]} 자세히 보기">
   ${i === fi ? '<span class="nx">NEXT!</span>' : ''}
   <span class="no">#0${i + 1}</span>
-  <span class="d">${s.mo}월 ${s.dd}일<small>(${s.dow})</small></span>
+  <span class="d">${s.mo}월 ${s.dd}일<small>(${s.dow})</small><span class="dsub"><span class="tm">${s.time}</span><i class="dd${i === fi ? ' next' : ''}${s.days === 0 ? ' today' : ''}">${s.dday}</i></span></span>
   <span class="t"><b>${NAMES[i]}</b><span class="wh"><i class="pb ${PL[i][0]}">${PL[i][0] === 'on' ? '◉ ' : '⚑ '}${PL[i][1]}</i>${PL[i][3] ? `<i class="pb on">◉ ${PL[i][3]}</i>` : ''}<span class="tm">${s.time}</span><i class="dd${i === fi ? ' next' : ''}${s.days === 0 ? ' today' : ''}">${s.dday}</i><span class="pl">${PL[i][2]}</span></span></span>
   <span class="k">${KAO[i]}<i class="tapin" aria-hidden="true">TAP</i></span></button>`).join('');
 
