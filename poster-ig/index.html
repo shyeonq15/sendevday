@@ -33,13 +33,17 @@ body{min-height:100vh;display:grid;place-items:center;word-break:keep-all;-webki
 .b2 .g2{position:absolute;left:392px}
 .b2 small{position:absolute;right:30px;bottom:20px;font:800 16px/1.35 var(--mono);letter-spacing:.06em;text-align:right}
 .b3{left:0;top:270px;width:513px;height:186px;background:#fff;font-size:116px;padding-left:34px;letter-spacing:.06em;align-items:flex-start;padding-top:20px}
-.yr{left:513px;top:270px;width:207px;height:186px;display:grid;grid-template-columns:1fr 1fr}
-.yr i{display:grid;place-items:center;font:500 82px/1 var(--sans);font-style:normal;background:var(--ink);color:#fff}
-.yr i:nth-child(1),.yr i:nth-child(4){background:#fff;color:var(--ink)}
-.qr{left:720px;top:270px;width:360px;height:186px;background:var(--sky);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px}
+.qr{top:270px;height:186px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.qr.ap{left:513px;width:207px;background:var(--coral)}
+.qr.oc{left:720px;width:180px;background:var(--sky)}
+.qr.ig{left:900px;width:180px;background:var(--lilac)}
 .qr span{background:#fff;padding:6px;width:122px;height:122px}
 .qr img{display:block;width:100%;height:100%}
-.qr em{font:800 12.5px/1.3 var(--mono);font-style:normal;color:var(--ink);text-align:center;letter-spacing:.06em}
+.qr em{font:800 13px/1 var(--mono);font-style:normal;white-space:nowrap;background:var(--ink);color:#fff;padding:6px 11px;border-radius:99px;letter-spacing:.04em}
+.qr em b{color:var(--lime);margin-right:5px}
+.qr.ap em{font:900 15px/1 var(--sans);letter-spacing:-.02em;padding:6px 13px}
+.qr .pw{position:absolute;top:-10px;right:4px;font:800 12px/1 var(--mono);font-style:normal;background:var(--ink);color:#fff;border:1.5px solid #fff;padding:5px 8px;transform:rotate(6deg);box-shadow:2px 2px 0 var(--coral);white-space:nowrap}
+.qr .pw b{color:var(--lime)}
 .label{left:30px;top:410px;transform:rotate(-3deg);background:var(--sky);color:var(--ink);font:900 31px/1 var(--mono);padding:12px 22px;letter-spacing:-.02em;box-shadow:5px 5px 0 var(--ink)}
 
 /* 2행: 기호 · 프롬이 · 소개 */
@@ -64,7 +68,7 @@ body{min-height:100vh;display:grid;place-items:center;word-break:keep-all;-webki
 .card .d small{font-size:27px;letter-spacing:-.02em;margin-left:4px}
 .card hr{margin:16px 0 14px;border:0;border-top:2.5px solid var(--ink)}
 .card .t{font:850 22px/1.28 var(--sans);letter-spacing:-.035em}
-.card .wh{margin-top:auto;display:flex;align-items:center;gap:12px}
+.card .wh{margin-top:auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px}
 .card .pb{font:900 16px/1 var(--sans);padding:8px 13px;border-radius:99px;white-space:nowrap}
 .card .pb.on{background:var(--ink);color:#fff}
 .card .pb.off{background:var(--coral);color:#fff}
@@ -85,8 +89,9 @@ body{min-height:100vh;display:grid;place-items:center;word-break:keep-all;-webki
   <div class="blk b1">교사</div>
   <div class="blk b2"><span class="g1">개발</span><span class="g2">자</span><small>DEVELOPER<br>DAY_</small></div>
   <div class="blk b3">의 날</div>
-  <div class="yr" aria-label="2026"><i>2</i><i>0</i><i>2</i><i>6</i></div>
-  <div class="qr"><span><img src="../shared/qr.svg" alt="인스타그램 @sendevkorea QR 코드"></span><em>INSTAGRAM<br>@sendevkorea</em></div>
+  <div class="qr ap"><span><img src="../shared/qr-apply.svg" alt="사전 신청 구글폼 QR 코드"></span><em>▶ 사전 신청</em></div>
+  <div class="qr oc"><span><img src="../shared/qr-chat.svg" alt="오픈채팅방 QR 코드"></span><em><b>TALK</b>오픈채팅</em><i class="pw"><b>PW</b> sendev</i></div>
+  <div class="qr ig"><span><img src="../shared/qr.svg" alt="인스타그램 @sendevkorea QR 코드"></span><em><b>IG</b>인스타</em></div>
   <div class="label">누구나 == 개발자</div>
 
   <span class="say">hello, teacher!</span>
@@ -97,7 +102,7 @@ body{min-height:100vh;display:grid;place-items:center;word-break:keep-all;-webki
 
   <div class="ft" style="left:30px">주최 <b>서울특별시교육청</b></div>
   <div class="ft" style="left:390px">기획 <b>교사개발자 문화조성분과</b></div>
-  <div class="ft" style="left:750px">신청 <b>sendev.kr</b> · 소식 <b>@sendevkorea</b></div>
+  <div class="ft" style="left:750px">소식과 후기 <b>@sendevkorea</b></div>
 </div>
 </div>
 <script>
@@ -132,14 +137,14 @@ egg.innerHTML = KIT.pix(['...KKKK...', '..KWWWWK..', '.KWWLWWWK.', '.KWLLLWWK.',
   { colors: { K: '#0E1311', W: '#FFFFFF', L: '#CCFF00', V: '#CFC4FF' } });
 
 // 회차 카드 — 날짜·시간은 shared/data.js
-const TITLE = ['경험을 잇는 날', 'debug 실패의 날<br>× 외국인 개발자 커뮤니티', '구출의 날 ·<br>구해줘요, 교사 개발자!'];
-const PL = [['on', '◉ 온라인'], ['off', '⚑ 현장 집합'], ['on', '◉ 온라인']];
+const TITLE = ['경험을 잇는 날', 'Debug 실패의 날<br>× 외국인 개발자 커뮤니티', '구출의 날 ·<br>구해줘요, 교사 개발자!'];
+const PL = [[['on', '◉ Zoom']], [['off', '⚑ 현장(인원 한정)'], ['on', '◉ 생중계']], [['on', '◉ Zoom']]];
 const KAO = ['{^_^}', '(;_;)', '\\(^o^)/'];
 S.forEach((s, i) => add(`<div class="card c${i}">
   <div class="hd"><span class="no">#0${i + 1}</span><span class="k">${KAO[i]}</span></div>
   <div class="d">${s.mo}월<br>${s.dd}일<small>(${s.dow})</small></div>
   <hr><div class="t">${TITLE[i]}</div>
-  <div class="wh"><span class="pb ${PL[i][0]}">${PL[i][1]}</span><span class="tm">${s.time}</span></div></div>`));
+  <div class="wh">${PL[i].map(([c, t]) => `<span class="pb ${c}">${t}</span>`).join('')}<span class="tm">${s.time}</span></div></div>`));
 add('<span class="nx">NEXT!</span>');
 
 // 칸 경계선
