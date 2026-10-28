@@ -102,7 +102,7 @@ window.CORE = (() => {
       const s = S[i], d = s.detail;
       $('.lb', page).textContent = `${i + 1}회 · ${['경험', '실패', '구출'][i] || ''}`;
       $('h2', page).textContent = d.name;
-      $('.meta', page).innerHTML = `<span>${s.mo}월 ${s.dd}일 ${s.dow}요일</span><span>${s.time}</span><span>${d.place}</span>`;
+      $('.meta', page).innerHTML = `<span>${s.mo}월 ${s.dd}일 ${s.dow}요일</span><span>${s.time}</span><span>${d.place}</span>${d.host ? `<span>진행자: ${d.host}</span>` : ''}`;
       $('.ic', page).innerHTML = o.face ? o.face(i) : '';
       // o.timetable: 분 단위 시간표 표시 여부 (false면 핵심만)
       $('.pg-bd', page).classList.toggle('no-tt', !o.timetable); page.classList.toggle('short', !o.timetable);
