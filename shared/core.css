@@ -137,6 +137,7 @@ canvas.dots{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
 .pg-bd .flow{gap:calc(var(--p)*12)}
 .pg-bd .flow li span{display:flex;flex-direction:column;gap:calc(var(--p)*3)}
 .pg-bd .flow li b{font:850 calc(var(--p)*15)/1.4 var(--sans);letter-spacing:-.02em}
+.pg-bd .flow li em .who{display:block;padding-left:1.25em;margin-bottom:calc(var(--p)*3);color:#7A837D}
 .pg-bd .flow li em{font:550 calc(var(--p)*13.5)/1.55 var(--sans);font-style:normal;color:#4B544F}
 .pg-bd .for{margin:calc(var(--p)*14) 0 0;font:600 calc(var(--p)*13.5)/1.55 var(--sans);background:#F1EEFF;border-radius:calc(var(--p)*12);padding:calc(var(--p)*11) calc(var(--p)*14)}
 .pg-bd .for b{display:inline-block;margin-right:calc(var(--p)*8);font:800 calc(var(--p)*12)/1 var(--mono);color:#6B5BD6;letter-spacing:.04em}
