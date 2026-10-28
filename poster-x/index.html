@@ -238,6 +238,31 @@ html:not(.wide) .eggpop{width:min(92%,calc(var(--p)*560));padding-left:calc(var(
 /* '누구나 == 개발자' 라벨: 세로·가로 모두 포스터 가로 가운데 */
 .label,.wide .label,html:not(.wide) .label{left:50%;right:auto;transform:translateX(-50%) rotate(-5deg);transform-origin:50% 50%}
 html:not(.wide) .label{bottom:calc(var(--p)*-46)}
+/* QR 세 칸: 신청(코랄) · 오픈채팅(하늘) · 인스타(라일락) */
+html:not(.wide) .blocks{grid-template-columns:repeat(6,1fr)}
+html:not(.wide) .b1,html:not(.wide) .b2,html:not(.wide) .b3{grid-column:span 3}
+.wide .blocks{grid-template-columns:1.1fr 1.5fr 1.1fr .62fr .62fr .62fr}
+.qr.ig{background:var(--lilac)}
+.qr.ig .qrcap{border-color:var(--lilac)}
+/* 세로판: QR 태그와 겹치지 않게 누구나 == 개발자 라벨은 의 날 아래 가운데로 */
+html:not(.wide) .label{left:25%}
+/* 가로판: 배지가 두 개인 2회 리본은 시간·D-day를 다음 줄로 (넘쳐서 잘리지 않게) */
+.wide .tape:nth-child(2) .wh{flex-wrap:wrap;row-gap:calc(var(--p)*6)}
+/* 가로판: 오른쪽 아래 '처음부터' 버튼과 하단 문구가 겹치지 않게 */
+.wide .foot{padding-right:calc(var(--p)*36 + 130px)}
+/* 사전 신청: 세 칸 중 가장 눈에 띄게 코랄 칸 + 굵은 한글 태그 */
+.qr.ap{background:var(--coral)}
+.qr.ap .qrcap{gap:calc(var(--p)*6);color:#fff;border-color:var(--coral);font:900 calc(var(--p)*15)/1 var(--sans);letter-spacing:-.02em;padding:calc(var(--p)*7) calc(var(--p)*14)}
+.wide .qr.ap .qrcap{font-size:calc(var(--p)*14)}
+.qr.ap .go{font-style:normal;font-size:.8em}
+/* 평소엔 검정으로 가만히, 2.6초마다 라임으로 바뀌며 흔들흔들. 위치 잡는 translate를 키프레임에 같이 넣어야 제자리에서 흔들림 */
+.qr.ap .qrcap{animation:apwig 2.6s ease-in-out infinite}
+@keyframes apwig{0%,58%,100%{transform:translate(calc(-50% + var(--qx, 0px)),50%) rotate(0);background:var(--ink);color:#fff}62%{transform:translate(calc(-50% + var(--qx, 0px)),50%) rotate(-8deg);background:var(--lime);color:var(--ink)}70%{transform:translate(calc(-50% + var(--qx, 0px)),50%) rotate(7deg)}78%{transform:translate(calc(-50% + var(--qx, 0px)),50%) rotate(-5deg)}86%{transform:translate(calc(-50% + var(--qx, 0px)),50%) rotate(3deg);background:var(--lime);color:var(--ink)}92%{transform:translate(calc(-50% + var(--qx, 0px)),50%) rotate(0);background:var(--ink);color:#fff}}
+.static .qr.ap .qrcap{animation:none}
+@media (prefers-reduced-motion:reduce){.qr.ap .qrcap{animation:none}}
+/* 오픈채팅 비밀번호: QR 칸 모서리 스티커 */
+.qr .pw{position:absolute;z-index:7;top:calc(var(--p)*-9);right:calc(var(--p)*-4);font:800 calc(var(--p)*11)/1 var(--mono);font-style:normal;letter-spacing:.02em;background:var(--ink);color:#fff;padding:calc(var(--p)*5) calc(var(--p)*8);transform:rotate(6deg);white-space:nowrap;border:calc(var(--p)*1.5) solid #fff;box-shadow:calc(var(--p)*2) calc(var(--p)*2) 0 var(--coral)}
+.qr .pw b{color:var(--lime);font-weight:800}
 </style>
 </head>
 <body>
@@ -257,8 +282,9 @@ html:not(.wide) .label{bottom:calc(var(--p)*-46)}
       <span class="label">누구나 == 개발자</span>
       <div class="bk b1">교사</div><div class="bk b2">개발자</div>
       <div class="bk b3">의 날</div>
-      <div class="yr" aria-label="2026"><i>2</i><i>0</i><i>2</i><i>6</i></div>
-      <a class="qr" target="_blank" rel="noopener" aria-label="인스타그램 @sendevkorea"><span><img src="../shared/qr.svg" alt="인스타그램 @sendevkorea QR 코드"></span><em class="qrcap"><b>IG</b>@sendevkorea</em></a>
+      <a class="qr ap" target="_blank" rel="noopener" aria-label="사전 신청(수요 조사) 구글폼"><span><img src="../shared/qr-apply.svg" alt="사전 신청 구글폼 QR 코드"></span><em class="qrcap"><i class="go" aria-hidden="true">▶</i>사전 신청</em></a>
+      <a class="qr oc" target="_blank" rel="noopener" aria-label="카카오톡 오픈채팅방 (비밀번호 sendev)"><span><img src="../shared/qr-chat.svg" alt="오픈채팅방 QR 코드"></span><em class="qrcap"><b>TALK</b>오픈채팅</em><i class="pw"><b>PW</b> sendev</i></a>
+      <a class="qr ig" target="_blank" rel="noopener" aria-label="인스타그램 @sendevkorea"><span><img src="../shared/qr.svg" alt="인스타그램 @sendevkorea QR 코드"></span><em class="qrcap"><b>IG</b>인스타</em></a>
     </div>
     <div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span class="apply"></span></div>
   </div>
@@ -270,7 +296,7 @@ const { STATIC, fi, F } = ENV, S = POSTER.sessions;
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const poster = $('#poster');
 $('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
-$('.qr').href = POSTER.insta.url;
+$('.qr.oc').href = POSTER.openchat.url; $('.qr.ig').href = POSTER.insta.url; $('.qr.ap').href = POSTER.signup.url;
 // 소개 문구 줄이 칸보다 길면(휴대폰 글씨 확대) 줄바꿈 대신 그 줄 글씨만 살짝 줄임
 function fitLede() {
   const lede = $('.lede'), max = lede.parentElement.clientWidth - 2 * lede.offsetLeft;
@@ -278,7 +304,7 @@ function fitLede() {
 }
 addEventListener('resize', fitLede); document.fonts.ready.then(fitLede); fitLede();
 // 인스타 라벨은 QR 가운데. 글씨가 커져 포스터 밖으로 나가면 그만큼만 안쪽으로
-const qrcap = $('.qrcap');
+const qrcap = $('.ig .qrcap');
 function fitCap() {
   qrcap.style.setProperty('--qx', '0px');
   const pr = poster.getBoundingClientRect(), c = qrcap.getBoundingClientRect(), m = 6;
@@ -286,7 +312,7 @@ function fitCap() {
   qrcap.style.setProperty('--qx', over > 0 ? -over + 'px' : under > 0 ? under + 'px' : '0px');
 }
 addEventListener('resize', fitCap); document.fonts.ready.then(fitCap); fitCap();
-$('.apply').innerHTML = '신청·자료는 sendev.kr · 소식과 후기는 인스타그램 @sendevkorea' + (F.apply ? '' : ENV.pendTag);
+$('.apply').innerHTML = '신청·오픈채팅·인스타그램(@sendevkorea)은 QR로' + (F.apply ? '' : ENV.pendTag);
 
 // 2D 프롬이
 const bw = $('.prom .bw');
@@ -352,7 +378,7 @@ if (!STATIC) {
 
 // 리본 테이프
 const NAMES = ['경험을 잇는 날', 'Debug 실패의 날 × 외국인 개발자 커뮤니티', '구출의 날 · 구해줘요, 교사 개발자!'];
-const PL = [['on', 'Zoom', '만들기 전과 후, 우리 교실 이야기'], ['off', '현장 집합', '장소 추후 안내 · 생중계'], ['on', 'Zoom', '연말 특집 보이는 라디오']];
+const PL = [['on', 'Zoom', '만들기 전과 후, 우리 교실 이야기'], ['off', '현장(인원 한정)', '장소 추후 안내', '생중계'], ['on', 'Zoom', '연말 특집 보이는 라디오']];
 const KAO = ['{^_^}', '(;_;)', '\\(^o^)/'];
 // 상세 페이지 프롬이: 1회 헤드셋(보이는 라디오) · 2회 버그 · 3회 히어로 망토
 const FACE = ['wink', 'worry', 'happy'], ACC = ['headset', 'bug', 'cape'];
@@ -360,7 +386,7 @@ $('.tapes').innerHTML = S.map((s, i) => `<button class="tape" type="button" data
   ${i === fi ? '<span class="nx">NEXT!</span>' : ''}
   <span class="no">#0${i + 1}</span>
   <span class="d">${s.mo}월 ${s.dd}일<small>(${s.dow})</small></span>
-  <span class="t"><b>${NAMES[i]}</b><span class="wh"><i class="pb ${PL[i][0]}">${PL[i][0] === 'on' ? '◉ ' : '⚑ '}${PL[i][1]}</i><span class="tm">${s.time}</span><i class="dd${i === fi ? ' next' : ''}${s.days === 0 ? ' today' : ''}">${s.dday}</i><span class="pl">${PL[i][2]}</span></span></span>
+  <span class="t"><b>${NAMES[i]}</b><span class="wh"><i class="pb ${PL[i][0]}">${PL[i][0] === 'on' ? '◉ ' : '⚑ '}${PL[i][1]}</i>${PL[i][3] ? `<i class="pb on">◉ ${PL[i][3]}</i>` : ''}<span class="tm">${s.time}</span><i class="dd${i === fi ? ' next' : ''}${s.days === 0 ? ' today' : ''}">${s.dday}</i><span class="pl">${PL[i][2]}</span></span></span>
   <span class="k">${KAO[i]}<i class="tapin" aria-hidden="true">TAP</i></span></button>`).join('');
 
 // 프롬이: 누르면 표정 바뀌고 말풍선 변경
@@ -387,7 +413,7 @@ poster.insertAdjacentHTML('beforeend', `<section class="eggpop" role="dialog" ar
   <h3 id="eggT">잡았다! 이스터에그</h3>
   <p><span class="ln">이스터에그는 개발자가 <span class="nb">몰래 숨겨 두는</span> <span class="nb"><b>작은 선물</b>이에요.</span></span><span class="ln">방송 화면에도 <span class="nb"><b>회차마다 단어가 하나씩</b></span> <span class="nb">숨어 있어요.</span></span></p>
   <div class="slots"><span><i>?</i>1회</span><span><i>?</i>2회</span><span><i>?</i>3회</span></div>
-  <p><span class="ln">세 단어를 모으면 <span class="nb"><b>선언문의 마지막 문장</b>이</span> <span class="nb">완성돼요.</span></span><span class="ln">찾은 단어는 <span class="nb">sendev.kr 시즌 패스에</span> <span class="nb">입력! <em>(선택 참여)</em></span></span></p>
+  <p><span class="ln">세 단어를 모으면 <span class="nb"><b>선언문의 마지막 문장</b>이</span> <span class="nb">완성돼요.</span></span><span class="ln">찾은 단어는 <span class="nb">12월 방송에서</span> <span class="nb">함께 맞춰 봐요! <em>(선택 참여)</em></span></span></p>
   <p class="eg-todo eg-kao" aria-label="신나는 표정">\\(^ㅂ^)/ ✧</p>
   <button class="eg-ok" type="button">이스터에그 찾으러 가기 ▶</button>
 </section>`);
@@ -492,7 +518,7 @@ CORE.init({
     symHome();
     // 제목 블록 → 기호·프롬이 → 테이프 순서로 휘리릭 (약 0.6초)
     KIT.pop([$('.top')], { duration: 300 });
-    $$('.bk,.yr,.qr').forEach((b, i) => b.animate([{ transform: 'translateY(-100%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 280, delay: i * 30, easing: 'cubic-bezier(.2,.9,.3,1.1)', fill: 'backwards' }));
+    $('.bk,.yr,.qr').forEach(b => b.animate([{ transform: 'translateY(-100%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 280, easing: 'cubic-bezier(.2,.9,.3,1.1)', fill: 'backwards' }));
     $$('.sym').forEach((s, i) => s.animate([{ transform: 'scale(0) rotate(-90deg)', opacity: 0 }, { transform: 'scale(1.15)', opacity: 1, offset: .7 }, { transform: 'none', opacity: 1 }],
       { duration: 260, delay: 60 + i * 15, easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'backwards' }));
     KIT.drop([$('.prom')], { delay: 80, height: 300, duration: 560 });

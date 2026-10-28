@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const out = root + 'site/';
-const SHARED = ['base.css', 'core.css', 'fonts.css', 'data.js', 'kit.js', 'core.js', 'qr.svg',
+const SHARED = ['base.css', 'core.css', 'fonts.css', 'data.js', 'kit.js', 'core.js', 'qr.svg', 'qr-apply.svg', 'qr-chat.svg',
   'fonts/PretendardVariable.woff2', 'fonts/Galmuri11.woff2', 'fonts/Galmuri11-Bold.woff2',
   'fonts/LICENSE-pretendard.txt', 'fonts/LICENSE-galmuri.txt'];
 

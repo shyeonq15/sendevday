@@ -111,8 +111,8 @@ window.CORE = (() => {
         <div class="${o.timetable ? '' : 'full'}"><h5>이런 걸 해요</h5><ol class="flow">${d.flow.map(x => Array.isArray(x) ? `<li><span><b>${x[0]}</b><em>${x[1]}</em></span></li>` : `<li>${x}</li>`).join('')}</ol>
           ${d.for ? `<p class="for"><b>이런 분께 추천</b>${d.for}</p>` : ''}</div>
         ${o.timetable ? `<div class="tt-wrap"><h5>시간표</h5><table class="tt"><tbody>${d.timetable.map(([t, a, b]) => `<tr><td>${t}</td><td>${a}</td><td>${b}</td></tr>`).join('')}</tbody></table></div>` : ''}
-        <div class="how ${o.timetable ? '' : 'full'}"><b>참여 방법</b> · ${d.how}</div>
-        <p class="note full">${o.timetable ? '시간표는 운영 계획(안)이라 바뀔 수 있어요. ' : ''}신청과 최신 안내는 sendev.kr에서 확인해 주세요.</p>`;
+        <div class="how ${o.timetable ? '' : 'full'}"><b>참여 방법</b> · ${d.how}${POSTER.signup ? ` <a class="signup" href="${POSTER.signup.url}" target="_blank" rel="noopener">사전 신청하기 →</a>` : ''}</div>
+        ${o.timetable ? '<p class="note full">시간표는 운영 계획(안)이라 바뀔 수 있어요.</p>' : ''}`;
       $('.pg-bd', page).scrollTop = 0;
       page.classList.add('on');
       lastCard = card;
