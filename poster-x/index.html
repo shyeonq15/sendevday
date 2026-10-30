@@ -266,6 +266,44 @@ html:not(.wide) .label{left:25%}
 /* 오픈채팅 비밀번호: QR 칸 모서리 스티커 */
 .qr .pw{position:absolute;z-index:7;top:calc(var(--p)*-9);right:calc(var(--p)*-4);font:800 calc(var(--p)*11)/1 var(--mono);font-style:normal;letter-spacing:.02em;background:var(--ink);color:#fff;padding:calc(var(--p)*5) calc(var(--p)*8);transform:rotate(6deg);white-space:nowrap;border:calc(var(--p)*1.5) solid #fff;box-shadow:calc(var(--p)*2) calc(var(--p)*2) 0 var(--coral)}
 .qr .pw b{color:var(--lime);font-weight:800}
+/* 주최 서울특별시교육청 로고 */
+.foot{align-items:center}
+.foot .host{display:flex;align-items:center;gap:calc(var(--p)*8);flex-wrap:wrap}
+/* 깜짝 이벤트: 말풍선이 프롬이 누르라고 콕콕, 누르면 화면 전체 위에 이미지 카드 */
+/* 말풍선은 프롬이 머리 오른쪽 위에 붙어 같이 둥실, 꼬리는 프롬이 입 쪽으로 */
+.prom .say{left:74%;top:-4%;transform-origin:0 100%;cursor:pointer;animation:saypoke 2.2s ease-in-out infinite}
+.prom .say::before{content:"";position:absolute;left:calc(var(--p)*10);bottom:calc(var(--p)*-13);width:calc(var(--p)*20);height:calc(var(--p)*15);background:var(--lime);clip-path:polygon(0 0,100% 0,0 100%)}
+@keyframes saypoke{0%,60%,100%{transform:rotate(10deg) scale(1)}68%{transform:rotate(3deg) scale(1.08)}76%{transform:rotate(12deg) scale(1)}84%{transform:rotate(8deg) scale(1.04)}}
+.static .say{animation:none}
+.prom:focus-visible{outline:calc(var(--p)*3) solid var(--lime);outline-offset:calc(var(--p)*6);border-radius:50%}
+.evt{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:16px;background:rgba(14,19,17,.82);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.evt[hidden]{display:none}
+.evt figure{position:relative;margin:0;width:min(100%,1120px,calc((100dvh - 64px) * 1672 / 941))}
+.evt figure{perspective:1400px}
+.evt-pic{position:relative;overflow:hidden;border-radius:14px;border:3px solid #fff;box-shadow:10px 10px 0 var(--lime);transition:transform .25s ease-out;will-change:transform}
+.evt img{display:block;width:100%;height:auto}
+/* 반짝 빛줄기: 열릴 때·마우스 올릴 때 한 번 쓱 */
+.evt-shine{position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 38%,rgba(255,255,255,.38) 50%,transparent 62%);transform:translateX(-130%)}
+/* 01·02·03 카드: 이벤트 이미지에서 카드 모양 그대로 오려 낸 조각을 제자리에 겹쳐 라임 빛을 두름 → 기울어진 모양·둥근 모서리에 딱 맞음
+   열리면 차례로 콕, 마우스 올리면 켜짐 */
+.evt .evt-hl{position:absolute;height:auto;opacity:0;transition:opacity .2s;
+  filter:drop-shadow(0 0 1.5px var(--lime)) drop-shadow(0 0 1.5px var(--lime)) drop-shadow(0 0 10px rgba(204,255,0,.9))}
+.evt .evt-hl:hover{opacity:1}
+/* 픽셀 색종이 */
+.evt-fx{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:3}
+.evt-fx i{position:absolute;top:-20px;width:var(--s);height:var(--s);background:var(--c)}
+.evt-x{position:absolute;right:-10px;top:-14px;z-index:2;width:44px;height:44px;border:3px solid var(--ink);border-radius:50%;background:var(--lime);color:var(--ink);font:900 18px/1 var(--sans);cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.evt-rot{display:none;margin-top:18px;text-align:center;font:700 13px/1.4 var(--mono);color:rgba(255,255,255,.75)}
+@media (orientation:portrait) and (max-width:700px){
+  .evt-pic{border-width:2px;border-radius:10px;box-shadow:6px 6px 0 var(--lime)}
+  .evt-x{width:38px;height:38px;font-size:16px;right:-6px;top:-12px}
+  .evt-rot{display:block}
+}
+html.evt-open{overflow:hidden}
+@media (prefers-reduced-motion:reduce){.say{animation:none}}
+/* 로고 위쪽 청록 원 때문에 글자(서울특별시교육청)가 그림 가운데보다 아래 → 그만큼 올려 옆 글줄과 높이 맞춤 */
+.foot .smoe{height:calc(var(--p)*26);width:auto;display:block;transform:translateY(-12%)}
+.wide .foot .smoe{height:calc(var(--p)*24)}
 </style>
 </head>
 <body>
@@ -275,8 +313,7 @@ html:not(.wide) .label{left:25%}
     <div class="top"><span><b>&gt;_</b> TEACHER_DEV_DAY.md</span><span class="c">// SEOUL 2026</span></div>
     <div class="art">
       <div class="syms" aria-hidden="true"></div>
-      <span class="say">hello, teacher!</span>
-      <div class="prom" role="img" aria-label="2D 프롬이"><div class="bw"></div></div>
+      <div class="prom" role="button" tabindex="0" aria-label="프롬이 누르고 깜짝 이벤트 보기"><div class="bw"></div><span class="say">날 눌러 봐!</span></div>
       <p class="lede"><span class="lc"># 교실의 문제를 <b>코드로</b> 바꾸는 선생님들</span><span class="lc">## <b>매달 한 번, 화요일 저녁</b> 모입니다</span><span class="lc eghint">// FIXME: 알이 가만히 있지를 않음. 잡아 주세요</span></p>
       <button class="egg" type="button" aria-label="숨은 이스터에그"></button>
     </div>
@@ -289,7 +326,7 @@ html:not(.wide) .label{left:25%}
       <a class="qr oc" target="_blank" rel="noopener" aria-label="카카오톡 오픈채팅방 (비밀번호 sendev)"><span><img src="../shared/qr-chat.svg" alt="오픈채팅방 QR 코드"></span><em class="qrcap"><b>TALK</b>오픈채팅</em><i class="pw"><b>PW</b> sendev</i></a>
       <a class="qr ig" target="_blank" rel="noopener" aria-label="인스타그램 @sendevkorea"><span><img src="../shared/qr.svg" alt="인스타그램 @sendevkorea QR 코드"></span><em class="qrcap"><b>IG</b>인스타</em></a>
     </div>
-    <div class="foot"><span>주최 <b class="h1"></b> · 기획 <b class="h2"></b></span><span class="apply"></span></div>
+    <div class="foot"><span class="host"><span class="hl">주최</span><img class="smoe" src="../shared/smoe-logo.png" alt="서울특별시교육청"><span class="hl">· 기획 <b class="h2"></b></span></span><span class="apply"></span></div>
   </div>
 </article>
 </div>
@@ -298,7 +335,7 @@ html:not(.wide) .label{left:25%}
 const { STATIC, fi, F } = ENV, S = POSTER.sessions;
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const poster = $('#poster');
-$('.h1').textContent = POSTER.host; $('.h2').textContent = POSTER.team;
+$('.h2').textContent = POSTER.team;
 $('.qr.oc').href = POSTER.openchat.url; $('.qr.ig').href = POSTER.insta.url; $('.qr.ap').href = POSTER.signup.url;
 // 소개 문구 줄이 칸보다 길면(휴대폰 글씨 확대) 줄바꿈 대신 그 줄 글씨만 살짝 줄임
 function fitLede() {
@@ -392,15 +429,79 @@ $('.tapes').innerHTML = S.map((s, i) => `<button class="tape" type="button" data
   <span class="t"><b>${NAMES[i]}</b><span class="wh"><i class="pb ${PL[i][0]}">${PL[i][0] === 'on' ? '◉ ' : '⚑ '}${PL[i][1]}</i>${PL[i][3] ? `<i class="pb on">◉ ${PL[i][3]}</i>` : ''}<span class="tm">${s.time}</span><i class="dd${i === fi ? ' next' : ''}${s.days === 0 ? ' today' : ''}">${s.dday}</i><span class="pl">${PL[i][2]}</span></span></span>
   <span class="k">${KAO[i]}<i class="tapin" aria-hidden="true">TAP</i></span></button>`).join('');
 
-// 프롬이: 누르면 표정 바뀌고 말풍선 변경
-const SAY = ['hello, teacher!', 'console.log("반가워요")', 'if (교실) 개발자 = true;', '>_ 접속 완료!'];
+// 프롬이: 누르면 표정 바뀌고 깜짝 이벤트 안내가 프롬이 자리에서 튀어나옴
 let k = 0;
-$('.prom').addEventListener('click', e => {
+document.body.insertAdjacentHTML('beforeend', `<div class="evt" role="dialog" aria-modal="true" aria-label="교사 개발자의 날 깜짝 이벤트" hidden>
+  <div class="evt-fx" aria-hidden="true"></div>
+  <figure><button class="evt-x" type="button" aria-label="닫기">✕</button>
+  <div class="evt-pic"><img src="../shared/event.webp" width="1672" height="941" alt="깜짝 이벤트. 01 한 회만 참여해도 유용한 개발 정보(웹진) 링크를 공유해 드려요. 02 1~3회 전회차 참여 시 2027 교사 개발차 NEW 해커톤 직무 연수 참여 기회 100% 제공. 03 인스타 팔로잉과 1~3회 전회차 참석자 대상 추첨을 통해 교사 개발자 잇템을 드려요.">
+  <img class="evt-hl" src="../shared/event-card1.webp" alt="" style="left:44.856%;top:14.453%;width:50.598%">
+  <img class="evt-hl" src="../shared/event-card2.webp" alt="" style="left:45.036%;top:38.470%;width:50.658%">
+  <img class="evt-hl" src="../shared/event-card3.webp" alt="" style="left:45.036%;top:61.105%;width:50.658%">
+  <span class="evt-shine"></span></div>
+  <figcaption class="evt-rot">↻ 휴대폰을 가로로 돌리면 더 크게 보여요</figcaption></figure></div>`);
+const evt = $('.evt'), evtCard = $('.evt figure'), promEl = $('.prom');
+const evtPic = $('.evt-pic'), evtFx = $('.evt-fx'), evtShine = $('.evt-shine');
+const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const shine = (delay = 0) => evtShine.animate([{ transform: 'translateX(-130%)' }, { transform: 'translateX(130%)' }], { duration: 900, delay, easing: 'cubic-bezier(.4,0,.2,1)' });
+// 위에서 픽셀 색종이가 빙글빙글 떨어짐
+function confetti(n = 46) {
+  const C = ['#CCFF00', '#CFC4FF', '#4FC3FF', '#FF5C39', '#FFFFFF'], H = innerHeight + 40;
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement('i'), s = 6 + (Math.random() * 3 | 0) * 3;
+    p.style.cssText = `left:${Math.random() * 100}%;--s:${s}px;--c:${C[i % C.length]}`;
+    evtFx.appendChild(p);
+    const drift = (Math.random() - .5) * 160, spin = (Math.random() < .5 ? -1 : 1) * (360 + Math.random() * 540);
+    p.animate([{ transform: 'translate(0,0) rotate(0)' }, { transform: `translate(${drift}px,${H}px) rotate(${spin}deg)` }],
+      { duration: 1800 + Math.random() * 1400, delay: Math.random() * 500, easing: 'cubic-bezier(.25,.4,.6,1)', fill: 'backwards' }).finished.then(() => p.remove());
+  }
+}
+// 01 → 02 → 03 카드에 차례로 라임 테두리가 콕
+const highlight = () => $$('.evt-hl').forEach((h, i) => h.animate(
+  [{ opacity: 0 }, { opacity: 1, offset: .3 }, { opacity: 1, offset: .7 }, { opacity: 0 }],
+  { duration: 1100, delay: 650 + i * 380, easing: 'ease-out' }));
+// PC: 마우스를 따라 카드가 살짝 3D로 기울어짐
+evtPic.addEventListener('pointermove', e => {
+  if (e.pointerType !== 'mouse' || still) return;
+  const r = evtPic.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+  evtPic.style.transform = `rotateX(${-y * 7}deg) rotateY(${x * 9}deg)`;
+});
+evtPic.addEventListener('pointerleave', () => { evtPic.style.transform = ''; });
+evtPic.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse' && !still) shine(); });
+// 카드가 프롬이 위치에서 화면 가운데로 날아오는 변환값
+const fromProm = () => {
+  const a = promEl.getBoundingClientRect(), b = evtCard.getBoundingClientRect();
+  return `translate(${a.left + a.width / 2 - (b.left + b.width / 2)}px, ${a.top + a.height / 2 - (b.top + b.height / 2)}px) scale(.08) rotate(-14deg)`;
+};
+function openEvt() {
+  evt.hidden = false; document.documentElement.classList.add('evt-open');
+  if (!still) {
+    evt.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: 'ease-out' });
+    evtCard.animate([{ transform: fromProm(), opacity: .4 }, { transform: 'scale(1.04) rotate(1.5deg)', opacity: 1, offset: .72 }, { transform: 'none', opacity: 1 }],
+      { duration: 560, easing: 'cubic-bezier(.2,.9,.3,1.1)' });
+    confetti(); shine(520); highlight();
+  }
+  $('.evt-x').focus({ preventScroll: true });
+}
+function closeEvt() {
+  if (evt.hidden) return;
+  const done = () => { evt.hidden = true; evtFx.textContent = ''; evtPic.style.transform = ''; document.documentElement.classList.remove('evt-open'); promEl.focus({ preventScroll: true }); };
+  if (still) return done();
+  evt.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, easing: 'ease-in', fill: 'forwards' }).finished.then(a => { done(); evt.getAnimations().forEach(x => x.cancel()); });
+  evtCard.animate([{ transform: 'none' }, { transform: fromProm(), opacity: 0 }], { duration: 300, easing: 'cubic-bezier(.5,0,.8,.4)', fill: 'forwards' })
+    .finished.then(() => evtCard.getAnimations().forEach(x => x.cancel()));
+}
+const pokeProm = e => {
   e.stopPropagation(); k++;
   bw.innerHTML = KIT.flat({ face: PF[k % PF.length], line: '#fff' });
-  $('.say').textContent = SAY[k % SAY.length];
-  KIT.burst(poster, 397, 330, { n: 16, colors: ['#CCFF00', '#CFC4FF', '#4FC3FF', '#FF5C39'] });
-});
+  KIT.burst(poster, 397, 330, { n: 22, colors: ['#CCFF00', '#CFC4FF', '#4FC3FF', '#FF5C39'] });
+  setTimeout(() => { openEvt(); $('.say').textContent = '이벤트 다시 볼래?'; }, still ? 0 : 160);
+};
+promEl.addEventListener('click', pokeProm);
+promEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pokeProm(e); } });
+evt.addEventListener('click', e => { if (e.target === evt) closeEvt(); });
+$('.evt-x').addEventListener('click', closeEvt);
+addEventListener('keydown', e => { if (e.key === 'Escape') closeEvt(); });
 
 // 한 번 눌러 보면 탭 안내는 사라짐
 // ── 이스터에그: 기호들 사이에 숨은 픽셀 알. 누르면 깨지면서 시즌 패스 안내
@@ -521,7 +622,7 @@ CORE.init({
     symHome();
     // 제목 블록 → 기호·프롬이 → 테이프 순서로 휘리릭 (약 0.6초)
     KIT.pop([$('.top')], { duration: 300 });
-    $('.bk,.yr,.qr').forEach(b => b.animate([{ transform: 'translateY(-100%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 280, easing: 'cubic-bezier(.2,.9,.3,1.1)', fill: 'backwards' }));
+    $$('.bk,.yr,.qr').forEach(b => b.animate([{ transform: 'translateY(-100%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 280, easing: 'cubic-bezier(.2,.9,.3,1.1)', fill: 'backwards' }));
     $$('.sym').forEach((s, i) => s.animate([{ transform: 'scale(0) rotate(-90deg)', opacity: 0 }, { transform: 'scale(1.15)', opacity: 1, offset: .7 }, { transform: 'none', opacity: 1 }],
       { duration: 260, delay: 60 + i * 15, easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'backwards' }));
     KIT.drop([$('.prom')], { delay: 80, height: 300, duration: 560 });
