@@ -289,6 +289,8 @@ html:not(.wide) .label{left:25%}
 .evt .evt-hl{position:absolute;height:auto;opacity:0;transition:opacity .2s;
   filter:drop-shadow(0 0 1.5px var(--lime)) drop-shadow(0 0 1.5px var(--lime)) drop-shadow(0 0 10px rgba(204,255,0,.9))}
 .evt .evt-hl:hover{opacity:1}
+/* 02 카드 모서리의 스마일 스티커: 빛나는 카드보다 위에 얹어서 카드에 붙은 그대로 보이게 */
+.evt .evt-st{position:absolute;height:auto;pointer-events:none}
 /* 픽셀 색종이 */
 .evt-fx{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:3}
 .evt-fx i{position:absolute;top:-20px;width:var(--s);height:var(--s);background:var(--c)}
@@ -438,6 +440,7 @@ document.body.insertAdjacentHTML('beforeend', `<div class="evt" role="dialog" ar
   <img class="evt-hl" src="shared/event-card1.webp" alt="" style="left:44.856%;top:14.453%;width:50.598%">
   <img class="evt-hl" src="shared/event-card2.webp" alt="" style="left:45.036%;top:38.470%;width:50.658%">
   <img class="evt-hl" src="shared/event-card3.webp" alt="" style="left:45.036%;top:61.105%;width:50.658%">
+  <img class="evt-st" src="shared/event-sticker.webp" alt="" style="left:91.268%;top:35.282%;width:5.263%">
   <span class="evt-shine"></span></div>
   <figcaption class="evt-rot">↻ 휴대폰을 가로로 돌리면 더 크게 보여요</figcaption></figure></div>`);
 const evt = $('.evt'), evtCard = $('.evt figure'), promEl = $('.prom');
